@@ -1,0 +1,2 @@
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:18:32:07 +0800] "GET /brand/findAll.do HTTP/1.1" 404 949 http-bio-9101-exec-1 10788
+0:0:0:0:0:0:0:1 - - [22/Nov/2018:18:32:08 +0800] "GET /favicon.ico HTTP/1.1" 404 973 http-bio-9101-exec-3 3
