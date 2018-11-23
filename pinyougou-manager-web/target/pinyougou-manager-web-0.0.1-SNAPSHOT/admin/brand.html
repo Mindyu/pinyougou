@@ -22,11 +22,44 @@
 
  <script type="text/javascript">
 	var app = angular.module('pinyougou', ['pagination']);
-	app.controller('brandController', function($scope, $http) {
+	
+	// 品牌服务 前端分层开发
+	app.service("brandService", function($http){
+		
+		this.findAll = function(){
+			return $http.get('../brand/findAll.do');
+		}
+		
+		this.findPage = function(page, size){
+			return $http.get('../brand/findPage.do?page='+page+'&size='+size);
+		}
+		
+		this.add = function(entity){
+			return $http.post('../brand/add.do', entity);
+		}
+		
+		this.update = function(entity){
+			return $http.post('../brand/update.do', entity);
+		}
+		
+		this.findOne = function(id){
+			return $http.get('../brand/findOne.do?id='+id;
+		}
+		
+		this.dele = function(ids){
+			return $http.get('../brand/delete.do?ids='+ids);
+		}
+		
+		this.search = function(page, size, entity){
+			return $http.post('../brand/search.do?page='+page+'&size='+size, entity);
+		}
+	});
+	
+	app.controller('brandController', function($scope, $http, brandService) {
 
 		// 查询品牌列表
 		$scope.findAll = function() {
-			$http.get('../brand/findAll.do').success(function(response) {
+			brandService.findAll().success(function(response) {
 				$scope.list = response;
 			});
 		}
@@ -44,7 +77,7 @@
 		
 		// 分页查询
 		$scope.findPage = function(page, size){
-			$http.get('../brand/findPage.do?page='+page+'&size='+size).success(function(response){
+			brandService.findPage().success(function(response){
 				$scope.list = response.rows;	// 显示当前页数据
 				$scope.paginationConf.totalItems = response.total;
 			});
@@ -57,11 +90,13 @@
 		
 		// 新增
 		$scope.save = function(){
-			var methodName = 'add';
+			var object = null;
 			if ($scope.entity.id != null) {
-				methodName = 'update';
+				object = brandSevice.add($scope.entity);
+			}else {
+				object = brandSevice.update($scope.entity);
 			}
-			$http.post('../brand/'+ methodName +'.do',$scope.entity).success(
+			object().success(
 				function(response){
 					if (response.success) {
 						$scope.reloadList();	//重新加载
@@ -73,7 +108,7 @@
 		
 		// 查询实体
 		$scope.findOne = function(id){
-			$http.get('../brand/findOne.do?id='+id).success(
+			brandSevice.findOne(id).success(
 				function(response){
 					$scope.entity = response; 
 			});
@@ -94,7 +129,7 @@
 		// 删除
 		$scope.dele = function(){
 			if (confirm('确定要删除吗？')) {
-				$http.get('../brand/delete.do?ids='+$scope.selectedIDs).success(
+				brandService.dele($scope.selectedIDs).success(
 						function(response){
 							if (response.success) {
 								$scope.reloadList();	//重新加载
@@ -117,7 +152,7 @@
 		
 		$scope.searchEntity = {};	// 初始化对象
 		$scope.search = function(page, size){
-			$http.post('../brand/search.do?page='+page+'&size='+size, $scope.searchEntity).success(function(response){
+			brandService.search(page, size, $scope.searchEntity).success(function(response){
 				$scope.list = response.rows;	// 显示当前页数据
 				$scope.paginationConf.totalItems = response.total;
 			});
@@ -158,8 +193,8 @@
 			</div>
 			<div class="box-tools pull-right">
 				<div class="has-feedback">
-					品牌名称<input ng-model="searchEntity.entity.name">
-					品牌首字母<input ng-model="searchEntity.entity.firstChar">
+					品牌名称<input ng-model="searchEntity.name">
+					品牌首字母<input ng-model="searchEntity.firstChar">
 					<button type="button" class="btn btn-default" title="查询"
 							ng-click="reloadList()">
 							<i class="fa fa-search"></i> 查询
