@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>品牌管理</title>
+<meta
+	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+<!-- 分页组件开始 -->
+<script src="../plugins/angularjs/pagination.js"></script>
+<link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+<!-- 分页组件结束 -->
+
+ <script type="text/javascript">
+	var app = angular.module('pinyougou', ['pagination']);
+	app.controller('brandController', function($scope, $http) {
+
+		// 查询品牌列表
+		$scope.findAll = function() {
+			$http.get('../brand/findAll.do').success(function(response) {
+				$scope.list = response;
+			});
+		}
+		
+		// 分页控件配置 
+		$scope.paginationConf = {
+				 currentPage: 1,
+				 totalItems: 10,
+				 itemsPerPage: 10,
+				 perPageOptions: [10, 20, 30, 40, 50],
+				 onChange: function(){
+				 	$scope.reloadList();//重新加载
+				 }
+		}
+		
+		// 分页查询
+		$scope.findPage = function(page, size){
+			$http.get('../brand/findPage.do?page='+page+'&size='+size).success(function(response){
+				$scope.list = response.rows;	// 显示当前页数据
+				$scope.paginationConf.totalItems = response.total;
+			});
+		}
+
+		// 刷新列表
+		$scope.reloadList = function(){
+			$scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
+		}
+		
+		// 新增
+		$scope.save = function(){
+			var methodName = 'add';
+			if ($scope.entity.id != null) {
+				methodName = 'update';
+			}
+			$http.post('../brand/'+ methodName +'.do',$scope.entity).success(
+				function(response){
+					if (response.success) {
+						$scope.reloadList();	//重新加载
+					}else {
+						alert(response.message);
+					}
+			});
+		}
+		
+		// 查询实体
+		$scope.findOne = function(id){
+			$http.get('../brand/findOne.do?id='+id).success(
+				function(response){
+					$scope.entity = response; 
+			});
+		}
+		
+		// 存储当前选中复选框的id集合
+		$scope.selectedIDs = [];
+		
+		$scope.updateSelectedIDS = function($event, id){
+			if ($event.target.checked) {		// 当前为勾选状态
+				$scope.selectedIDs.push(id); 	// 向selectedIDs集合中添加元素
+			} else {
+				var index = $scope.selectedIDs.indexOf(id); 	
+				$scope.selectedIDs.splice(index, 1); 	// 参数1：移除的下标位置，参数2：需要移除的元素个数
+			}
+		}
+		
+		// 删除
+		$scope.dele = function(){
+			if (confirm('确定要删除吗？')) {
+				$http.get('../brand/delete.do?ids='+$scope.selectedIDs).success(
+						function(response){
+							if (response.success) {
+								$scope.reloadList();	//重新加载
+							}else {
+								alert(response.message);
+							}
+					});
+			}
+		}
+		
+		// 回车则执行保存
+		$scope.enter = function($event){
+			//IE 编码包含在window.event.keyCode中，Firefox或Safari 包含在event.which中
+			var keycode = window.event?e.keyCode:e.which;
+			if (keycode == 13) {
+				$scope.save();
+				// 关闭编辑框
+			}
+		}
+		
+		$scope.searchEntity = {};	// 初始化对象
+		$scope.search = function(page, size){
+			$http.post('../brand/search.do?page='+page+'&size='+size, $scope.searchEntity).success(function(response){
+				$scope.list = response.rows;	// 显示当前页数据
+				$scope.paginationConf.totalItems = response.total;
+			});
+		}
+	});
+	
+</script>
+
+</head>
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="brandController">
+	<!-- .box-body -->
+	<div class="box-header with-border">
+		<h3 class="box-title">品牌管理</h3>
+	</div>
+
+	<div class="box-body">
+
+		<!-- 数据表格 -->
+		<div class="table-box">
+
+			<!--工具栏-->
+			<div class="pull-left">
+				<div class="form-group form-inline">
+					<div class="btn-group">
+						<button type="button" class="btn btn-default" title="新建"
+							data-toggle="modal" data-target="#editModal" ng-click="entity={}">
+							<i class="fa fa-file-o"></i> 新建
+						</button>
+						<button type="button" class="btn btn-default" title="删除" ng-click="dele()">
+							<i class="fa fa-trash-o"></i> 删除
+						</button>
+						<button type="button" class="btn btn-default" title="刷新"
+							onclick="window.location.reload();">
+							<i class="fa fa-refresh"></i> 刷新
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="box-tools pull-right">
+				<div class="has-feedback">
+					品牌名称<input ng-model="searchEntity.name">
+					品牌首字母<input ng-model="searchEntity.firstChar">
+					<button type="button" class="btn btn-default" title="查询"
+							ng-click="reloadList()">
+							<i class="fa fa-search"></i> 查询
+						</button>
+				</div>
+			</div>
+			<!--工具栏/-->
+			
+			{{$scope.selectedIDs}}
+			<!--数据列表-->
+			<table id="dataList"
+				class="table table-bordered table-striped table-hover dataTable">
+				<thead>
+					<tr>
+						<th class="" style="padding-right: 0px"><input id="selall"
+							type="checkbox" class="icheckbox_square-blue"></th>
+						<th class="sorting_asc">品牌ID</th>
+						<th class="sorting">品牌名称</th>
+						<th class="sorting">品牌首字母</th>
+						<th class="text-center">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="entity in list">
+						<td><input type="checkbox" ng-click="updateSelectedIDS($event, entity.id)"></td>
+						<td>{{entity.id}}</td>
+						<td>{{entity.name}}</td>
+						<td>{{entity.firstChar}}</td>
+						<td class="text-center">
+							<button type="button" class="btn bg-olive btn-xs"
+								data-toggle="modal" data-target="#editModal" ng-click="findOne(entity.id)">修改</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!--数据列表/-->
+			<!-- 分页 -->
+			<tm-pagination conf="paginationConf"></tm-pagination>
+		</div>
+		<!-- 数据表格 /-->
+
+	</div>
+	<!-- /.box-body -->
+
+	<!-- 编辑窗口 -->
+	<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myModalLabel">品牌编辑</h3>
+				</div>
+				<div class="modal-body">
+					<table class="table table-bordered table-striped" width="800px">
+						<tr>
+							<td>品牌名称</td>
+							<td><input class="form-control" placeholder="品牌名称" ng-model="entity.name">
+							</td>
+						</tr>
+						<tr>
+							<td>首字母</td>
+							<td><input class="form-control" placeholder="首字母" ng-model="entity.firstChar" ng-keydown="enter($event)"></td>
+						</tr>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success" data-dismiss="modal"
+						aria-hidden="true" ng-click="save()">保存</button>
+					<button class="btn btn-default" data-dismiss="modal"
+						aria-hidden="true">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
