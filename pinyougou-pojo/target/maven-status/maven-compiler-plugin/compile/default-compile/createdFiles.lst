@@ -34,6 +34,7 @@ com\pinyougou\pojo\TbSpecificationExample$GeneratedCriteria.class
 com\pinyougou\pojo\TbItemCatExample$GeneratedCriteria.class
 com\pinyougou\pojo\TbGoodsExample$Criteria.class
 com\pinyougou\pojo\TbPayLogExample$GeneratedCriteria.class
+com\pinyougou\pojogroup\Specification.class
 com\pinyougou\pojo\TbGoodsDescExample.class
 com\pinyougou\pojo\TbOrderExample$Criterion.class
 com\pinyougou\pojo\TbContentCategoryExample$Criterion.class

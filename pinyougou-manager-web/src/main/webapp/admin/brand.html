@@ -22,6 +22,7 @@
 
 <script type="text/javascript" src="../js/base_pagination.js"></script>
 <script type="text/javascript" src="../js/service/brandService.js"></script>
+<script type="text/javascript" src="../js/controller/baseController.js"></script>	<!-- 继承的baseController -->
 <script type="text/javascript" src="../js/controller/brandController.js"></script>
 
 </head>
@@ -65,8 +66,7 @@
 				</div>
 			</div>
 			<!--工具栏/-->
-			
-			{{$scope.selectedIDs}}
+
 			<!--数据列表-->
 			<table id="dataList"
 				class="table table-bordered table-striped table-hover dataTable">
@@ -82,7 +82,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="entity in list">
-						<td><input type="checkbox" ng-click="updateSelectedIDS($event, entity.id)"></td>
+						<td><input type="checkbox" ng-click="updateSelection($event, entity.id)"></td>
 						<td>{{entity.id}}</td>
 						<td>{{entity.name}}</td>
 						<td>{{entity.firstChar}}</td>
