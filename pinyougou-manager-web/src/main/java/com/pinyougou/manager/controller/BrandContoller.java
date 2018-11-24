@@ -1,6 +1,7 @@
 package com.pinyougou.manager.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,5 +73,10 @@ public class BrandContoller {
 	public PageResult search(@RequestBody TbBrand tbBrand, int page, int size) {
 //		System.out.println("debug="+tbBrand.getName()+"-"+tbBrand.getFirstChar());
 		return brandService.findPage(tbBrand, page, size);
+	}
+	
+	@RequestMapping("/selectOptionList")
+	public List<Map> selectOptionList(){
+		return brandService.selectOptionList();
 	}
 }

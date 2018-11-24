@@ -1,5 +1,5 @@
  //控制层 
-app.controller('specificationController' ,function($scope,$controller   ,specificationService){	
+app.controller('specificationController' ,function($scope,$controller,specificationService){	
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -91,5 +91,4 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 	$scope.deleTableRow = function(index){
 		$scope.entity.specificationOptionList.splice(index, 1);
 	}
-	
 });	

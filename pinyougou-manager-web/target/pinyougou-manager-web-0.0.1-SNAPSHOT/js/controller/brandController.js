@@ -47,7 +47,7 @@ app.controller('brandController', function($scope, $controller, brandService) {
 	// 删除
 	$scope.dele = function(){
 		if (confirm('确定要删除吗？')) {
-			brandService.dele($scope.selectedIDs).success(
+			brandService.dele($scope.selectIds).success(
 					function(response){
 						if (response.success) {
 							$scope.reloadList();	//重新加载

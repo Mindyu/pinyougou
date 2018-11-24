@@ -35,9 +35,9 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 	$scope.save=function(){				
 		var serviceObject;//服务层对象  				
 		if($scope.entity.specification.id!=null){//如果有ID
-			serviceObject=specificationService.update( $scope.entity ); //修改  
+			serviceObject = specificationService.update( $scope.entity ); //修改  
 		}else{
-			serviceObject=specificationService.add( $scope.entity  );//增加 
+			serviceObject = specificationService.add( $scope.entity  );//增加 
 		}				
 		serviceObject.success(
 			function(response){
@@ -53,16 +53,18 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 	
 	 
 	//批量删除 
-	$scope.dele=function(){			
-		//获取选中的复选框			
-		specificationService.dele( $scope.selectIds ).success(
-			function(response){
-				if(response.success){
-					$scope.reloadList();//刷新列表
-					$scope.selectIds=[];
-				}						
-			}		
-		);				
+	$scope.dele=function(){	
+		if (confirm('确定要删除吗？')) {
+			//获取选中的复选框			
+			specificationService.dele( $scope.selectIds ).success(
+				function(response){
+					if(response.success){
+						$scope.reloadList();//刷新列表
+						$scope.selectIds=[];
+					}						
+				}		
+			);		
+		}
 	}
 	
 	$scope.searchEntity={};//定义搜索对象 

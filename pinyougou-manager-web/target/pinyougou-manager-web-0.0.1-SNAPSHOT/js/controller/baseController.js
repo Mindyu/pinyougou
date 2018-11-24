@@ -17,13 +17,13 @@ app.controller('baseController', function($scope) {	// 通用 Controller
 	}
 	
 	// 存储当前选中复选框的id集合
-	$scope.selectedIDs = [];
-	$scope.updateSelectedIDS = function($event, id){
+	$scope.selectIds = [];
+	$scope.updateSelection = function($event, id){
 		if ($event.target.checked) {		// 当前为勾选状态
-			$scope.selectedIDs.push(id); 	// 向selectedIDs集合中添加元素
+			$scope.selectIds.push(id); 	// 向selectIds集合中添加元素
 		} else {
-			var index = $scope.selectedIDs.indexOf(id); 	
-			$scope.selectedIDs.splice(index, 1); 	// 参数1：移除的下标位置，参数2：需要移除的元素个数
+			var index = $scope.selectIds.indexOf(id); 	
+			$scope.selectIds.splice(index, 1); 	// 参数1：移除的下标位置，参数2：需要移除的元素个数
 		}
 	}
 		

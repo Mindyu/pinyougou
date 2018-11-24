@@ -36,4 +36,16 @@ app.controller('baseController', function($scope) {	// 通用 Controller
 				// 关闭编辑框
 		}
 	}
+	
+	// 将 json 字符串转 特定简写格式
+	$scope.jsonToString = function(jsonString, key){
+		var json = JSON.parse(jsonString);
+		var value = "";
+		
+		for (var i = 0; i < json.length; i++) {
+			if(i > 0) value += ",";
+			value += json[i][key];
+		}
+		return value;
+	}
 });
