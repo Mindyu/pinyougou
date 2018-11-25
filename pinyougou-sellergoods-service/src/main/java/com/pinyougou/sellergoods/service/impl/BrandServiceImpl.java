@@ -16,7 +16,7 @@ import com.pinyougou.sellergoods.service.BrandService;
 
 import entity.PageResult;
 
-@Service  // 若未配置则会出现“Failed to check the status of the service ”错误。在注册中心找不到服务。
+@Service  // 若未配置则会出现“Failed to check the status of the service”错误。在注册中心找不到服务。
 public class BrandServiceImpl implements BrandService {
 
 	@Autowired

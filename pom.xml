@@ -22,7 +22,7 @@
 		<commons-fileupload.version>1.3.1</commons-fileupload.version>
 		<freemarker.version>2.3.23</freemarker.version>
 		<activemq.version>5.11.2</activemq.version>
-		<security.version>3.2.3.RELEASE</security.version>		
+		<security.version>3.2.3.RELEASE</security.version>	
 		<solrj.version>4.10.3</solrj.version>
 		<ik.version>2012_u6</ik.version>		
 	</properties>
@@ -251,8 +251,6 @@
 		</dependencies>	
 	
 	</dependencyManagement>
-	
-
 	
 	<build>
 		

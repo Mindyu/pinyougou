@@ -161,12 +161,91 @@ $scope.jsonToString = function(jsonString,key){
 ![类型模板管理](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%95%86%E5%93%81%E7%B1%BB%E5%9E%8B%E6%A8%A1%E6%9D%BF%E7%AE%A1%E7%90%86.png)
 
 
+### Spring Security  安全框架
+
+为基于 Spring 的企业应用系统提供声明式的安全访问控制的解决方案。提供一组可以在 Spring 应用上下文中配置的 Bean。
+
+*使用步骤*
+
+- 引入 jar 包
+
+```xml
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-web</artifactId>
+	<version>4.1.0.RELEASE</version>
+</dependency>
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-config</artifactId>
+	<version>4.1.0.RELEASE</version>
+</dependency>
+```
+
+- web.xml 文件中引入 spring-security.xml 配置文件
+
+```xml
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/spring-security.xml</param-value>
+	 </context-param>
+	 <listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	 </listener>
+	
+	 <filter>  
+		<filter-name>springSecurityFilterChain</filter-name>  
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>  
+	 </filter>  
+	 <filter-mapping>  
+		<filter-name>springSecurityFilterChain</filter-name>  
+		<url-pattern>/*</url-pattern>  
+	 </filter-mapping>
+```
 
 
 
+- spring-security.xml 配置文件设置页面拦截规则、认证管理器以及不拦截的资源（静态资源、登陆页面）
 
+```xml
+	<!-- 设置页面不登陆也可以访问 -->
+	<http pattern="/*.html" security="none"></http>
+	<http pattern="/css/**" security="none"></http>
+	<http pattern="/img/**" security="none"></http>
+	<http pattern="/js/**" security="none"></http>
+	<http pattern="/plugins/**" security="none"></http>
 
+	<!-- 页面的拦截规则    use-expressions:是否启动SPEL表达式 默认是true -->
+	<http use-expressions="false">
+		<!-- 当前用户必须有ROLE_USER的角色 才可以访问根目录及所属子目录的资源 -->
+		<intercept-url pattern="/**" access="ROLE_ADMIN"/>
+		<!-- 开启表单登陆功能 -->
+		<form-login login-page="/login.html" default-target-url="/admin/index.html" authentication-failure-url="/login.html" always-use-default-target="true"/>
+		<csrf disabled="true"/>
+		<headers>
+			<frame-options policy="SAMEORIGIN"/>
+		</headers>
+		<logout/>	<!-- 退出登录 -->
+	</http>
+	
+	<!-- 认证管理器 -->
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="admin" password="123456" authorities="ROLE_ADMIN"/>
+				<user name="yang" password="123456" authorities="ROLE_ADMIN"/>
+			</user-service>
+		</authentication-provider>	
+	</authentication-manager>
+```
 
+CSRF（Cross-site request forgery）跨站请求伪造，也被称为“One Click Attack”或者Session Riding，通常缩写为CSRF或者XSRF，是一种对网站的恶意利用。
+
+XSS(跨站脚本攻击)利用站点内的信任用户，往Web页面里插入恶意Script代码 。
+
+CSRF通过伪装来自受信任用户的请求来利用受信任的网站。 
 
 
 
