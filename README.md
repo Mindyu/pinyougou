@@ -247,15 +247,75 @@ XSS(跨站脚本攻击)利用站点内的信任用户，往Web页面里插入恶
 
 CSRF通过伪装来自受信任用户的请求来利用受信任的网站。 
 
+### 商家系统登录安全控制
 
+*安全控制*
 
+1. 自定义认证类，创建类 UserDetailsServiceImpl.java 实现 UserDetailsService 接口
+2. 实现类中添加 SellerService 属性、和 setter 注入方法，修改 loadUserByUserName 方法。
+3. 配置 spring-security.xml。认证管理器中 authentication-provider 引用userDetailService 的bean，同时通过 dobbo 去依赖一个 sellerService 对象。
 
+*BCrypt 加密算法*
 
+用户表的密码通常使用 MD5 等不可逆算法加密后存储，为防止彩虹表破解更会先使用
+一个特定的字符串（如域名）加密，然后再使用一个随机的 salt（盐值）加密。 特定字符串是程序代码中固定的，salt 是每个密码单独随机，一般给用户表加一个字段单独存储，比较麻烦。 BCrypt 算法将 salt 随机并混入最终加密后的密码，验证时也无需单独提供之前的 salt，从而无需单独处理 salt 问题。
 
+```java
+/**
+ *  认证类
+ * @author YCQ
+ *
+ */
+public class UserDetailsServiceImpl implements UserDetailsService{
 
+	private SellerService sellerService;
+	
+	public void setSellerService(SellerService sellerService) {	// 通过配置的方式添加
+		this.sellerService = sellerService;
+	}
 
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
+//		System.out.println("执行 UserDetailsServiceImpl 认证");
+		// 构建角色列表
+		List<GrantedAuthority> grantAuths = new ArrayList<>();
+		grantAuths.add(new SimpleGrantedAuthority("ROLE_SELLER"));
+		
+		TbSeller seller = sellerService.findOne(username);
+		if (seller!=null && "1".equals(seller.getStatus())) {
+			return new User(username, seller.getPassword(), grantAuths);
+		}else {
+			return null;
+		}
+	}
 
+}
+```
+
+spring-security 配置
+```xml
+	<!-- 认证管理器 -->
+	<authentication-manager>
+		<authentication-provider user-service-ref="userDetailService">
+			<password-encoder ref="bcryptEncoder"></password-encoder>
+		</authentication-provider>	
+	</authentication-manager>
+	
+	<!-- 认证类 -->
+	<beans:bean id="userDetailService" class="com.pinyougou.service.UserDetailsServiceImpl">
+		<beans:property name="sellerService" ref="mSellerService"></beans:property>
+	</beans:bean>
+	
+	<!-- 引用dubbo 服务 -->
+	<dubbo:application name="pinyougou-shop-web" />
+	<dubbo:registry address="zookeeper://107.191.52.91:2181"/>
+	<dubbo:reference id="mSellerService" interface="com.pinyougou.sellergoods.service.SellerService"></dubbo:reference>
+	
+	<beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></beans:bean>
+```
+
+*注：浏览器控制台提示 [DOM] Input elements should have autocomplete attributes (suggested: "current-password") 为浏览器表单默认的记忆功能，可以在 input 标签中添加 autocomplete="off|on" 即可。*
 
 
 

@@ -1,4 +1,4 @@
-package com.pinyougou.manager.controller;
+package com.pinyougou.shop.controller;
 
 import java.util.HashMap;
 import java.util.Map;
