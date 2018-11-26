@@ -1,6 +1,6 @@
 ## 品优购项目学习
 
-  一个综合性的 B2B2C 的电商网站系统。网站采用商家入驻的模式，商家入驻平台提交申请，有平台进行资质审核，审核通过后，商家拥有独立的管理后台录入商品信息。商品经过平台审核后即可发布。 
+​	  一个综合性的 B2B2C 的电商网站系统。网站采用商家入驻的模式，商家入驻平台提交申请，有平台进行资质审核，审核通过后，商家拥有独立的管理后台录入商品信息。商品经过平台审核后即可发布。 
 
 [Github地址](https://github.com/Mindyu/pinyougou)
 
@@ -13,9 +13,9 @@
 
 **框架组合**
 
-前端 angularJS + Bootstrap 
+​	前端 angularJS + Bootstrap 
 
-后端 Spring + SpringMVC + mybatis + Dubbox
+​	后端 Spring + SpringMVC + mybatis + Dubbox
 
 **系统架构**
 	面向服务的架构（SOA架构）。控制层与服务层分离，通过网络调用。
@@ -73,13 +73,14 @@
 - ng-init 对变量初始化或调用某方法。
 - ng-controller 用于指定所使用的控制器，在控制器中定义函数和变量，通过scope 对象来访问。
 - ng-click 单击事件指令，点击时触发控制器的某个方法。
+- ng-if 判断语句，条件不存在就不执行。
 - ng-repeat 指令用于循环集合变量。
 - $index 用于获取 ng-repeat 指令循环中的索引。
 - $http 内置服务，用于访问后端数据。
 
 *复选框的使用*
 
-定义一个用于存储选中 ID 的数组，当我们点击复选框后判断是选择还是取消选择，如果是选择就加到数组中，如果是取消选择就从数组中移除。在后续点击删除按钮时需要用到这个存储了 ID 的数组。
+​	定义一个用于存储选中 ID 的数组，当我们点击复选框后判断是选择还是取消选择，如果是选择就加到数组中，如果是取消选择就从数组中移除。在后续点击删除按钮时需要用到这个存储了 ID 的数组。
 
 ```javascript
 	// 存储当前选中复选框的id集合
@@ -100,13 +101,13 @@
 
 *前端分层开发*
 
-运用 MVC 的思想，将 js 和 html 代码分离，提高程序的可维护性。
+​	运用 MVC 的思想，将 js 和 html 代码分离，提高程序的可维护性。
 
-实现方式：自定义服务，同后端的 service 层，封装一些操作，比如请求后端数据。在不同控制器通过依赖注入相关服务，即可调用服务的方法。将代码分为前端页面、前端服务层、前端控制层。
+​	实现方式：自定义服务，同后端的 service 层，封装一些操作，比如请求后端数据。在不同控制器通过依赖注入相关服务，即可调用服务的方法。将代码分为前端页面、前端服务层、前端控制层。
 
 *主键回填*
 
-修改 Mapper.xml 文件
+​	修改 Mapper.xml 文件
 
 ```xml
 <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
@@ -114,7 +115,7 @@
 </selectKey>
 ```
 
-对于规格与具体规格选项，可以创建一个组合实体类，包括 规格 和 规格选项的集合。在插入规格之后，通过主键回填，获取规格 ID ，然后将 ID 作为外键添加到规格选项中去。
+​	对于规格与具体规格选项，可以创建一个组合实体类，包括 规格 和 规格选项的集合。在插入规格之后，通过主键回填，获取规格 ID ，然后将 ID 作为外键添加到规格选项中去。
 
 ![规格管理](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E8%A7%84%E6%A0%BC%E7%AE%A1%E7%90%86.png)
 
@@ -143,7 +144,7 @@
 
 *模板列表显示*
 
-将从后台获取的 json 字符串中的某个属性的值提取出来，用逗号分隔，更直观的显示。
+​	将从后台获取的 json 字符串中的某个属性的值提取出来，用逗号分隔，更直观的显示。
 
 ```javascript
 // 提取 json 字符串数据中某个属性，返回拼接字符串逗号分隔
@@ -163,7 +164,7 @@ $scope.jsonToString = function(jsonString,key){
 
 ### Spring Security  安全框架
 
-为基于 Spring 的企业应用系统提供声明式的安全访问控制的解决方案。提供一组可以在 Spring 应用上下文中配置的 Bean。
+​	为基于 Spring 的企业应用系统提供声明式的安全访问控制的解决方案。提供一组可以在 Spring 应用上下文中配置的 Bean。
 
 *使用步骤*
 
@@ -241,11 +242,11 @@ $scope.jsonToString = function(jsonString,key){
 	</authentication-manager>
 ```
 
-CSRF（Cross-site request forgery）跨站请求伪造，也被称为“One Click Attack”或者Session Riding，通常缩写为CSRF或者XSRF，是一种对网站的恶意利用。
+​	CSRF（Cross-site request forgery）跨站请求伪造，也被称为“One Click Attack”或者Session Riding，通常缩写为CSRF或者XSRF，是一种对网站的恶意利用。
 
-XSS(跨站脚本攻击)利用站点内的信任用户，往Web页面里插入恶意Script代码 。
+​	XSS(跨站脚本攻击)利用站点内的信任用户，往Web页面里插入恶意Script代码 。
 
-CSRF通过伪装来自受信任用户的请求来利用受信任的网站。 
+​	CSRF通过伪装来自受信任用户的请求来利用受信任的网站。 
 
 ### 商家系统登录安全控制
 
@@ -257,7 +258,7 @@ CSRF通过伪装来自受信任用户的请求来利用受信任的网站。
 
 *BCrypt 加密算法*
 
-用户表的密码通常使用 MD5 等不可逆算法加密后存储，为防止彩虹表破解更会先使用
+​	用户表的密码通常使用 MD5 等不可逆算法加密后存储，为防止彩虹表破解更会先使用
 一个特定的字符串（如域名）加密，然后再使用一个随机的 salt（盐值）加密。 特定字符串是程序代码中固定的，salt 是每个密码单独随机，一般给用户表加一个字段单独存储，比较麻烦。 BCrypt 算法将 salt 随机并混入最终加密后的密码，验证时也无需单独提供之前的 salt，从而无需单独处理 salt 问题。
 
 ```java
@@ -316,6 +317,133 @@ spring-security 配置
 ```
 
 *注：浏览器控制台提示 [DOM] Input elements should have autocomplete attributes (suggested: "current-password") 为浏览器表单默认的记忆功能，可以在 input 标签中添加 autocomplete="off|on" 即可。*
+
+### 商品分类管理
+
+*多级分类列表*
+
+​	将商品分类分为三级，进入页面首先显示所有一级分类（主分类），点击查询下级，可查看当前主分类下的次分类，再次点击进入三级分类。三级分类为最后一级，列表中不显示查询下级按钮，同时更新面包屑导航。直接点击面包屑导航，可以实现直接层级跳转。
+
+*面包屑导航*
+
+```javascript
+	// 当前面包屑等级
+	$scope.grade = 1;
+	$scope.setGrade=function(value){
+		$scope.grade = value;
+	}
+	
+	$scope.selectList=function(p_entity){
+		if ($scope.grade == 1) {
+			$scope.entity_1 = null;
+			$scope.entity_2 = null;
+		} else if ($scope.grade == 2){
+			$scope.entity_1 = p_entity;
+			$scope.entity_2 = null;
+		} else {
+			$scope.entity_2 = p_entity;
+		}
+		$scope.findByParentId(p_entity.id);
+	}
+	
+```
+
+页面配置
+
+```html
+<li><a href="#" ng-click="grade=1;selectList({id:0})">顶级分类列表</a></li>
+<li><a href="#" ng-click="grade=2;selectList(entity_1)">{{entity_1.name}}</a></li>
+<li ng-if="entity_2!=null"><a href="#" ng-click="grade=3;selectList(entity_2)">{{entity_2.name}}</a></li>
+```
+
+
+
+*修改商品分类*
+
+​	实现类型模板的下拉框，采用 select2 组件实现。
+
+```html
+<td>类型模板</td>
+<td><input select2 ng-model="entity.typeId" config="itemList" placeholder="商品类型模板" class="form-control" type="text"/>
+</td>
+```
+
+​	config 为数据来源
+
+​	ng-model 绑定类型对象数据
+
+​	itemList 的来源：itemCatController 中 findItemList() 方法 -> typeTemplateService 的 selectOptionList() 方法 -> 请求后端 /typeTemplate/selectOptionList -> TypeTemplateService 服务层 -> TypeTemplateMapper 层方法
+
+
+
+*删除商品分类*
+
+​	判断所选分类下是否存在子分类，存在则不能删除。
+
+```java
+	/**
+	 * 批量删除
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	public Result delete(Long[] ids){
+		try {
+			// 判断当前所有分类是否存在子分类
+			boolean flag = false;	// 不存在
+			for (Long id : ids) {
+				if(itemCatService.findByParentId(id)!=null && itemCatService.findByParentId(id).size()!=0){
+					flag = true;break;
+				}
+			}
+			if (flag) return new Result(false, "当前所选分类存在子分类，切勿删除"); 
+			
+			itemCatService.delete(ids);
+			return new Result(true, "删除成功"); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "删除失败");
+		}
+	}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

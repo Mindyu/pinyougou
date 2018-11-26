@@ -89,8 +89,17 @@ public class ItemCatController {
 	 * @return
 	 */
 	@RequestMapping("/delete")
-	public Result delete(Long [] ids){
+	public Result delete(Long[] ids){
 		try {
+			// 判断当前所有分类是否存在子分类
+			boolean flag = false;	// 不存在
+			for (Long id : ids) {
+				if(itemCatService.findByParentId(id)!=null && itemCatService.findByParentId(id).size()!=0){
+					flag = true;break;
+				}
+			}
+			if (flag) return new Result(false, "当前所选分类存在子分类，切勿删除"); 
+			
 			itemCatService.delete(ids);
 			return new Result(true, "删除成功"); 
 		} catch (Exception e) {
@@ -99,7 +108,7 @@ public class ItemCatController {
 		}
 	}
 	
-		/**
+	/**
 	 * 查询+分页
 	 * @param brand
 	 * @param page
@@ -111,4 +120,13 @@ public class ItemCatController {
 		return itemCatService.findPage(itemCat, page, rows);		
 	}
 	
+	/**
+	 * 根据上级ID查询分类信息
+	 * @param parentId
+	 * @return
+	 */
+	@RequestMapping("/findByParentId")
+	public List<TbItemCat> findByParentId(Long parentId){
+		return itemCatService.findByParentId(parentId);
+	}
 }

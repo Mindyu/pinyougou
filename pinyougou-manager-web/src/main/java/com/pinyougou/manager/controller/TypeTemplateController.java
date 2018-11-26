@@ -1,5 +1,6 @@
 package com.pinyougou.manager.controller;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +38,7 @@ public class TypeTemplateController {
 	 * @return
 	 */
 	@RequestMapping("/findPage")
-	public PageResult  findPage(int page,int rows){			
+	public PageResult findPage(int page,int rows){			
 		return typeTemplateService.findPage(page, rows);
 	}
 	
@@ -99,7 +100,7 @@ public class TypeTemplateController {
 		}
 	}
 	
-		/**
+	/**
 	 * 查询+分页
 	 * @param brand
 	 * @param page
@@ -111,4 +112,12 @@ public class TypeTemplateController {
 		return typeTemplateService.findPage(typeTemplate, page, rows);		
 	}
 	
+	/**
+	 * 商品类型信息
+	 * @return
+	 */
+	@RequestMapping("/selectOptionList")
+	public List<Map> selectOptionList(){
+		return typeTemplateService.selectOptionList();
+	}
 }

@@ -15,11 +15,11 @@ app.service('itemCatService',function($http){
 	}
 	//增加 
 	this.add=function(entity){
-		return  $http.post('../itemCat/add.do',entity );
+		return $http.post('../itemCat/add.do',entity );
 	}
 	//修改 
 	this.update=function(entity){
-		return  $http.post('../itemCat/update.do',entity );
+		return $http.post('../itemCat/update.do',entity );
 	}
 	//删除
 	this.dele=function(ids){
@@ -28,5 +28,12 @@ app.service('itemCatService',function($http){
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../itemCat/search.do?page='+page+"&rows="+rows, searchEntity);
-	}    	
+	}
+	//根据上级ID查询
+	this.findByParentId=function(parentId){
+		return $http.get('../itemCat/findByParentId.do?parentId='+parentId);
+	}
+	this.selectOptionList=function(){
+		
+	}
 });
