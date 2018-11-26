@@ -76,8 +76,18 @@
 		<artifactId>servlet-api</artifactId>		
 		<scope>provided</scope>
 	</dependency>
-  
 
+
+	<dependency>
+		<groupId>com.pinyougou</groupId>
+		<artifactId>pinyougou-sellergoods-interface</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>com.pinyougou</groupId>
+		<artifactId>pinyougou-pojo</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
   </dependencies>
   
   
@@ -89,7 +99,7 @@
 				<version>2.2</version>
 				<configuration>
 					<!-- 指定端口 -->
-					<port>8080</port>
+					<port>9102</port>
 					<!-- 请求路径 -->
 					<path>/</path>
 				</configuration>

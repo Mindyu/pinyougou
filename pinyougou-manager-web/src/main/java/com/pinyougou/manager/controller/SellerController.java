@@ -24,7 +24,7 @@ public class SellerController {
 	private SellerService sellerService;
 	
 	/**
-	 * 返回全部列表
+	 *  返回全部列表
 	 * @return
 	 */
 	@RequestMapping("/findAll")
@@ -34,7 +34,7 @@ public class SellerController {
 	
 	
 	/**
-	 * 返回全部列表
+	 *  返回全部列表
 	 * @return
 	 */
 	@RequestMapping("/findPage")
@@ -43,7 +43,7 @@ public class SellerController {
 	}
 	
 	/**
-	 * 增加
+	 *  增加
 	 * @param seller
 	 * @return
 	 */
@@ -59,7 +59,7 @@ public class SellerController {
 	}
 	
 	/**
-	 * 修改
+	 *  修改
 	 * @param seller
 	 * @return
 	 */
@@ -75,7 +75,7 @@ public class SellerController {
 	}	
 	
 	/**
-	 * 获取实体
+	 *  获取实体
 	 * @param id
 	 * @return
 	 */
@@ -85,7 +85,7 @@ public class SellerController {
 	}
 	
 	/**
-	 * 批量删除
+	 *  批量删除
 	 * @param ids
 	 * @return
 	 */
@@ -100,8 +100,8 @@ public class SellerController {
 		}
 	}
 	
-		/**
-	 * 查询+分页
+	/**
+	 *  查询+分页
 	 * @param brand
 	 * @param page
 	 * @param rows
@@ -112,4 +112,20 @@ public class SellerController {
 		return sellerService.findPage(seller, page, rows);		
 	}
 	
+	/**
+	 * 修改审核状态
+	 * @param sellerId
+	 * @param status
+	 * @return
+	 */
+	@RequestMapping("/updateStatus")
+	public Result updateStatus(String sellerId, String status) {
+		try {
+			sellerService.updateStatus(sellerId, status);
+			return new Result(true, "修改成功"); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "修改失败");
+		}
+	}
 }
