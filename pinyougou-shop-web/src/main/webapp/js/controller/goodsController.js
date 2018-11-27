@@ -1,5 +1,5 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller,goodsService,uploadService){	
+app.controller('goodsController' ,function($scope,$controller,goodsService,uploadService,itemCatService,typeTemplateService){	
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -116,4 +116,56 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 	$scope.remove_image_entity=function(index){
 		$scope.entity.goodsDesc.itemImages.splice(index,1);
 	}
+	
+	// 查询一级商品分类列表
+	$scope.selectItemCat1List=function(){
+		itemCatService.findByParentId(0).success(
+			function(response){
+				$scope.itemCat1List = response;
+			}
+		);
+	}
+	
+	// angularjs变量监控方法,查询二级分类信息
+	$scope.$watch('entity.goods.category1Id',function(newValue, oldValue){
+		itemCatService.findByParentId(newValue).success(
+				function(response){
+					$scope.itemCat2List = response;
+					$scope.itemCat3List = "";
+					$scope.entity.goods.typeTemplateId = "";
+				}
+			);
+	});
+	
+	// angularjs变量监控方法,查询三级分类信息
+	$scope.$watch('entity.goods.category2Id',function(newValue, oldValue){
+		itemCatService.findByParentId(newValue).success(
+				function(response){
+					$scope.itemCat3List = response;
+					$scope.entity.goods.typeTemplateId = "";
+				}
+			);
+	});
+	
+	// 读取模板ID
+	$scope.$watch('entity.goods.category3Id',function(newValue, oldValue){
+		itemCatService.findOne(newValue).success(
+				function(response){
+					$scope.entity.goods.typeTemplateId = response.typeId;
+				}
+		);
+	});
+	
+	// 读取模板ID对应的品牌列表
+	$scope.$watch('entity.goods.typeTemplateId',function(newValue, oldValue){
+		typeTemplateService.findOne(newValue).success(
+				function(response){
+					$scope.typeTemplate = response;	// 类型模板对象
+					$scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);	// 转换为Json对象
+					// 扩展属性
+					$scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems);
+				}
+		);
+	});
+	
 });	

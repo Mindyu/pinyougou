@@ -435,7 +435,22 @@ spring-security 配置
 
 - Stroage ：实际保存文件。分为多个组，组内文件相同，起到备份作用。组间文件不同，起到分布式存储。
 
+*商品分类级联刷新*
 
+​	通过 Angular JS 变量监控方法，实现选择一级分类之后，初始化二级分类的列表信息。
+
+```javascript
+	// angularjs变量监控方法,查询二级分类信息
+	$scope.$watch('entity.goods.category1Id',function(newValue, oldValue){
+		itemCatService.findByParentId(newValue).success(
+				function(response){
+					$scope.itemCat2List = response;
+					$scope.itemCat3List = "";
+					$scope.entity.goods.typeTemplateId = "";
+				}
+			);
+	});
+```
 
 
 
