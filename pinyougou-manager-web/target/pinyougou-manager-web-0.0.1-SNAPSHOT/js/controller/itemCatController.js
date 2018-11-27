@@ -60,10 +60,10 @@ app.controller('itemCatController' ,function($scope,$controller,itemCatService,t
 		itemCatService.dele($scope.selectIds).success(
 			function(response){
 				if(response.success){
-					$scope.reloadList();	// 刷新列表
 					$scope.selectIds=[];
+					$scope.findByParentId($scope.parentId);
 				}else{
-					alert("删除分类存在子分类");
+					alert(response.message);
 				}					
 			}		
 		);				
