@@ -416,20 +416,23 @@ spring-security 配置
 
 ​	SKU （库存量单位） 为物理上不可分割的最小存货单元。不同的规格、颜色、款式为不同的SKU。
 
+
+
 *分布式文件服务器 FastDFS*
 
 ​	FastDFS 是用 c 语言编写的一款开源的分布式文件系统。FastDFS 为互联网量身定制,充分考虑了**冗余备份、负载均衡、线性扩容**等机制,并注重**高可用、高性能**等指标,使用FastDFS 很容易搭建一套高性能的文件服务器集群提供文件上传、下载等服务。
-​	FastDFS 架构包括 Tracker server 和 Storage server。
+	FastDFS 架构包括 Tracker server 和 Storage server。
 
 - Tracker server （追踪服务器、调度服务器）作用为负载均衡和调度。
 
 - Storage server （存储服务器）作用为文件存储。
 
-​	客户端请求 Tracker server 进行文件上传、下载,通过 Tracker server 调度最终由 Storage server 完成文件上传和下载。	
+   客户端请求 Tracker server 进行文件上传、下载,通过 Tracker server 调度最终由 Storage server 完成文件上传和下载。	
 
-​	服务端角色：
+   服务端角色：
 
 - Tracker : 管理集群，tracker也可以实现集群，每一个节点地位平等，一种备份的机制。tracker负责收集 storage 集群的存储状态。
+
 - Stroage ：实际保存文件。分为多个组，组内文件相同，起到备份作用。组间文件不同，起到分布式存储。
 
 

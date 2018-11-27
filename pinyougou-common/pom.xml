@@ -6,4 +6,17 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>pinyougou-common</artifactId>
+  
+  <dependencies>
+	<!-- 文件上传组件 -->
+	<dependency>
+		<groupId>org.csource.fastdfs</groupId>
+		<artifactId>fastdfs</artifactId>
+	</dependency>
+	<dependency>		<!-- apache上传组件，否则报：java.lang.ClassNotFoundException: org.apache.commons.fileupload.FileItemFactory异常 -->
+		<groupId>commons-fileupload</groupId>
+		<artifactId>commons-fileupload</artifactId>
+	</dependency> 
+  </dependencies>
+  
 </project>

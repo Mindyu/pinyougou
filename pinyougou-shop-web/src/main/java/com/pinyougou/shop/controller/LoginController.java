@@ -16,7 +16,7 @@ public class LoginController {
 		String name = SecurityContextHolder.getContext().getAuthentication().getName();
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("loginName", name);
-//		System.out.println("当前登录用户："+name);
+		System.out.println("当前登录用户："+name);
 		return map;
 	}
 	

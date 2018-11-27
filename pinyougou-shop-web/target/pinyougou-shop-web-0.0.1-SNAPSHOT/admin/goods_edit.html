@@ -20,8 +20,7 @@
 <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
 
 <!-- 富文本编辑器 -->
-<link rel="stylesheet"
-	href="../plugins/kindeditor/themes/default/default.css" />
+<link rel="stylesheet" href="../plugins/kindeditor/themes/default/default.css" />
 <script charset="utf-8" src="../plugins/kindeditor/kindeditor-min.js"></script>
 <script charset="utf-8" src="../plugins/kindeditor/lang/zh_CN.js"></script>
 
@@ -29,6 +28,7 @@
 
 <script type="text/javascript" src="../js/base.js"></script>
 <script type="text/javascript" src="../js/service/goodsService.js"></script>
+<script type="text/javascript" src="../js/service/uploadService.js"></script>
 <script type="text/javascript" src="../js/controller/baseController.js"></script>
 <script type="text/javascript" src="../js/controller/goodsController.js"></script>
 
@@ -108,7 +108,6 @@
 
 							<div class="col-md-2 title rowHeight2x">包装列表</div>
 							<div class="col-md-10 data rowHeight2x">
-
 								<textarea rows="4" class="form-control" placeholder="包装列表" ng-model="entity.goodsDesc.packageList"></textarea>
 							</div>
 
@@ -126,7 +125,7 @@
 							<!-- 颜色图片 -->
 							<div class="btn-group">
 								<button type="button" class="btn btn-default" title="新建"
-									data-target="#uploadModal" data-toggle="modal">
+									data-target="#uploadModal" data-toggle="modal" ng-click="imageEntity={}">
 									<i class="fa fa-file-o"></i> 新建
 								</button>
 
@@ -311,7 +310,7 @@
 					<table class="table table-bordered table-striped">
 						<tr>
 							<td>颜色</td>
-							<td><input class="form-control" placeholder="颜色"></td>
+							<td><input class="form-control" placeholder="颜色" ng-model="imageEntity.color"></td>
 						</tr>
 						<tr>
 							<td>商品图片</td>
@@ -319,8 +318,8 @@
 								<table>
 									<tr>
 										<td><input type="file" id="file" />
-											<button class="btn btn-primary" type="button">上传</button></td>
-										<td><img src="" width="200px" height="200px"></td>
+											<button class="btn btn-primary" type="button" ng-click="uploadFile()">上传</button></td>
+										<td><img src="{{imageEntity.url}}" width="200px" height="200px"></td>
 									</tr>
 								</table>
 							</td>
