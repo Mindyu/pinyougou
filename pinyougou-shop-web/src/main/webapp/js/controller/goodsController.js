@@ -58,8 +58,8 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 				function(response){
 					if(response.success){
 						alert('保存成功');
-						$scope.entity={};
-						editor.html("");	//	清空富文本编辑器
+						$scope.init();
+						editor.html("");		// 清空富文本编辑器
 					}else{
 						alert(response.message);
 					}
@@ -105,7 +105,12 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 		);
 	}
 	
-	$scope.entity={goods:{},goodsDesc:{itemImages:[],specificationItems:[]}};
+	// 初始化值
+	$scope.init=function(){
+		// 默认启用规格
+		$scope.entity={goods:{isEnableSpec:'1'},goodsDesc:{itemImages:[],specificationItems:[]}};
+		$scope.specList = [];	// 规格列表
+	}
 	
 	//将当前上传的图片实体存入图片列表
 	$scope.add_image_entity=function(){
@@ -173,8 +178,10 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 		if (newValue == ""){
 			$scope.typeTemplate = "";							// 类型模板对象
 			$scope.typeTemplate.brandIds = "";					// 品牌转换为Json对象
-			$scope.entity.goodsDesc.customAttributeItems = "";	// 扩展属性
-			$scope.specList = "";								// 规格列表
+			$scope.entity.goodsDesc.customAttributeItems = [];	// 扩展属性
+			$scope.entity.goodsDesc.specificationItems = [];	// 规格项集合 [{"attributeName":"网络","attributeValue":["移动3G","联通3G"]},{"attributeName":"机身内存","attributeValue":["16G","64G"]}]
+			$scope.specList = [];								// 规格列表
+			$scope.entity.itemList = [];						
 		}else if (newValue != undefined) {
 			// alert("监控typeTemplateId信息变化："+newValue);
 			typeTemplateService.findOne(newValue).success(
@@ -212,5 +219,41 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 			$scope.entity.goodsDesc.specificationItems.push({"attributeName":name,"attributeValue":[value]});
 		}
 	}
+	
+	// 创建SKU列表
+	$scope.creatItemList=function(){
+		// 列表初始化，规格对象、价格、库存量、状态、是否默认
+		$scope.entity.itemList = [ {spec:{},price:0,num:9999,status:'0',isDefault:'0'} ];
+		
+		var items = $scope.entity.goodsDesc.specificationItems;
+		
+		for (var i = 0; i < items.length; i++) {
+			$scope.entity.itemList = addColumn($scope.entity.itemList, items[i].attributeName, items[i].attributeValue);
+		}
+	}
+	
+	/**
+	 * $scope.entity.itemList:
+	 * [{"spec":{"网络":"移动3G","机身内存":"16G"},"price":0,"num":9999,"status":"0","isDefault":"0"},
+	 * {"spec":{"网络":"移动3G","机身内存":"32G"},"price":0,"num":9999,"status":"0","isDefault":"0"},
+	 * {"spec":{"网络":"联通3G","机身内存":"16G"},"price":0,"num":9999,"status":"0","isDefault":"0"},
+	 * {"spec":{"网络":"联通3G","机身内存":"32G"},"price":0,"num":9999,"status":"0","isDefault":"0"}]
+	 */
+	
+	// 深克隆方法   原集合、列名、列值
+	addColumn=function(list, columnName, columnValues){
+		var newList = [];
+		
+		for (var i = 0; i < list.length; i++) {
+			var oldRow = list[i];
+			for (var j = 0; j < columnValues.length; j++) {
+				var newRow = JSON.parse( JSON.stringify(oldRow) );
+				newRow.spec[columnName] = columnValues[j];
+				newList.push(newRow);
+			}
+		}
+		return newList;
+	}
+	
 	
 });	

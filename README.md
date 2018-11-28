@@ -435,6 +435,10 @@ spring-security 配置
 
 - Stroage ：实际保存文件。分为多个组，组内文件相同，起到备份作用。组间文件不同，起到分布式存储。
 
+![图片上传](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0.png)
+
+
+
 *商品分类级联刷新*
 
 ​	通过 Angular JS 变量监控方法，实现选择一级分类之后，初始化二级分类的列表信息。
@@ -442,25 +446,70 @@ spring-security 配置
 ```javascript
 	// angularjs变量监控方法,查询二级分类信息
 	$scope.$watch('entity.goods.category1Id',function(newValue, oldValue){
-		itemCatService.findByParentId(newValue).success(
-				function(response){
-					$scope.itemCat2List = response;
-					$scope.itemCat3List = "";
-					$scope.entity.goods.typeTemplateId = "";
-				}
-			);
+		if (newValue != undefined && newValue != "") {
+			// alert("category1Id"+newValue);
+			itemCatService.findByParentId(newValue).success(
+					function(response){
+						$scope.itemCat2List = response;
+						$scope.entity.goods.category2Id = "";
+					}
+				);
+		}
 	});
 ```
 
+![商品分类级联刷新](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E7%BA%A7%E8%81%94%E5%88%B7%E6%96%B0.png)
 
 
 
 
 
+*商品录入【SKU商品信息】* 
 
+对于同一个产品分为多种不同的规格组合。根据选择的规格录入商品的 SKU 信息，当用户选择相应的规格，下面的 SKU 列表就会自动生成。
 
+![规格管理](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%95%86%E5%93%81%E8%A7%84%E6%A0%BC%E7%BB%84%E5%90%88.png)
 
+实现思路：
+（1）我们先定义一个初始的不带规格名称的集合，只有一条记录。
+（2）循环用选择的规格，根据规格名称和已选择的规格选项对原集合进行扩充，添加规格名称和值，新增的记录数与选择的规格选项个数相同
 
+```javascript
+	// 创建SKU列表
+	$scope.creatItemList=function(){
+		// 列表初始化，规格对象、价格、库存量、状态、是否默认
+		$scope.entity.itemList = [ {spec:{},price:0,num:9999,status:'0',isDefault:'0'} ];
+		
+		var items = $scope.entity.goodsDesc.specificationItems;
+		
+		for (var i = 0; i < items.length; i++) {
+			$scope.entity.itemList = addColumn($scope.entity.itemList, items[i].attributeName, items[i].attributeValue);
+		}
+	}
+	
+	/**
+	 * $scope.entity.itemList:
+	 * [{"spec":{"网络":"移动3G","机身内存":"16G"},"price":0,"num":9999,"status":"0","isDefault":"0"},
+	 * {"spec":{"网络":"移动3G","机身内存":"32G"},"price":0,"num":9999,"status":"0","isDefault":"0"},
+	 * {"spec":{"网络":"联通3G","机身内存":"16G"},"price":0,"num":9999,"status":"0","isDefault":"0"},
+	 * {"spec":{"网络":"联通3G","机身内存":"32G"},"price":0,"num":9999,"status":"0","isDefault":"0"}]
+	 */
+	
+	// 深克隆方法   原集合、列名、列值
+	addColumn=function(list, columnName, columnValues){
+		var newList = [];
+		
+		for (var i = 0; i < list.length; i++) {
+			var oldRow = list[i];
+			for (var j = 0; j < columnValues.length; j++) {
+				var newRow = JSON.parse( JSON.stringify(oldRow) );
+				newRow.spec[columnName] = columnValues[j];
+				newList.push(newRow);
+			}
+		}
+		return newList;
+	}
+```
 
 
 

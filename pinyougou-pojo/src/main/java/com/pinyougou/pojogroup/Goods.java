@@ -9,9 +9,10 @@ import com.pinyougou.pojo.TbItem;
 
 public class Goods implements Serializable{
 	
-	private TbGoods goods;
-	private TbGoodsDesc goodsDesc;
-	private List<TbItem> itemList;
+	private TbGoods goods;			// 商品信息
+	private TbGoodsDesc goodsDesc;	// 商品详情
+	private List<TbItem> itemList;	// 
+	
 	public TbGoods getGoods() {
 		return goods;
 	}
