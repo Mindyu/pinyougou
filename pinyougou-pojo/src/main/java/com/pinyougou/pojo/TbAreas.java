@@ -42,4 +42,10 @@ public class TbAreas implements Serializable{
     public void setCityid(String cityid) {
         this.cityid = cityid == null ? null : cityid.trim();
     }
+
+	@Override
+	public String toString() {
+		return "TbAreas [id=" + id + ", areaid=" + areaid + ", area=" + area + ", cityid=" + cityid + "]";
+	}
+    
 }

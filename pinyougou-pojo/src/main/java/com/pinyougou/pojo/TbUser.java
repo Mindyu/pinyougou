@@ -223,4 +223,16 @@ public class TbUser implements Serializable{
     public void setLastLoginTime(Date lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
     }
+
+	@Override
+	public String toString() {
+		return "TbUser [id=" + id + ", username=" + username + ", password=" + password + ", phone=" + phone
+				+ ", email=" + email + ", created=" + created + ", updated=" + updated + ", sourceType=" + sourceType
+				+ ", nickName=" + nickName + ", name=" + name + ", status=" + status + ", headPic=" + headPic + ", qq="
+				+ qq + ", accountBalance=" + accountBalance + ", isMobileCheck=" + isMobileCheck + ", isEmailCheck="
+				+ isEmailCheck + ", sex=" + sex + ", userLevel=" + userLevel + ", points=" + points
+				+ ", experienceValue=" + experienceValue + ", birthday=" + birthday + ", lastLoginTime=" + lastLoginTime
+				+ "]";
+	}
+    
 }

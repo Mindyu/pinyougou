@@ -42,4 +42,10 @@ public class TbCities implements Serializable{
     public void setProvinceid(String provinceid) {
         this.provinceid = provinceid == null ? null : provinceid.trim();
     }
+
+	@Override
+	public String toString() {
+		return "TbCities [id=" + id + ", cityid=" + cityid + ", city=" + city + ", provinceid=" + provinceid + "]";
+	}
+    
 }

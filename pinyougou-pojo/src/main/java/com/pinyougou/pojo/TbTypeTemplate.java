@@ -52,4 +52,11 @@ public class TbTypeTemplate implements Serializable{
     public void setCustomAttributeItems(String customAttributeItems) {
         this.customAttributeItems = customAttributeItems == null ? null : customAttributeItems.trim();
     }
+
+	@Override
+	public String toString() {
+		return "TbTypeTemplate [id=" + id + ", name=" + name + ", specIds=" + specIds + ", brandIds=" + brandIds
+				+ ", customAttributeItems=" + customAttributeItems + "]";
+	}
+	
 }

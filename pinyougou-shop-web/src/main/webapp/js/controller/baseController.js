@@ -48,4 +48,20 @@ app.controller('baseController', function($scope) {	// 通用 Controller
 		}
 		return value;
 	}
+	
+	// 在list集合中根据某key的值查询对象	
+	/**
+	 *  eg：list = [
+	 *  {"attributeName":"网络","attributeValue":["移动3G","移动4G","联通3G"]},
+	 *  {"attributeName":"机身内存","attributeValue":["128G","64G"]}	]
+	 *  key = "attributeName", keyValue="网络"
+	 */
+	$scope.searchObjectByKey=function(list, key, keyValue){
+		for (var i = 0; i < list.length; i++) {
+			if (list[i][key] == keyValue) {		// list[i]['key']	表示集合中属性为‘key’对应的值为keyValue
+				return list[i];
+			}
+		}
+		return null;
+	}
 });

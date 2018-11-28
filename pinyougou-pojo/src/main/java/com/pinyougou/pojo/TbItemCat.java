@@ -42,4 +42,10 @@ public class TbItemCat implements Serializable{
     public void setTypeId(Long typeId) {
         this.typeId = typeId;
     }
+
+	@Override
+	public String toString() {
+		return "TbItemCat [id=" + id + ", parentId=" + parentId + ", name=" + name + ", typeId=" + typeId + "]";
+	}
+    
 }

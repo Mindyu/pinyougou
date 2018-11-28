@@ -187,40 +187,16 @@
                             	<p>
                             	<div>
 	                                <div class="row data-type">
-		                                <div>
-			                                <div class="col-md-2 title">屏幕尺寸</div>
+		                                <div ng-repeat="pojo in specList">
+			                                <div class="col-md-2 title">{{pojo.text}}</div>
 					                        <div class="col-md-10 data">
-					                            <span>
-					                            	<input  type="checkbox" >4.0					                            				                            	
+					                            <span ng-repeat="option in pojo.options">
+					                            	<input  type="checkbox" ng-click="updateSpecAttribute($event, pojo.text, option.optionName)">{{option.optionName}}					                            				                            	
 					                            </span>  	
-												<span>
-					                            	<input  type="checkbox" >4.5					                            				                            	
-					                            </span>
-												<span>
-					                            	<input  type="checkbox" >5.0					                            				                            	
-					                            </span>												
-					                            	
-					                        </div>
-		                                </div>   
-										<div>
-			                                <div class="col-md-2 title">网络制式</div>
-					                        <div class="col-md-10 data">
-					                               
-					                            <span>
-					                            	<input  type="checkbox" >2G					                            				                            	
-					                            </span>  	
-												<span>
-					                            	<input  type="checkbox" >3G					                            				                            	
-					                            </span>
-												<span>
-					                            	<input  type="checkbox" >4G					                            				                            	
-					                            </span>												
-					                            	
 					                        </div>
 		                                </div>  
-		                                                                                  
+		                                {{entity.goodsDesc.specificationItems}} 
 	                                </div>
-	
 	                                
 	                                <div class="row data-type">
 	                                	 <table class="table table-bordered table-striped table-hover dataTable">

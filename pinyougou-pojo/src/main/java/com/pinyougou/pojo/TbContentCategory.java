@@ -22,4 +22,10 @@ public class TbContentCategory implements Serializable{
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
     }
+
+	@Override
+	public String toString() {
+		return "TbContentCategory [id=" + id + ", name=" + name + "]";
+	}
+    
 }

@@ -123,4 +123,13 @@ public class TbAddress implements Serializable{
     public void setAlias(String alias) {
         this.alias = alias == null ? null : alias.trim();
     }
+
+	@Override
+	public String toString() {
+		return "TbAddress [id=" + id + ", userId=" + userId + ", provinceId=" + provinceId + ", cityId=" + cityId
+				+ ", townId=" + townId + ", mobile=" + mobile + ", address=" + address + ", contact=" + contact
+				+ ", isDefault=" + isDefault + ", notes=" + notes + ", createDate=" + createDate + ", alias=" + alias
+				+ "]";
+	}
+    
 }

@@ -27,11 +27,10 @@
 	<script type="text/javascript" src="../js/service/goodsService.js"></script>
 	<script type="text/javascript" src="../js/service/uploadService.js"></script>
 	<script type="text/javascript" src="../js/service/itemCatService.js"></script>
+	<script type="text/javascript" src="../js/service/typeTemplateService.js"></script>
 	<script type="text/javascript" src="../js/controller/baseController.js"></script>
 	<script type="text/javascript" src="../js/controller/goodsController.js"></script>
       
-    
-    
 </head>
 
 <body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="selectItemCat1List()">
@@ -73,16 +72,16 @@
 		                           	  	<table>
 		                           	  		<tr>
 		                           	  			<td>
-		                           	  				<select class="form-control" ng-model="entity.goods.category1Id" ng-option="item.id as item.name for item in itemCat1List"></select>
+		                           	  				<select class="form-control" ng-model="entity.goods.category1Id" ng-options="item.id as item.name for item in itemCat1List"></select>
 		                              			</td>
 		                              			<td>
-		                           	  				<select class="form-control select-sm" ></select>
+		                           	  				<select class="form-control select-sm" ng-model="entity.goods.category2Id" ng-options="item.id as item.name for item in itemCat2List"></select>
 		                              			</td>
 		                              			<td>
-		                           	  				<select class="form-control select-sm" ></select>
+		                           	  				<select class="form-control select-sm" ng-model="entity.goods.category3Id" ng-options="item.id as item.name for item in itemCat3List"></select>
 		                              			</td>
-		                              			<td>
-		                           	  				模板ID:19
+		                              			<td ng-if="entity.goods.typeTemplateId!=null">
+		                           	  				模板ID：{{entity.goods.typeTemplateId}}
 		                              			</td>
 		                           	  		</tr>
 		                           	  	</table>
@@ -97,7 +96,7 @@
 		                           
 		                           <div class="col-md-2 title">品牌</div>
 		                           <div class="col-md-10 data">
-		                              <select class="form-control" ></select>
+		                              <select class="form-control" ng-model="entity.goods.brandId" ng-options="brand.id as brand.text for brand in typeTemplate.brandIds"></select>
 		                           </div>
 		
 								   <div class="col-md-2 title">副标题</div>
@@ -128,7 +127,6 @@
 		                           <div class="col-md-10 data rowHeight2x">
 		                               <textarea rows="4"  class="form-control"  ng-model="entity.goodsDesc.saleService"    placeholder="售后服务"></textarea>
 		                           </div>                        
-                                  
                                     
                                 </div>
                             </div>
@@ -155,7 +153,7 @@
 									            	{{pojo.color}}
 									            </td>
 									            <td>
-									           		<img alt="" src="{{pojo.url}}" width="100px" height="100px">	            	 
+									           		<img alt="" src="''+{{pojo.url}}" width="100px" height="100px">	            	 
 									            </td>
 												 <td> <button type="button" class="btn btn-default" title="删除" ng-click="remove_image_entity($index)" ><i class="fa fa-trash-o"></i> 删除</button></td> 
 					                      </tr>
@@ -169,18 +167,12 @@
                             <!--扩展属性-->
                             <div class="tab-pane" id="customAttribute">
                                 <div class="row data-type">                                
-	                                <div>
-		                                <div class="col-md-2 title">扩展属性1</div>
+	                                <div ng-repeat="item in entity.goodsDesc.customAttributeItems">
+		                                <div class="col-md-2 title">{{item.text}}</div>
 				                        <div class="col-md-10 data">
-				                              <input class="form-control" placeholder="扩展属性1">	            	 
+				                              <input class="form-control" placeholder="{{item.text}}" ng-model="item.value">	            	 
 				                        </div>
 	                                </div>       
-									<div>
-		                                <div class="col-md-2 title">扩展属性2</div>
-				                        <div class="col-md-10 data">
-				                              <input class="form-control" placeholder="扩展属性2">	            	 
-				                        </div>
-	                                </div>  									
                                 </div>
                             </div>
                       
@@ -193,46 +185,18 @@
 			                        </div>
                             	</div>
                             	<p>
-                            	
                             	<div>
-                            	
 	                                <div class="row data-type">
-	                                
-		                                <div>
-			                                <div class="col-md-2 title">屏幕尺寸</div>
+		                                <div ng-repeat="pojo in specList">
+			                                <div class="col-md-2 title">{{pojo.text}}</div>
 					                        <div class="col-md-10 data">
-					                               
-					                            <span>
-					                            	<input  type="checkbox" >4.0					                            				                            	
+					                            <span ng-repeat="option in pojo.options">
+					                            	<input  type="checkbox" ng-click="updateSpecAttribute(pojo.text, option.optionName)">{{option.optionName}}					                            				                            	
 					                            </span>  	
-												<span>
-					                            	<input  type="checkbox" >4.5					                            				                            	
-					                            </span>
-												<span>
-					                            	<input  type="checkbox" >5.0					                            				                            	
-					                            </span>												
-					                            	
-					                        </div>
-		                                </div>   
-										<div>
-			                                <div class="col-md-2 title">网络制式</div>
-					                        <div class="col-md-10 data">
-					                               
-					                            <span>
-					                            	<input  type="checkbox" >2G					                            				                            	
-					                            </span>  	
-												<span>
-					                            	<input  type="checkbox" >3G					                            				                            	
-					                            </span>
-												<span>
-					                            	<input  type="checkbox" >4G					                            				                            	
-					                            </span>												
-					                            	
 					                        </div>
 		                                </div>  
-		                                                                                  
+		                                {{$scope.entity.goodsDesc.specificationItems}} 
 	                                </div>
-	
 	                                
 	                                <div class="row data-type">
 	                                	 <table class="table table-bordered table-striped table-hover dataTable">

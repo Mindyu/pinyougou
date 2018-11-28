@@ -28,5 +28,10 @@ public class Result implements Serializable{
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+	@Override
+	public String toString() {
+		return "Result [success=" + success + ", message=" + message + "]";
+	}
 	
 }

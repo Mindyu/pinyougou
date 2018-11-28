@@ -105,7 +105,7 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 		);
 	}
 	
-	$scope.entity={goods:{},goodsDesc:{itemImages:[]}};
+	$scope.entity={goods:{},goodsDesc:{itemImages:[],specificationItems:[]}};
 	
 	//将当前上传的图片实体存入图片列表
 	$scope.add_image_entity=function(){
@@ -128,44 +128,89 @@ app.controller('goodsController' ,function($scope,$controller,goodsService,uploa
 	
 	// angularjs变量监控方法,查询二级分类信息
 	$scope.$watch('entity.goods.category1Id',function(newValue, oldValue){
-		itemCatService.findByParentId(newValue).success(
-				function(response){
-					$scope.itemCat2List = response;
-					$scope.itemCat3List = "";
-					$scope.entity.goods.typeTemplateId = "";
-				}
-			);
+		if (newValue != undefined && newValue != "") {
+			// alert("category1Id"+newValue);
+			itemCatService.findByParentId(newValue).success(
+					function(response){
+						$scope.itemCat2List = response;
+						$scope.entity.goods.category2Id = "";
+					}
+				);
+		}
 	});
 	
 	// angularjs变量监控方法,查询三级分类信息
 	$scope.$watch('entity.goods.category2Id',function(newValue, oldValue){
-		itemCatService.findByParentId(newValue).success(
-				function(response){
-					$scope.itemCat3List = response;
-					$scope.entity.goods.typeTemplateId = "";
-				}
-			);
+		if(newValue == ""){
+			$scope.entity.goods.category3Id = "";
+		}else if (newValue != undefined) {
+			// alert("category2Id"+newValue);
+			itemCatService.findByParentId(newValue).success(
+					function(response){
+						$scope.itemCat3List = response;
+						$scope.entity.goods.category3Id = "";
+					}
+				);
+		}
 	});
 	
 	// 读取模板ID
 	$scope.$watch('entity.goods.category3Id',function(newValue, oldValue){
-		itemCatService.findOne(newValue).success(
-				function(response){
-					$scope.entity.goods.typeTemplateId = response.typeId;
-				}
-		);
+		if(newValue == ""){
+			$scope.entity.goods.typeTemplateId = "";
+		}else if (newValue != undefined) {
+			// alert("category3Id"+newValue);
+			itemCatService.findOne(newValue).success(
+					function(response){
+						$scope.entity.goods.typeTemplateId = response.typeId;
+					}
+			);
+		}
 	});
 	
-	// 读取模板ID对应的品牌列表
+	// 读取模板ID对应的品牌列表、扩展属性、规格列表
 	$scope.$watch('entity.goods.typeTemplateId',function(newValue, oldValue){
-		typeTemplateService.findOne(newValue).success(
-				function(response){
-					$scope.typeTemplate = response;	// 类型模板对象
-					$scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);	// 转换为Json对象
-					// 扩展属性
-					$scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems);
-				}
-		);
+		if (newValue == ""){
+			$scope.typeTemplate = "";							// 类型模板对象
+			$scope.typeTemplate.brandIds = "";					// 品牌转换为Json对象
+			$scope.entity.goodsDesc.customAttributeItems = "";	// 扩展属性
+			$scope.specList = "";								// 规格列表
+		}else if (newValue != undefined) {
+			// alert("监控typeTemplateId信息变化："+newValue);
+			typeTemplateService.findOne(newValue).success(
+					function(response){
+						$scope.typeTemplate = response;	// 类型模板对象
+						$scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);	// 品牌转换为Json对象
+						// 扩展属性
+						$scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems);
+					}
+			);
+			// 读取规格
+			typeTemplateService.findSpecList(newValue).success(
+					function(response){
+						$scope.specList = response;
+					}
+			);
+		}
 	});
+	
+	// {"attributeName":"网络","attributeValue":["移动2G","联通2G"]}
+	$scope.updateSpecAttribute=function($event, name, value){
+		
+		var object = $scope.searchObjectByKey($scope.entity.goodsDesc.specificationItems, 'attributeName', name);
+		
+		if (object != null) {
+			if ($event.target.checked) {
+				object.attributeValue.push(value);
+			}else{
+				object.attributeValue.splice(object.attributeValue.indexOf(value),1);	
+				if (object.attributeValue.length == 0) 		// 当前规格选项全部清空时，将当前规格项也删除
+					$scope.entity.goodsDesc.specificationItems.splice(
+							$scope.entity.goodsDesc.specificationItems.indexOf(object),1);
+			}
+		}else{
+			$scope.entity.goodsDesc.specificationItems.push({"attributeName":name,"attributeValue":[value]});
+		}
+	}
 	
 });	
