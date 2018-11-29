@@ -70,14 +70,26 @@
 *常见指令*
 
 - ng-app 定义 AngularJS 应用程序的根元素，表示以下的指令 angularJS 都会识别，且在页面加载完时会自动初始化。
+
 - ng-model 指令用于绑定变量,将用户在文本框输入的内容绑定到变量上，而表达式可以实时地输出变量。
+
 - ng-init 对变量初始化或调用某方法。
+
 - ng-controller 用于指定所使用的控制器，在控制器中定义函数和变量，通过scope 对象来访问。
+
 - ng-click 单击事件指令，点击时触发控制器的某个方法。
+
 - ng-if 判断语句，条件不存在就不执行。
+
 - ng-repeat 指令用于循环集合变量。
+
 - $index 用于获取 ng-repeat 指令循环中的索引。
+
 - $http 内置服务，用于访问后端数据。
+
+- $location 服务，用于获取链接地址中的参数值。 $location.search()['id']可以获取地址栏中id对应的值。(注：地址中 ? 前需要添加 # )
+
+  eg:  http://localhost:9102/admin/goods_edit.html#?id=149187842867969
 
 *复选框的使用*
 
@@ -513,19 +525,55 @@ spring-security 配置
 
 
 
+*商家后台列表显示*
 
+![商家商品管理](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%95%86%E5%AE%B6%E5%95%86%E5%93%81%E7%AE%A1%E7%90%86.png)
 
+状态显示：
 
+​	商品信息表（goods）中状态子段为 audit_status 。存储的为数字，0表示未审核、1表示已审核、2表示审核未通过、3为已关闭。从后台获取的状态值，直接在前端进行修改。通过一个status数组存储：
 
+​	$scope.status=['未审核','已审核','审核未通过','关闭'];//商品状态
 
+​	然后列表中显示为 {{status[entity.auditStatus]}}。
 
+分类信息显示：
 
+​	商品分为三级分类。存储于 tb_item_cat 表中。包括 id、父级id、分类名称、对应绑定的类型id。但是为了避免商品查询时重复的关联查询，可以采用现将所有分类信息读取到本地，然后在前端进行分类id到分类名称的转换操作。
 
+```javascript
+	$scope.itemCatList = [];
+	// 全部商品分类查询，存储在itemList数组中，然后再前端页面通过数组下标直接将商品分类ID转换为商品分类名称，避免后端连接查询。
+	$scope.findItemList = function(){
+		itemCatService.findAll().success(
+				function(response){
+					for (var i = 0; i < response.length; i++) {
+						$scope.itemCatList[response[i].id] = response[i].name;
+					}
+				}
+		);
+	}
+```
 
+​	将分类结果 response 对象封装为数组类型，数组下标为商品分类id，数组值为商品分类的名称。然后在列表项中通过 {{itemCatList[entity.category1Id]}} 将id转换为名称。
 
+*存在的问题*
 
+​	pinyougou-shop-web 模块中分页插件提示 ClassNotFoundException。但是页面可以访问。
 
+![](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/error_page.png)
 
+```xml
+			<dependency>
+			    <groupId>com.github.pagehelper</groupId>
+			    <artifactId>pagehelper</artifactId>
+			    <version>${pagehelper.version}</version>
+			</dependency>	
+```
+
+​	如上配置之后，又出现下图错误，导致商品列表无法显示。（但是 manager-web 模块中也没有引入pagehelper,但是没有出现问题）
+
+![](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/error_RowBounds.png)
 
 
 

@@ -33,7 +33,7 @@
       
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="selectItemCat1List()">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="selectItemCat1List();init();findOne()">
 
             <!-- 正文区域 -->
             <section class="content">
@@ -153,7 +153,7 @@
 									            	{{pojo.color}}
 									            </td>
 									            <td>
-									           		<img alt="" src="''+{{pojo.url}}" width="100px" height="100px">	            	 
+									           		<img alt="" src="{{pojo.url}}" width="100px" height="100px">	            	 
 									            </td>
 												 <td> <button type="button" class="btn btn-default" title="删除" ng-click="remove_image_entity($index)" ><i class="fa fa-trash-o"></i> 删除</button></td> 
 					                      </tr>
@@ -175,35 +175,36 @@
 	                                </div>       
                                 </div>
                             </div>
-                      
+                      		
                             <!--规格-->
                             <div class="tab-pane" id="spec">
                             	<div class="row data-type">
 	                            	<div class="col-md-2 title">是否启用规格</div>
 			                        <div class="col-md-10 data">
-			                        	<input type="checkbox" >			                           
+			                        	<input type="checkbox" ng-model="entity.goods.isEnableSpec" ng-true-value="1" ng-false-value="0">			                           
 			                        </div>
                             	</div>
-                            	<p>
-                            	<div>
+                            	
+                            	<div ng-show="entity.goods.isEnableSpec">
 	                                <div class="row data-type">
 		                                <div ng-repeat="pojo in specList">
 			                                <div class="col-md-2 title">{{pojo.text}}</div>
 					                        <div class="col-md-10 data">
 					                            <span ng-repeat="option in pojo.options">
-					                            	<input  type="checkbox" ng-click="updateSpecAttribute(pojo.text, option.optionName)">{{option.optionName}}					                            				                            	
+					                            	<input  type="checkbox" 
+					                            		ng-checked="checkAttributeValue( pojo.text, option.optionName )"
+					                            		ng-click="updateSpecAttribute($event, pojo.text, option.optionName);creatItemList()">{{option.optionName}}					                            				                            	
 					                            </span>  	
 					                        </div>
 		                                </div>  
-		                                {{$scope.entity.goodsDesc.specificationItems}} 
 	                                </div>
 	                                
 	                                <div class="row data-type">
 	                                	 <table class="table table-bordered table-striped table-hover dataTable">
 						                    <thead>
 						                        <tr>					                          
-												    <th class="sorting">屏幕尺寸</th>
-													<th class="sorting">网络制式</th>
+												    <th class="sorting" ng-repeat="item in entity.goodsDesc.specificationItems">{{item.attributeName}}</th>
+												    
 												    <th class="sorting">价格</th>
 												    <th class="sorting">库存</th>
 												    <th class="sorting">是否启用</th>
@@ -211,87 +212,23 @@
 											    </tr>
 								            </thead>
 						                    <tbody>
-						                      <tr>					                           
-										            <td>
-										            	4.0
-										            </td>
-													<td>
-										            	3G
+						                      <tr ng-repeat="pojo in entity.itemList">					                           
+										            <td ng-repeat="item in entity.goodsDesc.specificationItems">
+										            	{{pojo.spec[item.attributeName]}}
 										            </td>
 										            <td>
-										           		<input class="form-control"  placeholder="价格">
+										           		<input class="form-control"  placeholder="价格" ng-model="pojo.price">
 										            </td>
 										            <td>
-										            	<input class="form-control" placeholder="库存数量">
+										            	<input class="form-control" placeholder="库存数量" ng-model="pojo.num">
 										            </td>
 										            <td>
-										             	<input type="checkbox" >
+										             	<input type="checkbox" ng-model="pojo.status" ng-true-value="1" ng-false-value="0">
 										            </td>
 										            <td>
-										                <input type="checkbox" >									             	
+										                <input type="checkbox" ng-model="pojo.isDefault" ng-true-value="1" ng-false-value="0">									             	
 										            </td>
 						                      </tr>
-											  <tr>					                           
-										            <td>
-										            	4.0
-										            </td>
-													<td>
-										            	4G
-										            </td>
-										            <td>
-										           		<input class="form-control"  placeholder="价格">
-										            </td>
-										            <td>
-										            	<input class="form-control" placeholder="库存数量">
-										            </td>
-										            <td>
-										             	<input type="checkbox" >
-										            </td>
-										            <td>
-										                <input type="checkbox" >									             	
-										            </td>
-						                      </tr>
-											  <tr>					                           
-													<td>
-										            	5.0
-										            </td>
-													<td>
-										            	3G
-										            </td>
-										            <td>
-										           		<input class="form-control"  placeholder="价格">
-										            </td>
-										            <td>
-										            	<input class="form-control" placeholder="库存数量">
-										            </td>
-										            <td>
-										             	<input type="checkbox" >
-										            </td>
-										            <td>
-										                <input type="checkbox" >									             	
-										            </td>
-						                      </tr>
-											  <tr>					                           
-													<td>
-										            	5.0
-										            </td>
-													<td>
-										            	4G
-										            </td>
-										            <td>
-										           		<input class="form-control"  placeholder="价格">
-										            </td>
-										            <td>
-										            	<input class="form-control" placeholder="库存数量">
-										            </td>
-										            <td>
-										             	<input type="checkbox" >
-										            </td>
-										            <td>
-										                <input type="checkbox" >									             	
-										            </td>
-						                      </tr>
-											  
 						                    </tbody>
 									 	</table>
 								
@@ -311,8 +248,8 @@
                  	
                    </div>
                   <div class="btn-toolbar list-toolbar">
-				      <button class="btn btn-primary" ng-click="add()"><i class="fa fa-save"></i>保存</button>
-				      <button class="btn btn-default" >返回列表</button>
+				      <button class="btn btn-primary" ng-click="save()"><i class="fa fa-save"></i>保存</button>
+				      <a class="btn btn-default" href="goods.html">返回列表</a>
 				  </div>
 			
             </section>

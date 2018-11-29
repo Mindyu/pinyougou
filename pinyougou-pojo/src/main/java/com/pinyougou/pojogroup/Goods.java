@@ -11,7 +11,7 @@ public class Goods implements Serializable{
 	
 	private TbGoods goods;			// 商品信息
 	private TbGoodsDesc goodsDesc;	// 商品详情
-	private List<TbItem> itemList;	// 
+	private List<TbItem> itemList;	// SKU 信息
 	
 	public TbGoods getGoods() {
 		return goods;
