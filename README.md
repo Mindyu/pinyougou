@@ -577,6 +577,32 @@ spring-security 配置
 
 
 
+商品删除
+
+​	逻辑删除，通过修改数据库表中的 is_delete 字段为1，然后过滤掉商品。然后查询时，在 findPage() 方法中添加 criteria.andIsDeleteIsNull() 条件。
+
+
+
+*注解式事务配置*
+
+​	创建  applicationContext-tx.xml 配置文件
+
+```xml
+<!-- 事务管理器 -->
+<bean id="transactionManager"
+class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<property name="dataSource" ref="dataSource" />
+</bean>
+<!-- 开启事务控制的注解支持 -->
+<tx:annotation-driven transaction-manager="transactionManager"/>
+```
+
+​	然后在方法或服务实现类上添加 @Transactional 注解。
+
+
+
+
+
 
 [1]: https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E9%9D%A2%E5%90%91%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%9E%B6%E6%9E%84.jpg
 [2]: https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/Dubbox%E5%8E%9F%E7%90%86.jpg

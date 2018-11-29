@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -17,6 +18,7 @@ import com.pinyougou.sellergoods.service.BrandService;
 import entity.PageResult;
 
 @Service  // 若未配置则会出现“Failed to check the status of the service”错误。在注册中心找不到服务。
+@Transactional
 public class BrandServiceImpl implements BrandService {
 
 	@Autowired

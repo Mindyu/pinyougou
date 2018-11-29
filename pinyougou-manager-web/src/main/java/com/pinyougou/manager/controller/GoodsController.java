@@ -114,4 +114,14 @@ public class GoodsController {
 		return goodsService.findPage(goods, page, rows);		
 	}
 	
+	@RequestMapping("/updateStatus")
+	public Result updateStatus(Long[] ids, String status) {
+		try {
+			goodsService.updateStatus(ids, status);
+			return new Result(true, "删除成功"); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "删除失败");
+		}
+	}
 }

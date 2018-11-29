@@ -1,5 +1,5 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller   ,goodsService){	
+app.controller('goodsController' ,function($scope,$controller,$location,itemCatService,goodsService){	
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -23,10 +23,22 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService){
 	}
 	
 	//查询实体 
-	$scope.findOne=function(id){				
+	$scope.findOne=function(id){
+		var id = $location.search()['id'];
 		goodsService.findOne(id).success(
 			function(response){
-				$scope.entity= response;					
+				$scope.entity= response;	
+				// 商品图片
+				$scope.entity.goodsDesc.itemImages = JSON.parse($scope.entity.goodsDesc.itemImages);
+				// 扩展属性
+				$scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.entity.goodsDesc.customAttributeItems);
+				// 规格选项
+				$scope.entity.goodsDesc.specificationItems = JSON.parse($scope.entity.goodsDesc.specificationItems);
+				
+				// 转换SKU列表中的规格对象
+				for (var i = 0; i < $scope.entity.itemList.length; i++) {
+					$scope.entity.itemList[i].spec = JSON.parse($scope.entity.itemList[i].spec);
+				}
 			}
 		);				
 	}
@@ -77,4 +89,31 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService){
 		);
 	}
     
+	$scope.status=['未审核','已审核','审核未通过','已关闭'];
+	
+	$scope.itemCatList = [];
+	// 全部商品分类查询，存储在itemList数组中，然后再前端页面通过数组下标直接将商品分类ID转换为商品分类名称，避免后端连接查询。
+	$scope.findItemList = function(){
+		itemCatService.findAll().success(
+				function(response){
+					for (var i = 0; i < response.length; i++) {
+						$scope.itemCatList[response[i].id] = response[i].name;
+					}
+				}
+		);
+	}
+	
+	$scope.updateStatus = function(status){
+		goodsService.updateStatus($scope.selectIds, status).success(
+				function(response){
+					if (response.success) {
+						$scope.reloadList();
+						$scope.selectIds = [];
+					}else{
+						alert(response.message);
+					}
+				}
+		);
+		
+	}
 });	
