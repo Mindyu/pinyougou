@@ -601,6 +601,62 @@ class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 
 
 
+*网站前台广告服务*
+
+​	设计为广告分类表（id、name）与广告内容表（id、categoryId、title、url、pic、status、order）。广告有首页轮播广告、今日推荐、各品类楼层广告等分类。
+
+
+
+​	Redis 缓存数据库用于解决高访问量对后端数据库造成的很大的访问压力。（另一种解决方案为网页静态化）
+
+​	Spring Data Redis 提供了在 srping 应用中通过简单的配置访问 redis 服务，对 reids 底层开发包(Jedis, JRedis, and RJC)进行了高度封装，RedisTemplate 提供了 redis 各种操作、异常处理及序列化，支持发布订阅，并对 spring 3.1 cache 进行了实现。
+
+spring-data-redis 针对 jedis 提供了如下功能：
+	1.连接池自动管理，提供了一个高度封装的“RedisTemplate”类。
+	2.针对 jedis 客户端中大量 api 进行了归类封装,将同一类型操作封装为 operation 接口
+
+操作样例：
+
+key-value 键值对操作
+
+​	插入：redisTemplate.boundValueOps("name").set("mindyu");
+
+​	读取：redisTemplate.boundValueOps("name").get();
+
+​	删除：redisTemplate.delete("name");
+
+Set 类型操作（无序集合）
+
+​	插入：redisTemplate.boundSetOps("nameset").add("曹操"); 
+
+​	读取：redisTemplate.boundSetOps("nameset").members();
+
+​	删除：redisTemplate.boundSetOps("nameset").remove("曹操");	// 单一元素
+
+redisTemplate.delete("name");  // 整个集合
+
+List 集合 （有序）
+
+​	rightPush() 、leftPush()、读取：range(0,10)、index(1)、remove(1, "value") // 1 表示删除数据的个数
+
+Hash 类型
+
+​	put("key","value")、读取所有键：keys()、读取所有值：values()、get(“key”)、delete("key")
+
+​	使用 Redis 缓存时，需要注意，当数据修改时需要清除缓存数据，使其达到一致性约束。必须修改广告时，如果修改了该广告所属的分类，那么需要同时清除原分类以及新分类的缓存信息。
+
+
+
+出现的问题：
+
+​	首页在加载广告模块时，出现 “Failed to load resource: net::ERR_BLOCKED_BY_CLIENT” 错误，是因为谷歌浏览器的广告插件，导致无法加载该图片。
+
+
+
+
+
+
+
 
 
 
