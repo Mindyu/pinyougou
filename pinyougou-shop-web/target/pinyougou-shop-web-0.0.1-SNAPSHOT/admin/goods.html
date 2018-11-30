@@ -52,7 +52,7 @@
 				<div class="form-group form-inline">
 					<div class="btn-group">
 						<a class="btn btn-default" href="goods_edit.html">新建</a>
-						<button type="button" class="btn btn-default" title="删除">
+						<button type="button" class="btn btn-default" title="删除" ng-click="dele()">
 							<i class="fa fa-trash-o"></i> 删除
 						</button>
 						<button type="button" class="btn btn-default" title="提交审核">
@@ -102,7 +102,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="entity in list">
-						<td><input type="checkbox"></td>
+						<td><input type="checkbox" ng-click="updateSelection($event, entity.id)"></td>
 						<td>{{entity.id}}</td>
 						<td>{{entity.goodsName}}</td>
 						<td>{{entity.price}}</td>

@@ -294,5 +294,7 @@
 		<module>pinyougou-sellergoods-service</module>
 		<module>pinyougou-manager-web</module>
 		<module>pinyougou-shop-web</module>
+		<module>pinyougou-content-interface</module>
+		<module>pinyougou-content-service</module>
 	</modules>
 </project>

@@ -2,9 +2,12 @@ com\pinyougou\manager\controller\ItemController.class
 com\pinyougou\manager\controller\LoginController.class
 com\pinyougou\manager\controller\ItemCatController.class
 com\pinyougou\manager\controller\BrandController.class
+com\pinyougou\manager\controller\ContentCategoryController.class
 com\pinyougou\manager\controller\SellerController.class
 com\pinyougou\manager\controller\SpecificationOptionController.class
 com\pinyougou\manager\controller\TypeTemplateController.class
+com\pinyougou\manager\controller\UploadController.class
+com\pinyougou\manager\controller\ContentController.class
 com\pinyougou\manager\controller\GoodsDescController.class
 com\pinyougou\manager\controller\SpecificationController.class
 com\pinyougou\manager\controller\GoodsController.class
