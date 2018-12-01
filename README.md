@@ -724,6 +724,83 @@ Hash 类型
 
 
 
+出现的错误
+
+​	前端可以从后台获取数据（ itemsearch/search.do正常获取数据 ），但是控制台显示" TypeError: Cannot read property 'success' of undefined "错误。
+
+![success_of_undefined](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/success_undefined.png)
+
+原因是因为：
+
+```javascript
+app.service('searchService', function($http){
+	this.search=function(searchMap){
+		return $http.post('itemsearch/search.do',searchMap);
+	}
+});
+```
+
+angularjs 服务层的search方法并未 return。 
+
+
+
+*批量数据导入 solr 系统*
+
+​	将商品数据导入到 solr 系统。
+
+- 创建 solr-util (jar)，引入 dao 模块以及 spring 相关依赖。
+- 创建spring 的配置文件，添加包扫描。
+
+<context:component-scan base-package="com.pinyougou.solrutil">
+</context:component-scan>
+
+- 依赖 pojo 模块，为实体类添加 @Field 注解。
+
+- pojo 中引入 spring-data-solr 依赖（会自动引入其所依赖solr包）动态域中@Dynamic 注解是该包提供的
+
+- 添加 solr.xml 配置文件与 spring 目录中。
+
+  ```xml
+  <!-- solr 服务器地址 -->
+  <solr:solr-server id="solrServer" url="http://127.0.0.1:8080/solr" />
+  <!-- solr 模板，使用 solr 模板可对索引库进行 CRUD 的操作 -->
+  <bean id="solrTemplate" class="org.springframework.data.solr.core.SolrTemplate">
+  	<constructor-arg ref="solrServer" />
+  <bean>
+  ```
+
+- 通过 spring 注入 SolrTemplate 模板类对象。
+
+- 使用 SolrTemplate 对象执行相应的方法。
+
+*关键字搜索模块*
+
+​	通过注入 SolrTemplate 对象，使用该对象实现关键字搜索。
+
+```java
+@Service(timeout=5000)		// 超时5S，默认是1S
+public class ItemSearchServiceImpl implements ItemSearchService{
+
+	@Autowired
+	private SolrTemplate solrTemplate; 
+	
+	@Override
+	public Map search(Map searchMap) {
+		Map map = new HashMap();
+		
+		Query query = new SimpleQuery("*:*");
+		Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
+		query.addCriteria(criteria);
+		
+		ScoredPage<TbItem> page = solrTemplate.queryForPage(query, TbItem.class);
+		map.put("rows", page.getContent());		// page.getContent() 返回一个 List 集合
+		
+		return map;
+	}
+
+}
+```
+
 
 
 
