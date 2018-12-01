@@ -653,6 +653,77 @@ Hash 类型
 
 
 
+### 搜索解决方案
+
+*简介*
+
+​	Solr 是一个开源搜索平台，用于构建搜索应用程序。 它建立在 Lucene(全文搜索引擎)之上。 Solr 是企业级的，快速的和高度可扩展的。 使用 Solr 构建的应用程序非常复杂，可提供高性能。Solr 是一个**可扩展的**，**可部署**，**搜索/存储引擎**，**优化搜索大量以文本为中心的数据**。
+
+*安装及配置*
+
+1. 安装 Tomcat，解压缩。
+2. 解压 solr。
+3. 把 solr 下的 dist 目录 solr-4.10.3.war 部署到 webapps 下(去掉版本号，方便访问)。
+4. 启动 Tomcat 解压缩 war 包
+5. 把solr下 example/lib/ext 目录下的所有的扩展 jar 包，添加到 solr 的工程中(\WEB-INF\lib目录下)。
+6. 创建一个 solrhome 。solr 下的 /example/solr 目录就是一个 solrhome。复制此目录到 D 盘改名为 solrhome
+7. 关联 solr 及 solrhome。需要修改 solr 工程的 web.xml 文件。
+
+```xml
+<env-entry>
+	<env-entry-name>solr/home</env-entry-name>
+	<env-entry-value>d:\solrhome</env-entry-value>
+	<env-entry-type>java.lang.String</env-entry-type>
+</env-entry>
+```
+
+8. 启动 Tomcat 。访问 http://localhost:8080/solr 即可
+
+   ![solr](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/solr%E6%8E%A7%E5%88%B6%E5%8F%B0.png)
+
+
+
+*中文分析器 IK Analyzer*
+
+​	IK Analyzer 是一个开源的，基于 java 语言开发的轻量级的中文分词工具包。
+
+配置
+
+1. 把 IKAnalyzer2012FF_u1.jar 添加到 solr 工程的 lib 目录下
+
+2. solr 工程下创建 WEB-INF/classes 文件夹，用于存放扩展词典、停用词词典、配置文件。
+
+3. 修改 Solrhome 中的 schema.xml 文件，配置一个 FieldType，使用 IKAnalyzer 
+
+   ```xml
+   <fieldType name="text_ik" class="solr.TextField">
+   	<analyzer class="org.wltea.analyzer.lucene.IKAnalyzer"/>
+   </fieldType>
+   ```
+
+   
+
+配置域 
+
+​	域相当于数据库的表字段，用户存放数据，用户可根据业务需要去定义相关的 Field（域），一般来说，每一种域对应着一种数据，用户对同一种数据进行相同的操作。域的常用属性：
+
+- name  域的名称
+- type 域的类型
+- indexed 是否索引
+- stored 是否存储
+- required 是否必须
+- multiValued 是否多值
+
+复制域：
+
+​	将某一个域中的数据复制到另一个域中。比如商品查询时，同样一个关键字可能是品牌、商品标题、商品分类、商家名称等多种可能。此时就需要复制域。
+
+动态域：
+
+​	对于字段名称不固定的情况下，用于动态扩充字段。比如商品的规格的值不是固定的（不同商品可能存在不同的规格项）。
+
+
+
 
 
 
