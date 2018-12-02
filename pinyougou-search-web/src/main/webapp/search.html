@@ -155,35 +155,23 @@
 			</div>
 			<!--selector-->
 			<div class="clearfix selector">
-				<div class="type-wrap">
+				<div class="type-wrap" ng-show="resultMap.categoryList">
 					<div class="fl key">商品分类</div>
 					<div class="fl value">
-						<a href="#">手机</a> <a href="#">电视</a>
+						<span ng-repeat="category in resultMap.categoryList">
+							<a href="#">{{category}}</a>
+						</span>
 					</div>
 					<div class="fl ext"></div>
 				</div>
-				<div class="type-wrap logo">
+				<div class="type-wrap logo" ng-show="resultMap.brandList">
 					<div class="fl key brand">品牌</div>
 					<div class="value logos">
 						<ul class="logo-list">
-							<li><img src="img/_/phone01.png" /></li>
-							<li><img src="img/_/phone02.png" /></li>
-							<li><img src="img/_/phone03.png" /></li>
-							<li><img src="img/_/phone04.png" /></li>
-							<li><img src="img/_/phone05.png" /></li>
-							<li><img src="img/_/phone06.png" /></li>
-							<li><img src="img/_/phone07.png" /></li>
-							<li><img src="img/_/phone08.png" /></li>
-							<li><img src="img/_/phone09.png" /></li>
-							<li><img src="img/_/phone10.png" /></li>
-							<li><img src="img/_/phone11.png" /></li>
-							<li><img src="img/_/phone12.png" /></li>
-							<li><img src="img/_/phone13.png" /></li>
-							<li><img src="img/_/phone14.png" /></li>
-							<li><img src="img/_/phone05.png" /></li>
-							<li><img src="img/_/phone06.png" /></li>
-							<li><img src="img/_/phone07.png" /></li>
-							<li><img src="img/_/phone02.png" /></li>
+							<li ng-repeat="brand in resultMap.brandList">
+								<a href="#">{{brand.text}}</a>
+							</li>
+							<!-- <li><img src="img/_/phone01.png" /></li> -->
 						</ul>
 					</div>
 					<div class="ext">
@@ -191,47 +179,19 @@
 							href="javascript:void(0);">更多</a>
 					</div>
 				</div>
-				<div class="type-wrap">
-					<div class="fl key">网络制式</div>
+				
+				<div class="type-wrap" ng-repeat="spec in resultMap.specList">
+					<div class="fl key">{{spec.text}}</div>
 					<div class="fl value">
 						<ul class="type-list">
-							<li><a>GSM（移动/联通2G）</a></li>
-							<li><a>电信2G</a></li>
-							<li><a>电信3G</a></li>
-							<li><a>移动3G</a></li>
-							<li><a>联通3G</a></li>
-							<li><a>联通4G</a></li>
-							<li><a>电信3G</a></li>
-							<li><a>移动3G</a></li>
-							<li><a>联通3G</a></li>
-							<li><a>联通4G</a></li>
+							<li ng-repeat="option in spec.options">
+								<a>{{option.optionName}}</a>
+							</li>
 						</ul>
 					</div>
 					<div class="fl ext"></div>
 				</div>
-				<div class="type-wrap">
-					<div class="fl key">显示屏尺寸</div>
-					<div class="fl value">
-						<ul class="type-list">
-							<li><a>4.0-4.9英寸</a></li>
-							<li><a>4.0-4.9英寸</a></li>
-						</ul>
-					</div>
-					<div class="fl ext"></div>
-				</div>
-				<div class="type-wrap">
-					<div class="fl key">摄像头像素</div>
-					<div class="fl value">
-						<ul class="type-list">
-							<li><a>1200万以上</a></li>
-							<li><a>800-1199万</a></li>
-							<li><a>1200-1599万</a></li>
-							<li><a>1600万以上</a></li>
-							<li><a>无摄像头</a></li>
-						</ul>
-					</div>
-					<div class="fl ext"></div>
-				</div>
+				
 				<div class="type-wrap">
 					<div class="fl key">价格</div>
 					<div class="fl value">

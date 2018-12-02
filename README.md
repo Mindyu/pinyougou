@@ -22,7 +22,7 @@
 ![面向服务的架构][1]
 
 **Dubbox框架**
-​	致力于提供高性能和透明化的RPC远程服务调用方案，以及SOA服务治理方案。远程服务调用的分布式框架。
+	致力于提供高性能和透明化的RPC远程服务调用方案，以及SOA服务治理方案。远程服务调用的分布式框架。
 
 原理图
 ![Dubbox原理图][2]
@@ -887,6 +887,90 @@ app.filter('trustHtml', ['$sce', function($sce){
 ```
 
 然后在页面通过 `<div class="attr" ng-bind-html="item.title | trustHtml"></div>`来调用转换方法。
+
+
+
+### 搜索业务规则
+
+ 	搜索模块
+
+1. 用户输入搜索关键字，显示列表结果和商品分类信息。因为一个关键字可能对应多种商品分类
+2. 根据第一个商品分类，默认查询该分类的模板ID，然后根据模板ID查询品牌列表和规格列表
+3. 当用户点击某一个商品分类时，则显示该分类对应商品结果，同时根据该分类的模板ID查询对应的品牌列表和规格列表
+4. 当用户点击商品品牌列表时，筛选出当前所选的品牌商品信息
+5. 当用户点击商品规格列表时，筛选出当前所选的规格所对应的商品信息
+6. 用户点击价格区间时，商品信息根据价格进行过滤
+7. 用户点击搜索面板上的条件时，隐藏该条件
+
+
+
+系统搜索量很大，所以需要将搜索信息放置到 Redis 缓存数据库中。
+
+缓存商品分类信息
+
+```java
+	private void saveToRedis() {
+		// 将模板ID放入缓存 分类名称作为key,模板ID作为value
+		List<TbItemCat> itemCatList = findAll();
+		for (TbItemCat itemCat : itemCatList) {
+			redisTemplate.boundHashOps("itemCat").put(itemCat.getName(), itemCat.getTypeId());
+		}
+		System.out.println("将模板ID放入缓存");
+	}
+```
+
+
+
+缓存所有的品牌信息和规格信息
+
+```java
+	private void saveToRedis() {
+		
+		List<TbTypeTemplate> typeTempList = findAll();
+		
+		for(TbTypeTemplate template : typeTempList) {
+			Long id = template.getId();
+			// 将模板ID作为key 品牌列表作为value
+			List brandList = JSON.parseArray(template.getBrandIds(), Map.class);	// {id:1,text:联想}
+			redisTemplate.boundHashOps("brandList").put(id, brandList);
+			
+			// 将模板ID作为key 规格列表作为value
+			List<Map> specList = findSpecList(id);
+			redisTemplate.boundHashOps("specList").put(id, specList);
+		}
+		System.out.println("完成品牌列表、规格列表缓存");
+	}
+```
+
+分类列表查询（spring data solr 条件查询）
+
+```java
+	private List<String> searchCategoryList(Map searchMap) {
+		List<String> list = new ArrayList<>();
+		
+		Query query = new SimpleQuery("*:*");
+		
+		// 根据关键字查询
+		Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));	// where ...
+		query.addCriteria(criteria);
+		
+		// 设置分组选项
+		GroupOptions groupOptions = new GroupOptions().addGroupByField("item_category");	// group by ....（可以有多个分组域）
+		query.setGroupOptions(groupOptions);
+		
+		// 获取分组页
+		GroupPage<TbItem> queryForGroupPage = solrTemplate.queryForGroupPage(query, TbItem.class);
+		// 获取分组结果对象
+		GroupResult<TbItem> groupResult = queryForGroupPage.getGroupResult("item_category");
+		// 获取分组入口页
+		Page<GroupEntry<TbItem>> groupEntries = groupResult.getGroupEntries();
+		// 遍历获取每个对象的值
+		for(GroupEntry<TbItem> entry : groupEntries) {
+			list.add(entry.getGroupValue());
+		}
+		return list;
+	}
+```
 
 
 
