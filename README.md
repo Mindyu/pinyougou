@@ -87,9 +87,15 @@
 
 - $http 内置服务，用于访问后端数据。
 
-- $location 服务，用于获取链接地址中的参数值。 $location.search()['id']可以获取地址栏中id对应的值。(注：地址中 ? 前需要添加 # )
+- $location 服务，用于获取链接地址中的参数值。` $location.search()['id']`id对应的值。(注：地址中 ? 前需要添加 # )
 
   eg:  http://localhost:9102/admin/goods_edit.html#?id=149187842867969
+
+- ng-bind-html 指令用于显示 html 内容
+
+- app.filter 过滤器，通过 | 来调用过滤器
+
+- $sce 服务 严格控制上下文访问，为防止 跨站XSS。该服务可以实现安全控制，比如允许html标签的插入转换。
 
 *复选框的使用*
 
@@ -726,7 +732,7 @@ Hash 类型
 
 出现的错误
 
-​	前端可以从后台获取数据（ itemsearch/search.do正常获取数据 ），但是控制台显示" TypeError: Cannot read property 'success' of undefined "错误。
+1. 前端可以从后台获取数据（ itemsearch/search.do正常获取数据 ），但是控制台显示" TypeError: Cannot read property 'success' of undefined "错误。
 
 ![success_of_undefined](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/success_undefined.png)
 
@@ -741,6 +747,11 @@ app.service('searchService', function($http){
 ```
 
 angularjs 服务层的search方法并未 return。 
+
+	2. 服务启动超时：com.alibaba.dubbo.remoting.TimeoutException: Waiting server-side response timeout. start time: 2018-12-02 08:35:41.093, end time: 2018-12-02 08:35:46.094, client elapsed: 0 ms, server elapsed: 5001 ms, timeout: 5000 ms。
+
+- 网站前台 portal-web 模块出现的原因是因为没有启动 redis 服务器。然后前台广告数据获取不到。
+- 搜索模块 search-web ：就很奇怪，dubbox 服务正常、solr 服务正常。昨天晚上还是正常的，上午纠结了半天，然后不知道为啥突然又好了。。。 烦躁
 
 
 
@@ -800,6 +811,82 @@ public class ItemSearchServiceImpl implements ItemSearchService{
 
 }
 ```
+
+
+
+*搜索结果高亮显示*
+
+​	将搜索关键字在搜索结果中，高亮显示出来。实现原理也就是在关键字前后添加html标签：<em style="color:red">关键字</em>
+
+​	后端实现代码：
+
+```java
+	@Override
+	public Map search(Map searchMap) {
+		Map map = new HashMap();
+		/*
+		Query query = new SimpleQuery("*:*");
+		Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
+		query.addCriteria(criteria);
+		
+		ScoredPage<TbItem> page = solrTemplate.queryForPage(query, TbItem.class);
+		map.put("rows", page.getContent());		// page.getContent() 返回一个 List 集合
+		*/
+		
+		// 高亮显示
+		HighlightQuery query = new SimpleHighlightQuery();
+		
+		// 构建高亮选项
+		HighlightOptions highlightOptions = new HighlightOptions().addField("item_title");	// 高亮域（可以为多个）
+		highlightOptions.setSimplePrefix("<em style='color:red'>");	// 前缀
+		highlightOptions.setSimplePostfix("</em>");					// 后缀
+		
+		query.setHighlightOptions(highlightOptions);	// 为查询设置高亮查询
+		
+		Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
+		query.addCriteria(criteria);
+		
+		 HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);
+		 // 高亮入口集合（每条高亮结果的入口）
+		 List<HighlightEntry<TbItem>> entryList = page.getHighlighted();
+		 
+		 for (HighlightEntry<TbItem> entry : entryList) {
+			 // 获取高亮列表（高亮域的个数）
+			 List<Highlight> hightLightList = entry.getHighlights();
+			 /*
+			 for (Highlight highLight : hightLightList) {
+				 // 每个域可能存在多值（复制域）
+				 List<String> sns = highLight.getSnipplets();
+				 System.out.println(sns);
+			 }*/
+			 if (entry.getHighlights().size()>0 && entry.getHighlights().get(0).getSnipplets().size()>0) {
+				 TbItem item = entry.getEntity();
+				 item.setTitle(entry.getHighlights().get(0).getSnipplets().get(0));		// 用高亮标签结果替换
+			 }
+		 }
+		 
+		 map.put("rows", page.getContent());
+		
+		return map;
+	}
+```
+
+​	前端实现：
+
+angularJS 会将后端插入的html标签原样输出，而不会去解析。这是防止html攻击采取的一种安全策略。可以使用 $sce 服务的 trustAsHtml 方法来实现转换。
+
+```javascript
+// 定义过滤器
+app.filter('trustHtml', ['$sce', function($sce){
+	
+	return function(data){	// 传入参数时，被过滤的内容
+		return $sce.trustAsHtml(data);	// 返回的是过滤后的内容（信任html的转换）
+	}
+	
+} ]);
+```
+
+然后在页面通过 `<div class="attr" ng-bind-html="item.title | trustHtml"></div>`来调用转换方法。
 
 
 
