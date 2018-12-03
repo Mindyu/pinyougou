@@ -1,19 +1,23 @@
 package com.pinyougou.search.service.impl;
 
+import java.security.KeyStore.Entry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.Criteria;
+import org.springframework.data.solr.core.query.FilterQuery;
 import org.springframework.data.solr.core.query.GroupOptions;
 import org.springframework.data.solr.core.query.HighlightOptions;
 import org.springframework.data.solr.core.query.HighlightQuery;
 import org.springframework.data.solr.core.query.Query;
+import org.springframework.data.solr.core.query.SimpleFilterQuery;
 import org.springframework.data.solr.core.query.SimpleHighlightQuery;
 import org.springframework.data.solr.core.query.SimpleQuery;
 import org.springframework.data.solr.core.query.result.GroupEntry;
@@ -34,22 +38,26 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 	private SolrTemplate solrTemplate;
 	
 	@Autowired
-	private RedisTemplate<String, ?> redisTemplate;
+	private RedisTemplate redisTemplate;
 	
 	@Override
 	public Map search(Map searchMap) {
 		Map<Object, Object> map = new HashMap<>();
 		
-		// 查询列表
+		// 1.查询列表
 		map.putAll(searchLsit(searchMap));
 	
-		// 查询分组 商品分类列表
+		// 2.查询分组 商品分类列表
 		List<String> searchCategoryList = searchCategoryList(searchMap);
 		map.put("categoryList", searchCategoryList);
 		
-		if (searchCategoryList.size()>0) {
+		// 3.查询品牌和规格信息
+		String category = (String) searchMap.get("category");
+		if ("".equals(category) && searchCategoryList.size()>0) {
 			Map brandAndSpecList = searchBrandAndSpecList(searchCategoryList.get(0));
 			map.putAll(brandAndSpecList);
+		}else {
+			map.putAll(searchBrandAndSpecList(category));
 		}
 		
 		return map;
@@ -58,23 +66,51 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 	// 查询列表
 	private Map<Object, Object> searchLsit(Map<?, ?> searchMap) {
 		Map<Object, Object> map = new HashMap<>();
-		// 高亮显示
+		// 高亮选项初始化
 		HighlightQuery query = new SimpleHighlightQuery();
-
 		// 构建高亮选项
 		HighlightOptions highlightOptions = new HighlightOptions().addField("item_title"); // 高亮域（可以为多个）
 		highlightOptions.setSimplePrefix("<em style='color:red'>"); // 前缀
 		highlightOptions.setSimplePostfix("</em>"); // 后缀
-
 		query.setHighlightOptions(highlightOptions); // 为查询设置高亮查询
 
+		// 1.1关键字查询
 		Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
 		query.addCriteria(criteria);
 
+		// 1.2商品分类过滤查询
+		if (!"".equals(searchMap.get("category"))) {	// 商品分类不为空字符串
+			// System.out.println("category:"+searchMap.get("category"));
+			FilterQuery filterQuery = new SimpleFilterQuery();
+			Criteria filterCriteria = new Criteria("item_category").is(searchMap.get("category"));
+			filterQuery.addCriteria(filterCriteria);
+			query.addFilterQuery(filterQuery);
+		}
+		
+		// 1.3品牌过滤查询
+		if (!"".equals(searchMap.get("brand"))) {
+			FilterQuery filterQuery = new SimpleFilterQuery();
+			Criteria filterCriteria = new Criteria("item_brand").is(searchMap.get("brand"));
+			filterQuery.addCriteria(filterCriteria);
+			query.addFilterQuery(filterQuery);
+		}
+		
+		// 1.4规格过滤查询 {"keywords":"三星","category":"手机","brand":"三星","spec":{"网络":"电信4G","机身内存":"64G"}}
+		if (searchMap.get("spec")!=null) {
+			Map<String,String> specMap = (Map<String, String>) searchMap.get("spec");
+			for ( String key : specMap.keySet()) {
+				FilterQuery filterQuery = new SimpleFilterQuery();
+				Criteria filterCriteria = new Criteria("item_spec_"+key).is(specMap.get(key));
+				filterQuery.addCriteria(filterCriteria);
+				query.addFilterQuery(filterQuery);
+			}
+		}
+		
+		
+		// 高亮页对象
 		HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);
 		// 高亮入口集合（每条高亮结果的入口）
 		List<HighlightEntry<TbItem>> entryList = page.getHighlighted();
-
 		for (HighlightEntry<TbItem> entry : entryList) {
 			// 获取高亮列表（高亮域的个数）
 			List<Highlight> hightLightList = entry.getHighlights();

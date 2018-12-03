@@ -139,39 +139,33 @@
 			<!--bread-->
 			<div class="bread">
 				<ul class="fl sui-breadcrumb">
-					<li><a href="#">全部结果</a></li>
-					<li class="active">智能手机</li>
+					<li><a href="#">搜索条件</a></li>
 				</ul>
 				<ul class="tags-choose">
-					<li class="tag">全网通<i class="sui-icon icon-tb-close"></i></li>
-					<li class="tag">63G<i class="sui-icon icon-tb-close"></i></li>
+					<li class="tag" ng-if="searchMap.category!=''">商品分类：{{searchMap.category}}<i class="sui-icon icon-tb-close" ng-click="removeSearchItem('category')"></i></li>
+					<li class="tag" ng-if="searchMap.brand!=''">品牌：{{searchMap.brand}}<i class="sui-icon icon-tb-close" ng-click="removeSearchItem('brand')"></i></li>
+					<li class="tag" ng-repeat="(key,value) in searchMap.spec">{{key}}：{{value}}<i class="sui-icon icon-tb-close" ng-click="removeSearchItem(key)"></i></li>
 				</ul>
-				<form class="fl sui-form form-dark">
-					<div class="input-control control-right">
-						<input type="text" /> <i class="sui-icon icon-touch-magnifier"></i>
-					</div>
-				</form>
 				<div class="clearfix"></div>
 			</div>
 			<!--selector-->
 			<div class="clearfix selector">
-				<div class="type-wrap" ng-show="resultMap.categoryList">
+				<div class="type-wrap" ng-if="resultMap.categoryList!=null && searchMap.category=='' ">
 					<div class="fl key">商品分类</div>
 					<div class="fl value">
 						<span ng-repeat="category in resultMap.categoryList">
-							<a href="#">{{category}}</a>
+							<a href="#" ng-click="addSearchItem('category', category)">{{category}}</a>
 						</span>
 					</div>
 					<div class="fl ext"></div>
 				</div>
-				<div class="type-wrap logo" ng-show="resultMap.brandList">
+				<div class="type-wrap logo" ng-if="resultMap.brandList!=null && searchMap.brand=='' ">
 					<div class="fl key brand">品牌</div>
 					<div class="value logos">
 						<ul class="logo-list">
 							<li ng-repeat="brand in resultMap.brandList">
-								<a href="#">{{brand.text}}</a>
+								<a href="#" ng-click="addSearchItem('brand', brand.text)">{{brand.text}}</a>
 							</li>
-							<!-- <li><img src="img/_/phone01.png" /></li> -->
 						</ul>
 					</div>
 					<div class="ext">
@@ -180,12 +174,12 @@
 					</div>
 				</div>
 				
-				<div class="type-wrap" ng-repeat="spec in resultMap.specList">
+				<div class="type-wrap" ng-repeat="spec in resultMap.specList" ng-if="searchMap.spec[spec.text] == null">
 					<div class="fl key">{{spec.text}}</div>
 					<div class="fl value">
 						<ul class="type-list">
 							<li ng-repeat="option in spec.options">
-								<a>{{option.optionName}}</a>
+								<a ng-click="addSearchItem(spec.text, option.optionName)">{{option.optionName}}</a>
 							</li>
 						</ul>
 					</div>
