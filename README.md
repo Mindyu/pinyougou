@@ -1064,7 +1064,51 @@ app.filter('trustHtml', ['$sce', function($sce){
 
 
 
+*搜索数据排序*
 
+​	根据综合、价格升降序、新品的来实现排序。前端传递两个参数，分别为待排序的字段名称和排序方式（升序or降序）。
+
+```java
+		// 1.7 排序
+		String sortValue = (String) searchMap.get("sort");	// 升序 or 降序
+		String sortFiled = (String) searchMap.get("sortFiled");	 // 升序字段
+		if (!"".equals(sortValue) && !"".equals(sortFiled)) {
+			if (sortValue.equals("ASC")) {	// 升序
+				Sort sort = new Sort(Sort.Direction.ASC, "item_"+sortFiled);
+				query.addSort(sort);
+			}else if(sortValue.equals("DESC")) {
+				Sort sort = new Sort(Sort.Direction.DESC, "item_"+sortFiled);
+				query.addSort(sort);
+			}
+		}
+```
+
+​	销量和评价的排序(待完成)：
+
+增加域 item_salecount 用于存储每一个 SKU 的销量信息，然后定时更新每一个 SKU 的销量数据（固定时间，比如一个月，否则会导致新上架的商品无法排在前列），同时每天定时更新一次销量数据。
+
+
+
+*隐藏品牌列表*
+
+​	当用户搜索的关键字包含品牌时隐藏品牌列表。也就是判断搜索关键字中是否存在返回的品牌列表中的信息。这个过程中发现，搜索关键字 searchMap.keywords 和输入框进行了绑定。那么当我们修改输入框的时候，可能就会影响品牌列表的显示。 此处将 search 重载，添加一个带 keywords的方法。然后搜索框就不和搜索关键字进行绑定，而是以传递参数的形式赋值给 searchMap。
+
+
+
+*首页和搜索页对接*
+
+​	在首页输入框中输入关键字，然后跳转到搜索页面，查询对应关键字的数据。
+
+首页通过 链接的形式传递参数`location.href="http://localhost:9104/search.html#?keywords="+$scope.keywords;` 然后搜索模块使用 $location 服务接受参数。
+
+```javascript
+	// 引入 $location 服务
+	// 接受首页跳转
+	$scope.loadKeywords=function(){
+		$scope.searchMap.keywords =  $location.search()['keywords'];
+		$scope.search();
+	}
+```
 
 
 

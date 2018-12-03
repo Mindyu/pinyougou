@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.Criteria;
@@ -55,7 +57,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 		map.put("categoryList", searchCategoryList);
 		
 		// 3.查询品牌和规格信息
-		String category = (String) searchMap.get("category");
+		String category = (String) searchMap.get("category");		// 商品分类名称
 		if ("".equals(category) && searchCategoryList.size()>0) {
 			Map brandAndSpecList = searchBrandAndSpecList(searchCategoryList.get(0));
 			map.putAll(brandAndSpecList);
@@ -78,8 +80,10 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 		query.setHighlightOptions(highlightOptions); // 为查询设置高亮查询
 
 		// 1.1关键字查询
-		Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
-		query.addCriteria(criteria);
+		if (!"".equals(searchMap.get("keywords"))) {
+			Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
+			query.addCriteria(criteria);
+		}
 
 		// 1.2商品分类过滤查询
 		if (!"".equals(searchMap.get("category"))) {	// 商品分类不为空字符串
@@ -134,6 +138,19 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 		if (pageSize == null) pageSize = 20;
 		query.setOffset( (pageNo-1)*pageSize );
 		query.setRows(pageSize);
+		
+		// 1.7 排序
+		String sortValue = (String) searchMap.get("sort");	// 升序 or 降序
+		String sortFiled = (String) searchMap.get("sortFiled");	 // 升序字段
+		if (!"".equals(sortValue) && !"".equals(sortFiled)) {
+			if (sortValue.equals("ASC")) {	// 升序
+				Sort sort = new Sort(Sort.Direction.ASC, "item_"+sortFiled);
+				query.addSort(sort);
+			}else if(sortValue.equals("DESC")) {
+				Sort sort = new Sort(Sort.Direction.DESC, "item_"+sortFiled);
+				query.addSort(sort);
+			}
+		}
 		
 		// 高亮页对象
 		HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);

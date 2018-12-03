@@ -25,7 +25,7 @@
 	
 	<!-- 引用dubbo 服务 -->
 	<dubbo:application name="pinyougou-search-web" />
-	<dubbo:registry address="zookeeper://192.168.25.130:2181"/>
+	<dubbo:registry address="zookeeper://107.191.52.91:2181"/>
 	<dubbo:annotation package="com.pinyougou.search.controller" />  	
 
 </beans>
