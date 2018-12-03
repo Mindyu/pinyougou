@@ -974,6 +974,98 @@ app.filter('trustHtml', ['$sce', function($sce){
 
 
 
+*过滤条件的构建*
+
+​	当点击搜索面板的分类、品牌和规格时，实现查询条件的构建。查询 条件以面包屑的形式显示。当面包屑显示分类、品牌和规格时，要同时隐藏搜索面板对应的区域。点击面包屑查询条件的撤销链接时，重新显示搜索面板相应的区域。
+
+​	面包屑其实就是显示搜索对象。可将搜索对象定义为`$scope.searchMap={'keywords':'','category':'','brand':'',spec:{}};`。然后实现添加查询条件和取消查询条件。
+
+```java
+	// 搜索
+	$scope.search = function() {
+		searchService.search($scope.searchMap).success(function(response) {
+			$scope.resultMap = response;	// 搜索返回的结果
+		});
+	}
+	
+	// 添加查询搜索项
+	$scope.addSearchItem=function(key,value){
+		if (key == 'brand' || key == 'category') {	// 如果点击品牌和分类
+			$scope.searchMap[key] = value;
+		}else{
+			$scope.searchMap.spec[key]=value;
+		}
+		$scope.search();
+	}
+	
+	// 取消查询条件
+	$scope.removeSearchItem=function(key){
+		if (key == 'brand' || key == 'category') {	// 如果点击品牌和分类
+			$scope.searchMap[key] = "";
+		}else{
+			delete $scope.searchMap.spec[key];
+		}
+		$scope.search();
+	}
+```
+
+
+
+*价格区间筛选*
+
+​	点击搜索面板的价格区间，实现按价格筛选相应的商品。和上述的过滤条件类似，前端依然将价格区间以字符串的形式放入到 searchMap 集合中（如 'price':'500-1000'）。然后后端通过字符串的截取获得相应的价格区间，然后进而筛选。
+
+
+
+*自定义搜索结果分页*
+
+​	前端将当前页数和页大小通过 searchMap 传给后端，然后后端通过构建 solr 的 query 对象实现分页效果。然后返回当前页数据和总页数以及总记录数。`$scope.searchMap={'keywords':'','category':'','brand':'','spec':{},'price':'','pageNo':1,'pageSize':40 };//搜索条件封装对象`
+
+通过当前页数、总页数然后构建分页标签。
+
+```javascript
+	// 构建分页标签
+	buildPageLable=function(){
+		$scope.pageLable=[];
+		var firstPage = 1;		// 开始页码
+		var lastPage = $scope.resultMap.totalPages;	 // 截止页码
+		$scope.firstDot = true;
+		$scope.lastDot = true;
+		
+		if (lastPage > 5){
+			if ($scope.searchMap.pageNo<=3){	// 当前页码小于3，显示前五页
+				lastPage = 5;
+				$scope.firstDot = false;
+			}else if ($scope.searchMap.pageNo>=lastPage-2) {	// 当前页码大于总页数-2，则显示后5页
+				firstPage = lastPage - 4;
+				$scope.lastDot = false;
+			}else {
+				firstPage = $scope.searchMap.pageNo - 2;
+				lastPage = $scope.searchMap.pageNo + 2;
+			}
+		}else{
+			$scope.firstDot = false;
+			$scope.lastDot = false;
+		}
+		
+		for (var i = firstPage; i <= lastPage; i++) {
+			$scope.pageLable.push(i);
+		}
+	}
+```
+
+
+
+*多关键字搜索*
+
+​	在搜索时，分词器首先会将我们输入的关键字进行分词，然后对每个分词都会去搜索对应的结果，然后求得并集。比如搜索“三星手机”时，会将“三星”的搜索集合和“手机”搜索结构都返回给我们。这样做可以显示更多数据，让用户有更多的选择。同时会根据搜索的关键字匹配度进行排序。
+
+​	此时注意：当搜索关键字有空格时，中文分词无法进行分词，那么就会导致搜索出来的结果较少或者没有。然后可以采用在**后端去掉关键字中所有的空格**。原来如此，我平时搜索的时候经常喜欢敲空格，以为这样多个条件就能更精准的搜索我想要的额，套路套路。
+
+
+
+
+
 
 
 
