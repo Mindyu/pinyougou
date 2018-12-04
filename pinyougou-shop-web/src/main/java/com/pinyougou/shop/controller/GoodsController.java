@@ -31,7 +31,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/findAll")
-	public List<TbGoods> findAll(){			
+	public List<TbGoods> findAll(){	
 		return goodsService.findAll();
 	}
 	
@@ -41,7 +41,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/findPage")
-	public PageResult  findPage(int page,int rows){			
+	public PageResult findPage(int page,int rows){			
 		return goodsService.findPage(page, rows);
 	}
 	

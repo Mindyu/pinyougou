@@ -1,5 +1,6 @@
 package com.pinyougou.sellergoods.service.impl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -217,7 +218,6 @@ public class GoodsServiceImpl implements GoodsService {
 
 		if (goods != null) {
 			if (goods.getSellerId() != null && goods.getSellerId().length() > 0) { // 商家ID查询, 精确查询
-				// criteria.andSellerIdLike("%"+goods.getSellerId()+"%");
 				criteria.andSellerIdEqualTo(goods.getSellerId());
 			}
 			if (goods.getGoodsName() != null && goods.getGoodsName().length() > 0) {
@@ -256,6 +256,21 @@ public class GoodsServiceImpl implements GoodsService {
 			goodsMapper.updateByPrimaryKey(goods);
 		}
 
+	}
+	
+	/**
+	 * 根据SPU集合查询SKU信息列表
+	 * @param ids
+	 * @param status
+	 * @return
+	 */
+	@Override
+	public List<TbItem> findItemListByGoodsIdAndStatus(Long[] ids, String status){
+		TbItemExample example = new TbItemExample();
+		com.pinyougou.pojo.TbItemExample.Criteria criteria = example.createCriteria();
+		criteria.andStatusEqualTo(status);
+		criteria.andGoodsIdIn(Arrays.asList(ids));
+		return itemMapper.selectByExample(example);
 	}
 
 }

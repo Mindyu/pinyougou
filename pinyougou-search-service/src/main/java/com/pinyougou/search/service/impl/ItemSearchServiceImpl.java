@@ -1,16 +1,14 @@
 package com.pinyougou.search.service.impl;
 
-import java.security.KeyStore.Entry;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.Criteria;
@@ -22,6 +20,7 @@ import org.springframework.data.solr.core.query.Query;
 import org.springframework.data.solr.core.query.SimpleFilterQuery;
 import org.springframework.data.solr.core.query.SimpleHighlightQuery;
 import org.springframework.data.solr.core.query.SimpleQuery;
+import org.springframework.data.solr.core.query.SolrDataQuery;
 import org.springframework.data.solr.core.query.result.GroupEntry;
 import org.springframework.data.solr.core.query.result.GroupPage;
 import org.springframework.data.solr.core.query.result.GroupResult;
@@ -33,7 +32,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.search.service.ItemSearchService;
 
-@Service(timeout = 10000) // 超时5S，默认是1S
+@Service(timeout = 50000) // 超时5S，默认是1S
 public class ItemSearchServiceImpl implements ItemSearchService {
 
 	@Autowired
@@ -223,5 +222,19 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 		return map;
 	}
 	
-	
+	@Override
+	public void importItemList(List<TbItem> itemList) {
+		solrTemplate.saveBeans(itemList);
+		solrTemplate.commit();
+	}
+
+	@Override
+	public void deleteByGoodsIds(Long[] goodsIds) {
+		SolrDataQuery query = new SimpleQuery("*:*");
+		
+		Criteria criteria = new Criteria("item_goodsid").in(Arrays.asList(goodsIds));
+		query.addCriteria(criteria );
+		solrTemplate.delete(query);
+		solrTemplate.commit();
+	}
 }
