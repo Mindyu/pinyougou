@@ -1112,6 +1112,100 @@ app.filter('trustHtml', ['$sce', function($sce){
 
 
 
+*索引库的增量更新*
+
+​	实现在商品审核之后将数据更新到 solr 索引库，在商品删除的时候删除 solr 索引库中相应的记录。(增量更新)
+
+​	商品审核是对商品表（SPU信息）进行操作，但是索引库中存储的是SKU信息，所以首先需要通过商品的 SPU 信息查询该商品对应的 SKU 信息，然后将查询到的集合提交给 solrTemplate。删除可以直接根据 goodsId 集合进行条件删除。
+
+
+
+### 网页静态化技术
+
+​	网页静态化技术和缓存技术的共同点都是为了**减轻数据库的访问压力**，但是具体的应用场景不同，缓存比较适合小规模的数据，而网页静态化比较适合大规模且相对变化不太频繁的数据。另外网页静态化还有利于 SEO（搜索引擎优化）。静态界面通过 Nginx 服务器部署可以达到5万的并发，而Tomcat只有几百。
+
+*Freemarker* 模板引擎，基于模板来生成文本输出。与web容器无关。
+
+模板文件的元素
+
+- 文本，直接输出的部分
+- 注释，<#-- 该内容不会输出 -->
+- 插值，${...} 将使用数据模型中的部分来替代输出
+- FTL 指令，实现逻辑
+
+生成文件
+
+```java
+	public static void main(String[] args) throws IOException, TemplateException {
+		
+		// 1. 创建一个配置对象
+		Configuration configuration = new Configuration(Configuration.getVersion());
+		// 2. 设置模板所在的目录
+		configuration.setDirectoryForTemplateLoading(new File("E:\\eclipse-workspace\\freemarkerDemo\\src\\main\\resources\\"));
+		// 3. 设置默认字符编码
+		configuration.setDefaultEncoding("utf-8");
+		// 4. 加载模板，创建一个模板对象
+		Template template = configuration.getTemplate("test.ftl");
+		// 5. 模板的数据集模型
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("name", "Mindyu");
+		map.put("message", "this is a freemarker demo!");
+		// 6. 模板输出流对象
+		Writer out = new FileWriter("d:\\src\\test.html");
+		// 7. 输出文件
+		template.process(map, out);
+		// 8. 关闭输出流对象
+		out.close();
+		
+	}
+```
+
+
+
+FTL 指令
+
+- assgin 用于在页面上定义一个变量：<#assign info={"mobile":"aa",'address':'11'} >
+
+- include 用于模板文件的嵌套：<#include "head.ftl">
+
+- if 指令 条件判断语句
+
+- list 指令 对集合的遍历 (goods_index 获得索引)
+
+  ```javascript
+  <#list goodsList as goods>
+  	${goods_index+1} 商品名称： ${goods.name} 价格：${goods.price}<br>
+  </#list>
+  ```
+
+内建函数 （语法格式：变量+?+函数名称）
+
+- ${goodsList?size} 获取集合的大小
+- <#assign object=text?eval> 转换 JSON 字符串为对象
+- ${today?date} 当前日期 （dataModel.put("today", new Date());）
+- ${today?time} 当前时间
+- ${today?datetime} 当前日期+时间
+- ${today?string("yyyy年MM月")} 日期格式化
+- ${number} 数字会以每三位一个分隔符显示 123,456,789
+- ${number?c} 将数字转换为字符串
+- 空值处理运算符
+  - variable?? 判断变量是否存在，存在则返回true
+  - ${aaa!'-'} 缺失变脸默认值,若aaa为空值则使用默认值‘-’
+- 运算符
+  - 算数运算符 +、-、*、/
+  - 逻辑运算符 && || ! 
+  - 比较运算符 = 、==、!=、>(gt)、<(lt)、>=(gte)、<=(lte)
+
+
+
+
+
+
+
+
+
+
+
 
 
 

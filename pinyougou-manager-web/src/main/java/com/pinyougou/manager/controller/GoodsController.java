@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.page.service.ItemPageService;
 import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.Goods;
@@ -29,6 +30,9 @@ public class GoodsController {
 	
 	@Reference
 	private ItemSearchService itemSearchService;
+	
+	@Reference(timeout=50000)
+	private ItemPageService itemPageService;
 	
 	/**
 	 * 返回全部列表
@@ -126,8 +130,10 @@ public class GoodsController {
 	public Result updateStatus(Long[] ids, String status) {
 		try {
 			goodsService.updateStatus(ids, status);
-			if ("1".equals(status)) {	// 如果为审核
+			if ("1".equals(status)) {	// 如果为审核通过
+				// 得到需要的SKU列表
 				List<TbItem> itemList = goodsService.findItemListByGoodsIdAndStatus(ids, status);
+				// 导入到solr 
 				itemSearchService.importItemList(itemList);
 			}
 			return new Result(true, "修改成功"); 
@@ -135,5 +141,10 @@ public class GoodsController {
 			e.printStackTrace();
 			return new Result(false, "修改失败");
 		}
+	}
+	
+	@RequestMapping("/genHtml")
+	public void genItemHtml(Long goodsId) {
+		itemPageService.genItemHtml(goodsId);
 	}
 }

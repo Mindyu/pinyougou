@@ -301,5 +301,7 @@
 		<module>pinyougou-search-interface</module>
 		<module>pinyougou-search-service</module>
 		<module>pinyougou-search-web</module>
+		<module>pinyougou-page-interface</module>
+		<module>pinyougou-page-service</module>
 	</modules>
 </project>
