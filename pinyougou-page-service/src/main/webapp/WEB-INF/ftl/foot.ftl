@@ -289,5 +289,5 @@ $(function(){
 <script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
 <script type="text/javascript" src="js/plugins/jquery.jqzoom/jquery.jqzoom.js"></script>
 <script type="text/javascript" src="js/plugins/jquery.jqzoom/zoom.js"></script>
-<script type="text/javascript" src="index/index.js"></script>
+<!--<script type="text/javascript" src="index/index.js"></script>-->
 

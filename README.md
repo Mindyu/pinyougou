@@ -1198,7 +1198,174 @@ FTL 指令
 
 
 
+*商品详情页的数据显示*
 
+​	创建 pinyougou-page-interface 工程，创建 com.pinyougou.page.service 包,包下创建接口 ItemPageService。然后再创建服务层，来实现接口方法。pom 文件中添加 freemarker 依赖。Spring 配置文件中添加 freemarker 的bean.
+
+```xml
+<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+	<property name="templateLoaderPath" value="/WEB-INF/ftl/" />
+	<property name="defaultEncoding" value="UTF-8" />
+</bean>
+```
+
+服务层生成静态页面的方法：
+
+```java
+	@Override
+	public boolean genItemHtml(Long goodsId) {
+
+		try {
+			Configuration configuration = freeMarkerConfig.getConfiguration();
+			Template template = configuration.getTemplate("item.ftl");
+			
+			// 创建数据模型
+			Map<Object, Object> dataModel = new HashMap<>();
+			// 1.商品主表信息
+			TbGoods goods = goodsMapper.selectByPrimaryKey(goodsId);
+			dataModel.put("goods", goods);
+			// 2.商品详细信息
+			TbGoodsDesc goodsDesc = goodsDescMapper.selectByPrimaryKey(goodsId);
+			dataModel.put("goodsDesc", goodsDesc);
+			// 3.读取商品分类
+			String itemCat1 = itemCatMapper.selectByPrimaryKey(goods.getCategory1Id()).getName();
+			String itemCat2 = itemCatMapper.selectByPrimaryKey(goods.getCategory2Id()).getName();
+			String itemCat3 = itemCatMapper.selectByPrimaryKey(goods.getCategory3Id()).getName();
+			dataModel.put("itemCat1", itemCat1);
+			dataModel.put("itemCat2", itemCat2);
+			dataModel.put("itemCat3", itemCat3);
+			// 4.读取SKU列表信息
+			TbItemExample example = new TbItemExample();
+			Criteria criteria = example.createCriteria();
+			criteria.andGoodsIdEqualTo(goodsId);	// 设置SPU信息
+			criteria.andStatusEqualTo("1");			// 存在状态
+			example.setOrderByClause("is_default desc");	// 按是否默认降序排序,目的是为了方便前端可以直接取出默认选项
+			List<TbItem> itemList = itemMapper.selectByExample(example);
+			dataModel.put("itemList", itemList);
+			
+			Writer out = new FileWriter("D:\\src\\item\\"+goodsId+".html");
+			template.process(dataModel, out);
+			out.close();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (TemplateException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+```
+
+在运营商管理后台引入依赖，因为需要在运营商审核之后生成静态页面。
+
+
+
+freemarker 图片列表的生成（扩展属性、规格列表类似）
+
+​	通过 assign指令，将字符串转换为对象格式`<#assign imageList=goodsDesc.itemImages?eval />`，然后在图片显示区遍历图片对象。
+
+```html
+<!--默认第一个预览-->
+<div id="preview" class="spec-preview">
+	<#if (imageList?size>0)>
+		<span class="jqzoom"><img jqimg="${imageList[0].url}" src="${imageList[0].url}" width="400px" height="400px"/></span>
+	</#if>
+</div>
+<!--下方的缩略图-->
+<div class="spec-scroll">
+	<a class="prev">&lt;</a>
+	<!--左右按钮-->
+	<div class="items">
+		<ul>
+			<#list imageList as item>
+				<li><img src="${item.url}" bimg="${item.url}" onmousemove="preview(this)" /></li>
+			</#list>
+		</ul>
+	</div>
+	<a class="next">&gt;</a>
+</div>
+```
+
+
+
+*商品详情页-前端逻辑*
+
+​	静态页面的动态效果，就需要 angularjs 来实现。比如商品购买数量的点击事件对应到angularjs的变量中、规格的选择。都已变量的形式与页面进行绑定。
+
+​	不同规格的标题、价格等信息都不相同（SKU信息），为了实现静态页面的效果可以在将SKU信息生成到静态页面。以变量的形式保存在前端。然后用户点击不同规格时，去匹配对应的SKU列表中的某一条数据。
+
+```javascript
+ //控制层 
+app.controller('itemController' ,function($scope){	
+	 
+	 $scope.specificationItems={};	// 存储用户选择的规格
+	 
+	 // 数量加减
+	 $scope.addNum=function(x){
+		 $scope.num+=x;
+		 if ($scope.num<1) $scope.num=1;
+	 }
+	 
+	 // 选择规格
+	 $scope.selectSpecification=function(key,value){
+		 $scope.specificationItems[key]=value;
+		 searchSku();	// 查询sku
+	 }
+	 
+	 // 判断规格是否被选中
+	 $scope.isSelected=function(key,value){
+		 if($scope.specificationItems[key]==value){
+			 return true;
+		 }return false;
+	 }
+	 
+	 $scope.sku={};
+	 // 加载默认的sku信息
+	 $scope.loadSku=function(){
+		 $scope.sku=skuList[0];
+		 $scope.specificationItems=JSON.parse(JSON.stringify($scope.sku.spec)); // 深克隆
+	 }
+	 
+	 // 判断两个对象是否匹配
+	 isEqual=function(map1,map2){
+		 
+		 for(var k in map1){
+			 if(map1[k]!=map2[k]){
+				 return false;
+			 }
+		 }
+		 for(var k in map2){
+			 if(map2[k]!=map1[k]){
+				 return false;
+			 }
+		 }
+		 return true;
+	 }
+	 
+	 // 根据规格查询sku信息
+	 searchSku=function(){
+		 
+		 for(var i=0;i<skuList.length;i++){
+			 if( isEqual($scope.specificationItems, skuList[i].spec) ){
+				 $scope.sku=skuList[i];
+				 return;
+			 }
+		 }
+		 $scope.sku={id:0,title:'--------',price:0};
+	 }
+	 // 添加到购物车
+	 $scope.addToCart=function(){
+		 alert('sku_id:'+ $scope.sku.id);
+	 }
+	 
+});	
+```
+
+
+
+*系统模块的对接*
+
+​	
 
 
 

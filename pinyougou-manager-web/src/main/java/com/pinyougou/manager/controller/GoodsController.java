@@ -131,10 +131,16 @@ public class GoodsController {
 		try {
 			goodsService.updateStatus(ids, status);
 			if ("1".equals(status)) {	// 如果为审核通过
+				/********导入到索引库**********/
 				// 得到需要的SKU列表
 				List<TbItem> itemList = goodsService.findItemListByGoodsIdAndStatus(ids, status);
 				// 导入到solr 
 				itemSearchService.importItemList(itemList);
+				
+				/********生成静态页面**********/
+				for (Long id : ids) {
+					itemPageService.genItemHtml(id);
+				}
 			}
 			return new Result(true, "修改成功"); 
 		} catch (Exception e) {
