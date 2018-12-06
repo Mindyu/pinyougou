@@ -1365,7 +1365,9 @@ app.controller('itemController' ,function($scope){
 
 *系统模块的对接*
 
-​	
+​	运营商管理后台在审核之后进行静态页面的生成。创建 page-web 工程，用于存储生成页面。实现前端 angular 动态逻辑和静态模板的实现。
+
+​	修改搜索系统模块中的search.html。点击搜索页面的图片跳转到静态页面。
 
 
 
