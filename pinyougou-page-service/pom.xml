@@ -42,7 +42,7 @@
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-test</artifactId>		
 	</dependency>
-	<!-- dubbo相关 -->
+	<!-- dubbo相关	// 采用JMS服务，运营商管理后台就不需要直接访问该服务了
 	<dependency>
 		<groupId>com.alibaba</groupId>
 		<artifactId>dubbo</artifactId>	
@@ -54,7 +54,7 @@
 	<dependency>
 		<groupId>com.github.sgroschupf</groupId>
 		<artifactId>zkclient</artifactId>		
-	</dependency>
+	</dependency> -->
 	<dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>		
@@ -80,6 +80,11 @@
 		<groupId>org.freemarker</groupId>
 		<artifactId>freemarker</artifactId>
 	</dependency>
+	<dependency>
+		<groupId>org.apache.activemq</groupId>
+		<artifactId>activemq-client</artifactId>
+		<version>5.13.4</version>
+	</dependency>	
 
 	<dependency>
 		<groupId>com.pinyougou</groupId>

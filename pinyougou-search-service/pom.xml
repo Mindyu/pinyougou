@@ -76,6 +76,11 @@
 		<artifactId>servlet-api</artifactId>		
 		<scope>provided</scope>
 	</dependency>
+	<dependency>
+		<groupId>org.apache.activemq</groupId>
+		<artifactId>activemq-client</artifactId>
+		<version>5.13.4</version>
+	</dependency>
   	<dependency>
   		<groupId>com.pinyougou</groupId>
   		<artifactId>pinyougou-search-interface</artifactId>

@@ -1371,6 +1371,291 @@ app.controller('itemController' ,function($scope){
 
 
 
+### 消息中间件解决方案 JMS
+
+*消息中间件*
+
+​	消息中间件利用**高效可靠的消息传递机制进行平台无关的数据交流**，并基于数据通信来进行分布式系统的集成。通过提供消息传递和消息排队模型，它可以在分布式环境下扩展进程间的通信。对于消息中间件，常见的角色大致也就有 Producer（生产者）、Consumer（消费者）。
+
+*常见产品*
+
+- ActiveMQ  Apache 出品，最流行的，能力强劲的开源消息总线。
+- RabbitMQ AMQP 协议的领导实现，支持多种场景。
+- ZeroMQ 史上最快的消息队列系统
+- Kafka 高吞吐，在一台普通的服务器上就可以达到 10W/s的吞吐速率；完全的分布式系统。适合处理海量数据。
+
+*JMS（Java 消息服务）*
+
+​	 Java 平台上有关面向消息中间件的技术规范，它便于消息系统中的 Java 应用程序进行消息交换，并且通过提供标准的产生、发送、接收消息的接口简化企业应用的开发。**是一系列接口规范**。
+
+​	消息是 JMS 中的一种类型对象，由两部分组成：**报头和消息主体**。报头由路由信息以及有关该消息的元数据组成。消息主体则携带着应用程序的数据或有效负载。消息正文格式：
+
+- · TextMessage--一个字符串对象
+- · MapMessage--一套名称-值对
+- · ObjectMessage--一个序列化的 Java 对象
+- · BytesMessage--一个字节的数据流
+- · StreamMessage -- Java 原始值的数据流
+
+*JMS 消息传递类型*
+
+- 点对点模式：一个生产者一个消费者，存在多个消费者时，只有一个消费者可以获取消息。（未消费的消息会存储在队列中直到被消费）
+- 发布订阅模式：一个生产者产生消息并进行发送后，可以由多个消费者进
+  行接收。（如果消息发送时没有消费者，那么这个消息无效，不会再被消费）
+
+*安装*
+
+​	下载、解压、赋权、启动服务（./activemq start）。ActiveMQ 管理页面端口8161。（用户：admin 密码：admin）
+
+![activemq管理界面](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/activemq.png)
+
+
+
+*点对点模式案例*
+
+​	引入依赖
+
+```xml
+	<dependency>
+		<groupId>org.apache.activemq</groupId>
+		<artifactId>activemq-client</artifactId>
+		<version>5.13.4</version>
+	</dependency>
+```
+
+​	消息生产者:
+
+```java
+	public static void main(String[] args) throws JMSException {
+		// 1. 创建连接工厂
+		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://192.168.25.130:61616");
+		// 2. 创建连接对象
+		Connection connection = connectionFactory.createConnection();
+		// 3. 启动连接
+		connection.start();
+		// 4. 获取session（会话对象） 参数1：是否启动事务  参数2：消息确认方式
+		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		// 5. 创建队列对象
+		Queue queue = session.createQueue("test-queue");
+		// 6. 创建消息生产者对象
+		MessageProducer producer = session.createProducer(queue);
+		// 7. 创建消息对象（TextMessage）
+		TextMessage message = session.createTextMessage("这是一条text消息");
+		// 8. 发送消息 
+		producer.send(message);
+		// 9. 关闭资源
+		producer.close();
+		session.close();
+		connection.close();
+	}
+```
+
+注：创建session的第二个参数为消息确认模式：AUTO_ACKNOWLEDGE = 1 自动确认、CLIENT_ACKNOWLEDGE = 2 客户端手动确认、DUPS_OK_ACKNOWLEDGE = 3 自动批量确认、SESSION_TRANSACTED = 0 事务提交并确认。
+
+​	消息消费者：
+
+```java
+	public static void main(String[] args) throws JMSException, IOException {
+		// 1. 创建连接工厂
+		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://192.168.25.130:61616");
+		// 2. 创建连接对象
+		Connection connection = connectionFactory.createConnection();
+		// 3. 启动连接
+		connection.start();
+		// 4. 获取session（会话对象） 参数1：是否启动事务 参数2：消息确认方式
+		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		// 5. 创建队列对象
+		Queue queue = session.createQueue("test-queue");
+		// 6. 创建消息的消费者对象
+		MessageConsumer consumer = session.createConsumer(queue);
+		// 7. 设置监听
+		consumer.setMessageListener(new MessageListener() {
+			@Override
+			public void onMessage(Message message) {
+				TextMessage textMessage = (TextMessage) message;
+				try {
+					System.out.println(""+ textMessage.getText());
+				} catch (JMSException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		// 8. 等待键盘输入
+		System.in.read();
+		// 9. 关闭资源
+		consumer.close();
+		session.close();
+		connection.close();
+	}
+```
+
+*发布订阅模式*
+
+​	只需要修改上述第五步中，创建对应的主题对象即可`Topic topic = session.createTopic("test-topic");`
+
+
+
+*JMS 应用*
+
+​	运营商后台管理模块中，商品审核之后需要导入 solr 索引库和生成静态页面。对于这种同步调用的情况存在**耦合度高、后期不易维护、同步执行、导致审核过程缓慢、用户体验性不好**等多种问题。我们可以采用消息中间件来进行解耦，实现运营商后端与搜索服务的零耦合。运营商执行审核后，向activeMQ 发送消息（SKU列表），搜索服务从activeMQ接收到消息执行导入操作。
+
+​	然后搜索模块采用 solr 系统实现，那么我们可以采用点对点的方式实现消息服务，而静态页面生成服务，由于静态页面存储于多个服务器，并且各个服务器数据相同，需要实现服务器之间同步更新的效果，所以需要采用发布订阅的方式实现。
+
+导入搜索系统的消息生产者实现：
+
+1. 解除耦合（移除itemService服务依赖）
+2. 引入activeMQ客户端依赖、spring-jms依赖。
+3. 创建jms生产者配置文件
+
+```xml
+	<!-- 真正可以产生Connection的ConnectionFactory，由对应的 JMS服务厂商提供-->  
+	<bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">  
+	    <property name="brokerURL" value="tcp://192.168.25.130:61616"/>  
+	</bean>
+	   
+    <!-- Spring用于管理真正的ConnectionFactory的ConnectionFactory -->  
+	<bean id="connectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">  
+	<!-- 目标ConnectionFactory对应真实的可以产生JMS Connection的ConnectionFactory -->  
+	    <property name="targetConnectionFactory" ref="targetConnectionFactory"/>  
+	</bean>  
+		   
+    <!-- Spring提供的JMS工具类，它可以进行消息发送、接收等 -->  
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">  
+	    <!-- 这个connectionFactory对应的是我们定义的Spring提供的那个ConnectionFactory对象 -->  
+	    <property name="connectionFactory" ref="connectionFactory"/>  
+	</bean>      
+    <!--这个是队列目的地，点对点的  文本信息-->  
+	<bean id="queueSolrDestination" class="org.apache.activemq.command.ActiveMQQueue">  
+	    <constructor-arg value="pinyougou_queue_solr"/>  
+	</bean>    
+	<!--这个是队列目的地，点对点的  文本信息，删除操作-->  
+	<bean id="queueSolrDeleteDestination" class="org.apache.activemq.command.ActiveMQQueue">  
+	    <constructor-arg value="pinyougou_queue_solr_delete"/>  
+	</bean>  
+	
+	<!--这个是订阅模式  生成页面-->  
+	<bean id="topicPageDestination" class="org.apache.activemq.command.ActiveMQTopic">  
+	    <constructor-arg value="pinyougou_topic_page"/>  
+	</bean> 
+	<!--这个是订阅模式  删除页面-->  
+	<bean id="topicPageDeleteDestination" class="org.apache.activemq.command.ActiveMQTopic">  
+	    <constructor-arg value="pinyougou_topic_page_delete"/>  
+	</bean> 
+```
+
+4. web.xml文件中引入该配置文件(contextConfigLocation)
+5. 代码实现，注入所用的对象服务(jmsTemplate、queueSolrDestination、queueSolrDeleteDestination)
+
+```
+/********导入到索引库**********/
+// 得到需要的SKU列表
+List<TbItem> itemList = goodsService.findItemListByGoodsIdAndStatus(ids, status);
+// 导入到solr 
+// itemSearchService.importItemList(itemList);
+final String jsonString = JSON.toJSONString(itemList);	// 转换为json字符串
+
+jmsTemplate.send(queueSolrDestination, new MessageCreator() {
+	@Override
+	public Message createMessage(Session session) throws JMSException {
+		return session.createTextMessage(jsonString);
+	}
+});
+
+/********生成静态页面**********/
+/*for (final Long id : ids) {
+	itemPageService.genItemHtml(id);
+}*/
+jmsTemplate.send(topicPageDestination, new MessageCreator() {
+	@Override
+	public Message createMessage(Session session) throws JMSException {
+		return session.createObjectMessage(ids);
+	}
+});
+
+```
+
+
+
+消息消费者（搜索服务）
+
+ 	1.  添加 activeMQ 依赖
+ 	2. 添加spring配置文件  applicationContext-jms-consumer.xml
+
+```xml
+	<!-- 真正可以产生Connection的ConnectionFactory，由对应的 JMS服务厂商提供-->  
+	<bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">  
+	    <property name="brokerURL" value="tcp://192.168.25.130:61616"/>  
+	</bean>
+	   
+    <!-- Spring用于管理真正的ConnectionFactory的ConnectionFactory -->  
+	<bean id="connectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">  
+	<!-- 目标ConnectionFactory对应真实的可以产生JMS Connection的ConnectionFactory -->  
+	    <property name="targetConnectionFactory" ref="targetConnectionFactory"/>  
+	</bean>  
+	
+    <!--这个是队列目的地，导入到索引库-->  
+	<bean id="queueSolrDestination" class="org.apache.activemq.command.ActiveMQQueue">  
+	    <constructor-arg value="pinyougou_queue_solr"/>  
+	</bean>    
+	
+	<!-- 消息监听容器 -->
+	<bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="queueSolrDestination" />
+		<property name="messageListener" ref="itemSearchListener" />
+	</bean>
+	
+	<!--这个是队列目的地，删除索引库-->  
+	<bean id="queueSolrDeleteDestination" class="org.apache.activemq.command.ActiveMQQueue">  
+	    <constructor-arg value="pinyougou_queue_solr_delete"/>  
+	</bean>    
+	
+	<!-- 消息监听容器 -->
+	<bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="queueSolrDeleteDestination" />
+		<property name="messageListener" ref="itemDeleteListener" />
+	</bean>
+```
+
+消息监听类：
+
+```java
+@Component
+public class ItemSearchListener implements MessageListener {
+
+	@Autowired
+	private ItemSearchService itemSearchService;
+	
+	@Override
+	public void onMessage(Message message) {
+		TextMessage textMessage = (javax.jms.TextMessage) message;
+		try {
+			String text = textMessage.getText();
+			System.out.println("监听到消息："+text);
+			
+			List<TbItem> itemlist = JSON.parseArray(text,TbItem.class);
+			itemSearchService.importItemList(itemlist);
+			System.out.println("导入到solr索引库");
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
+	}
+
+}
+```
+
+商品删除（移除solr索引库记录）类似。以及王爷静态化，主要是消息模式为发布订阅模式。运营商执行商品审核后，向 activeMQ 发送消息（商品 ID集合），网页生成服务从 activeMQ 接收到消息后执行网页生成操作。
+
+
+
+*存在的问题*
+
+​		 Exception sending context initialized event to listener instance of class org.springframework.web.context.ContextLoaderListener
+
+org.springframework.beans.factory.BeanDefinitionStoreException: Invalid bean definition with name 'dataSource' defined in URL [jar:file:/D:/Program%20Files/Maven/repository/com/pinyougou/pinyougou-dao/0.0.1-SNAPSHOT/pinyougou-dao-0.0.1-SNAPSHOT.jar!/spring/applicationContext-dao.xml]: Could not resolve placeholder 'jdbc.url' in string value "${jdbc.url}"; nested exception is java.lang.IllegalArgumentException: Could not resolve placeholder 'jdbc.url' in string value "${jdbc.url}"
+
+​	提示找不到配置文件中的jdbc.url配置。是因为在page-service中，在生成静态页面时会用到一个页面生成路径的配置信息。然后在spring中的配置文件中设置`<context:property-placeholder location="classpath:config/page.properties" />` 。但是该服务依赖dao模块，这个模块中的数据库连接池的配置信息存放在 properties/db.properties 中，然后在 dao 模块中配置了 `<context:property-placeholder location="classpath*:properties/*.properties" />` 。此时 page-service 模块中的配置会覆盖该配置，就导致了无法访问 properties/db.properties 中数据库连接池的配置信息。解决方法就是使 `<context:property-placeholder location="classpath*:*/*.properties" />` 包含 dao 模块中的加载配置即可。
+
 
 
 
