@@ -1,4 +1,4 @@
-## 品优购项目学习
+## 品优购项目学习笔记
 
 一个综合性的 B2B2C 的电商网站系统。网站采用商家入驻的模式，商家入驻平台提交申请，有平台进行资质审核，审核通过后，商家拥有独立的管理后台录入商品信息。商品经过平台审核后即可发布。 
 
@@ -107,16 +107,16 @@
 ​	定义一个用于存储选中 ID 的数组，当我们点击复选框后判断是选择还是取消选择，如果是选择就加到数组中，如果是取消选择就从数组中移除。在后续点击删除按钮时需要用到这个存储了 ID 的数组。
 
 ```javascript
-	// 存储当前选中复选框的id集合
-	$scope.selectIds = [];
-	$scope.updateSelection = function($event, id){
-		if ($event.target.checked) {		// 当前为勾选状态
-			$scope.selectIds.push(id); 		// 向selectIds集合中添加元素
-		} else {
-			var index = $scope.selectIds.indexOf(id); 	
-			$scope.selectIds.splice(index, 1); 	// 参数1：移除的下标位置，参数2：需要移除的元素个数
-		}
-	}
+// 存储当前选中复选框的id集合
+$scope.selectIds = [];
+$scope.updateSelection = function($event, id){
+    if ($event.target.checked) {		// 当前为勾选状态
+        $scope.selectIds.push(id); 		// 向selectIds集合中添加元素
+    } else {
+        var index = $scope.selectIds.indexOf(id); 	
+        $scope.selectIds.splice(index, 1); 	// 参数1：移除的下标位置，参数2：需要移除的元素个数
+    }
+}
 ```
 
 
@@ -208,24 +208,24 @@ $scope.jsonToString = function(jsonString,key){
 - web.xml 文件中引入 spring-security.xml 配置文件
 
 ```xml
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring/spring-security.xml</param-value>
-	 </context-param>
-	 <listener>
-		<listener-class>
-			org.springframework.web.context.ContextLoaderListener
-		</listener-class>
-	 </listener>
-	
-	 <filter>  
-		<filter-name>springSecurityFilterChain</filter-name>  
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>  
-	 </filter>  
-	 <filter-mapping>  
-		<filter-name>springSecurityFilterChain</filter-name>  
-		<url-pattern>/*</url-pattern>  
-	 </filter-mapping>
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:spring/spring-security.xml</param-value>
+ </context-param>
+ <listener>
+    <listener-class>
+        org.springframework.web.context.ContextLoaderListener
+    </listener-class>
+ </listener>
+
+ <filter>  
+    <filter-name>springSecurityFilterChain</filter-name>  
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>  
+ </filter>  
+ <filter-mapping>  
+    <filter-name>springSecurityFilterChain</filter-name>  
+    <url-pattern>/*</url-pattern>  
+ </filter-mapping>
 ```
 
 
@@ -233,35 +233,35 @@ $scope.jsonToString = function(jsonString,key){
 - spring-security.xml 配置文件设置页面拦截规则、认证管理器以及不拦截的资源（静态资源、登陆页面）
 
 ```xml
-	<!-- 设置页面不登陆也可以访问 -->
-	<http pattern="/*.html" security="none"></http>
-	<http pattern="/css/**" security="none"></http>
-	<http pattern="/img/**" security="none"></http>
-	<http pattern="/js/**" security="none"></http>
-	<http pattern="/plugins/**" security="none"></http>
+<!-- 设置页面不登陆也可以访问 -->
+<http pattern="/*.html" security="none"></http>
+<http pattern="/css/**" security="none"></http>
+<http pattern="/img/**" security="none"></http>
+<http pattern="/js/**" security="none"></http>
+<http pattern="/plugins/**" security="none"></http>
 
-	<!-- 页面的拦截规则    use-expressions:是否启动SPEL表达式 默认是true -->
-	<http use-expressions="false">
-		<!-- 当前用户必须有ROLE_USER的角色 才可以访问根目录及所属子目录的资源 -->
-		<intercept-url pattern="/**" access="ROLE_ADMIN"/>
-		<!-- 开启表单登陆功能 -->
-		<form-login login-page="/login.html" default-target-url="/admin/index.html" authentication-failure-url="/login.html" always-use-default-target="true"/>
-		<csrf disabled="true"/>
-		<headers>
-			<frame-options policy="SAMEORIGIN"/>
-		</headers>
-		<logout/>	<!-- 退出登录 -->
-	</http>
-	
-	<!-- 认证管理器 -->
-	<authentication-manager>
-		<authentication-provider>
-			<user-service>
-				<user name="admin" password="123456" authorities="ROLE_ADMIN"/>
-				<user name="yang" password="123456" authorities="ROLE_ADMIN"/>
-			</user-service>
-		</authentication-provider>	
-	</authentication-manager>
+<!-- 页面的拦截规则    use-expressions:是否启动SPEL表达式 默认是true -->
+<http use-expressions="false">
+    <!-- 当前用户必须有ROLE_USER的角色 才可以访问根目录及所属子目录的资源 -->
+    <intercept-url pattern="/**" access="ROLE_ADMIN"/>
+    <!-- 开启表单登陆功能 -->
+    <form-login login-page="/login.html" default-target-url="/admin/index.html" authentication-failure-url="/login.html" always-use-default-target="true"/>
+    <csrf disabled="true"/>
+    <headers>
+        <frame-options policy="SAMEORIGIN"/>
+    </headers>
+    <logout/>	<!-- 退出登录 -->
+</http>
+
+<!-- 认证管理器 -->
+<authentication-manager>
+    <authentication-provider>
+        <user-service>
+            <user name="admin" password="123456" authorities="ROLE_ADMIN"/>
+            <user name="yang" password="123456" authorities="ROLE_ADMIN"/>
+        </user-service>
+    </authentication-provider>	
+</authentication-manager>
 ```
 
 ​	CSRF（Cross-site request forgery）跨站请求伪造，也被称为“One Click Attack”或者Session Riding，通常缩写为CSRF或者XSRF，是一种对网站的恶意利用。
@@ -351,24 +351,24 @@ spring-security 配置
 *面包屑导航*
 
 ```javascript
-	// 当前面包屑等级
-	$scope.grade = 1;
-	$scope.setGrade=function(value){
-		$scope.grade = value;
-	}
-	
-	$scope.selectList=function(p_entity){
-		if ($scope.grade == 1) {
-			$scope.entity_1 = null;
-			$scope.entity_2 = null;
-		} else if ($scope.grade == 2){
-			$scope.entity_1 = p_entity;
-			$scope.entity_2 = null;
-		} else {
-			$scope.entity_2 = p_entity;
-		}
-		$scope.findByParentId(p_entity.id);
-	}
+// 当前面包屑等级
+$scope.grade = 1;
+$scope.setGrade=function(value){
+    $scope.grade = value;
+}
+
+$scope.selectList=function(p_entity){
+    if ($scope.grade == 1) {
+        $scope.entity_1 = null;
+        $scope.entity_2 = null;
+    } else if ($scope.grade == 2){
+        $scope.entity_1 = p_entity;
+        $scope.entity_2 = null;
+    } else {
+        $scope.entity_2 = p_entity;
+    }
+    $scope.findByParentId(p_entity.id);
+}
 	
 ```
 
@@ -405,30 +405,30 @@ spring-security 配置
 ​	判断所选分类下是否存在子分类，存在则不能删除。
 
 ```java
-	/**
-	 * 批量删除
-	 * @param ids
-	 * @return
-	 */
-	@RequestMapping("/delete")
-	public Result delete(Long[] ids){
-		try {
-			// 判断当前所有分类是否存在子分类
-			boolean flag = false;	// 不存在
-			for (Long id : ids) {
-				if(itemCatService.findByParentId(id)!=null && itemCatService.findByParentId(id).size()!=0){
-					flag = true;break;
-				}
-			}
-			if (flag) return new Result(false, "当前所选分类存在子分类，切勿删除"); 
-			
-			itemCatService.delete(ids);
-			return new Result(true, "删除成功"); 
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new Result(false, "删除失败");
-		}
-	}
+/**
+ * 批量删除
+ * @param ids
+ * @return
+ */
+@RequestMapping("/delete")
+public Result delete(Long[] ids){
+    try {
+        // 判断当前所有分类是否存在子分类
+        boolean flag = false;	// 不存在
+        for (Long id : ids) {
+            if(itemCatService.findByParentId(id)!=null && itemCatService.findByParentId(id).size()!=0){
+                flag = true;break;
+            }
+        }
+        if (flag) return new Result(false, "当前所选分类存在子分类，切勿删除"); 
+
+        itemCatService.delete(ids);
+        return new Result(true, "删除成功"); 
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new Result(false, "删除失败");
+    }
+}
 ```
 
 
@@ -467,18 +467,18 @@ spring-security 配置
 ​	通过 Angular JS 变量监控方法，实现选择一级分类之后，初始化二级分类的列表信息。
 
 ```javascript
-	// angularjs变量监控方法,查询二级分类信息
-	$scope.$watch('entity.goods.category1Id',function(newValue, oldValue){
-		if (newValue != undefined && newValue != "") {
-			// alert("category1Id"+newValue);
-			itemCatService.findByParentId(newValue).success(
-					function(response){
-						$scope.itemCat2List = response;
-						$scope.entity.goods.category2Id = "";
-					}
-				);
-		}
-	});
+// angularjs变量监控方法,查询二级分类信息
+$scope.$watch('entity.goods.category1Id',function(newValue, oldValue){
+    if (newValue != undefined && newValue != "") {
+        // alert("category1Id"+newValue);
+        itemCatService.findByParentId(newValue).success(
+                function(response){
+                    $scope.itemCat2List = response;
+                    $scope.entity.goods.category2Id = "";
+                }
+            );
+    }
+});
 ```
 
 ![商品分类级联刷新](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E7%BA%A7%E8%81%94%E5%88%B7%E6%96%B0.png)
@@ -496,40 +496,40 @@ spring-security 配置
 （2）循环用选择的规格，根据规格名称和已选择的规格选项对原集合进行扩充，添加规格名称和值，新增的记录数与选择的规格选项个数相同
 
 ```javascript
-	// 创建SKU列表
-	$scope.creatItemList=function(){
-		// 列表初始化，规格对象、价格、库存量、状态、是否默认
-		$scope.entity.itemList = [ {spec:{},price:0,num:9999,status:'0',isDefault:'0'} ];
-		
-		var items = $scope.entity.goodsDesc.specificationItems;
-		
-		for (var i = 0; i < items.length; i++) {
-			$scope.entity.itemList = addColumn($scope.entity.itemList, items[i].attributeName, items[i].attributeValue);
-		}
-	}
-	
-	/**
-	 * $scope.entity.itemList:
-	 * [{"spec":{"网络":"移动3G","机身内存":"16G"},"price":0,"num":9999,"status":"0","isDefault":"0"},
-	 * {"spec":{"网络":"移动3G","机身内存":"32G"},"price":0,"num":9999,"status":"0","isDefault":"0"},
-	 * {"spec":{"网络":"联通3G","机身内存":"16G"},"price":0,"num":9999,"status":"0","isDefault":"0"},
-	 * {"spec":{"网络":"联通3G","机身内存":"32G"},"price":0,"num":9999,"status":"0","isDefault":"0"}]
-	 */
-	
-	// 深克隆方法   原集合、列名、列值
-	addColumn=function(list, columnName, columnValues){
-		var newList = [];
-		
-		for (var i = 0; i < list.length; i++) {
-			var oldRow = list[i];
-			for (var j = 0; j < columnValues.length; j++) {
-				var newRow = JSON.parse( JSON.stringify(oldRow) );
-				newRow.spec[columnName] = columnValues[j];
-				newList.push(newRow);
-			}
-		}
-		return newList;
-	}
+// 创建SKU列表
+$scope.creatItemList=function(){
+    // 列表初始化，规格对象、价格、库存量、状态、是否默认
+    $scope.entity.itemList = [ {spec:{},price:0,num:9999,status:'0',isDefault:'0'} ];
+
+    var items = $scope.entity.goodsDesc.specificationItems;
+
+    for (var i = 0; i < items.length; i++) {
+        $scope.entity.itemList = addColumn($scope.entity.itemList, items[i].attributeName, items[i].attributeValue);
+    }
+}
+
+/**
+ * $scope.entity.itemList:
+ * [{"spec":{"网络":"移动3G","机身内存":"16G"},"price":0,"num":9999,"status":"0","isDefault":"0"},
+ * {"spec":{"网络":"移动3G","机身内存":"32G"},"price":0,"num":9999,"status":"0","isDefault":"0"},
+ * {"spec":{"网络":"联通3G","机身内存":"16G"},"price":0,"num":9999,"status":"0","isDefault":"0"},
+ * {"spec":{"网络":"联通3G","机身内存":"32G"},"price":0,"num":9999,"status":"0","isDefault":"0"}]
+ */
+
+// 深克隆方法   原集合、列名、列值
+addColumn=function(list, columnName, columnValues){
+    var newList = [];
+
+    for (var i = 0; i < list.length; i++) {
+        var oldRow = list[i];
+        for (var j = 0; j < columnValues.length; j++) {
+            var newRow = JSON.parse( JSON.stringify(oldRow) );
+            newRow.spec[columnName] = columnValues[j];
+            newList.push(newRow);
+        }
+    }
+    return newList;
+}
 ```
 
 
@@ -549,17 +549,17 @@ spring-security 配置
 ​	商品分为三级分类。存储于 tb_item_cat 表中。包括 id、父级id、分类名称、对应绑定的类型id。但是为了避免商品查询时重复的关联查询，可以采用现将所有分类信息读取到本地，然后在前端进行分类id到分类名称的转换操作。
 
 ```javascript
-	$scope.itemCatList = [];
-	// 全部商品分类查询，存储在itemList数组中，然后再前端页面通过数组下标直接将商品分类ID转换为商品分类名称，避免后端连接查询。
-	$scope.findItemList = function(){
-		itemCatService.findAll().success(
-				function(response){
-					for (var i = 0; i < response.length; i++) {
-						$scope.itemCatList[response[i].id] = response[i].name;
-					}
-				}
-		);
-	}
+$scope.itemCatList = [];
+// 全部商品分类查询，存储在itemList数组中，然后再前端页面通过数组下标直接将商品分类ID转换为商品分类名称，避免后端连接查询。
+$scope.findItemList = function(){
+    itemCatService.findAll().success(
+            function(response){
+                for (var i = 0; i < response.length; i++) {
+                    $scope.itemCatList[response[i].id] = response[i].name;
+                }
+            }
+    );
+}
 ```
 
 ​	将分类结果 response 对象封装为数组类型，数组下标为商品分类id，数组值为商品分类的名称。然后在列表项中通过 {{itemCatList[entity.category1Id]}} 将id转换为名称。
@@ -815,54 +815,54 @@ public class ItemSearchServiceImpl implements ItemSearchService{
 ​	后端实现代码：
 
 ```java
-	@Override
-	public Map search(Map searchMap) {
-		Map map = new HashMap();
-		/*
-		Query query = new SimpleQuery("*:*");
-		Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
-		query.addCriteria(criteria);
-		
-		ScoredPage<TbItem> page = solrTemplate.queryForPage(query, TbItem.class);
-		map.put("rows", page.getContent());		// page.getContent() 返回一个 List 集合
-		*/
-		
-		// 高亮显示
-		HighlightQuery query = new SimpleHighlightQuery();
-		
-		// 构建高亮选项
-		HighlightOptions highlightOptions = new HighlightOptions().addField("item_title");	// 高亮域（可以为多个）
-		highlightOptions.setSimplePrefix("<em style='color:red'>");	// 前缀
-		highlightOptions.setSimplePostfix("</em>");					// 后缀
-		
-		query.setHighlightOptions(highlightOptions);	// 为查询设置高亮查询
-		
-		Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
-		query.addCriteria(criteria);
-		
-		 HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);
-		 // 高亮入口集合（每条高亮结果的入口）
-		 List<HighlightEntry<TbItem>> entryList = page.getHighlighted();
-		 
-		 for (HighlightEntry<TbItem> entry : entryList) {
-			 // 获取高亮列表（高亮域的个数）
-			 List<Highlight> hightLightList = entry.getHighlights();
-			 /*
-			 for (Highlight highLight : hightLightList) {
-				 // 每个域可能存在多值（复制域）
-				 List<String> sns = highLight.getSnipplets();
-				 System.out.println(sns);
-			 }*/
-			 if (entry.getHighlights().size()>0 && entry.getHighlights().get(0).getSnipplets().size()>0) {
-				 TbItem item = entry.getEntity();
-				 item.setTitle(entry.getHighlights().get(0).getSnipplets().get(0));		// 用高亮标签结果替换
-			 }
-		 }
-		 
-		 map.put("rows", page.getContent());
-		
-		return map;
-	}
+@Override
+public Map search(Map searchMap) {
+    Map map = new HashMap();
+    /*
+    Query query = new SimpleQuery("*:*");
+    Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
+    query.addCriteria(criteria);
+
+    ScoredPage<TbItem> page = solrTemplate.queryForPage(query, TbItem.class);
+    map.put("rows", page.getContent());		// page.getContent() 返回一个 List 集合
+    */
+
+    // 高亮显示
+    HighlightQuery query = new SimpleHighlightQuery();
+
+    // 构建高亮选项
+    HighlightOptions highlightOptions = new HighlightOptions().addField("item_title");	// 高亮域（可以为多个）
+    highlightOptions.setSimplePrefix("<em style='color:red'>");	// 前缀
+    highlightOptions.setSimplePostfix("</em>");					// 后缀
+
+    query.setHighlightOptions(highlightOptions);	// 为查询设置高亮查询
+
+    Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
+    query.addCriteria(criteria);
+
+     HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);
+     // 高亮入口集合（每条高亮结果的入口）
+     List<HighlightEntry<TbItem>> entryList = page.getHighlighted();
+
+     for (HighlightEntry<TbItem> entry : entryList) {
+         // 获取高亮列表（高亮域的个数）
+         List<Highlight> hightLightList = entry.getHighlights();
+         /*
+         for (Highlight highLight : hightLightList) {
+             // 每个域可能存在多值（复制域）
+             List<String> sns = highLight.getSnipplets();
+             System.out.println(sns);
+         }*/
+         if (entry.getHighlights().size()>0 && entry.getHighlights().get(0).getSnipplets().size()>0) {
+             TbItem item = entry.getEntity();
+             item.setTitle(entry.getHighlights().get(0).getSnipplets().get(0));		// 用高亮标签结果替换
+         }
+     }
+
+     map.put("rows", page.getContent());
+
+    return map;
+}
 ```
 
 ​	前端实现：
@@ -886,7 +886,7 @@ app.filter('trustHtml', ['$sce', function($sce){
 
 ### 搜索业务规则
 
- 	搜索模块
+搜索模块
 
 1. 用户输入搜索关键字，显示列表结果和商品分类信息。因为一个关键字可能对应多种商品分类
 2. 根据第一个商品分类，默认查询该分类的模板ID，然后根据模板ID查询品牌列表和规格列表
@@ -903,14 +903,14 @@ app.filter('trustHtml', ['$sce', function($sce){
 缓存商品分类信息
 
 ```java
-	private void saveToRedis() {
-		// 将模板ID放入缓存 分类名称作为key,模板ID作为value
-		List<TbItemCat> itemCatList = findAll();
-		for (TbItemCat itemCat : itemCatList) {
-			redisTemplate.boundHashOps("itemCat").put(itemCat.getName(), itemCat.getTypeId());
-		}
-		System.out.println("将模板ID放入缓存");
-	}
+private void saveToRedis() {
+    // 将模板ID放入缓存 分类名称作为key,模板ID作为value
+    List<TbItemCat> itemCatList = findAll();
+    for (TbItemCat itemCat : itemCatList) {
+        redisTemplate.boundHashOps("itemCat").put(itemCat.getName(), itemCat.getTypeId());
+    }
+    System.out.println("将模板ID放入缓存");
+}
 ```
 
 
@@ -918,52 +918,52 @@ app.filter('trustHtml', ['$sce', function($sce){
 缓存所有的品牌信息和规格信息
 
 ```java
-	private void saveToRedis() {
-		
-		List<TbTypeTemplate> typeTempList = findAll();
-		
-		for(TbTypeTemplate template : typeTempList) {
-			Long id = template.getId();
-			// 将模板ID作为key 品牌列表作为value
-			List brandList = JSON.parseArray(template.getBrandIds(), Map.class);	// {id:1,text:联想}
-			redisTemplate.boundHashOps("brandList").put(id, brandList);
-			
-			// 将模板ID作为key 规格列表作为value
-			List<Map> specList = findSpecList(id);
-			redisTemplate.boundHashOps("specList").put(id, specList);
-		}
-		System.out.println("完成品牌列表、规格列表缓存");
-	}
+private void saveToRedis() {
+
+    List<TbTypeTemplate> typeTempList = findAll();
+
+    for(TbTypeTemplate template : typeTempList) {
+        Long id = template.getId();
+        // 将模板ID作为key 品牌列表作为value
+        List brandList = JSON.parseArray(template.getBrandIds(), Map.class);	// {id:1,text:联想}
+        redisTemplate.boundHashOps("brandList").put(id, brandList);
+
+        // 将模板ID作为key 规格列表作为value
+        List<Map> specList = findSpecList(id);
+        redisTemplate.boundHashOps("specList").put(id, specList);
+    }
+    System.out.println("完成品牌列表、规格列表缓存");
+}
 ```
 
 分类列表查询（spring data solr 条件查询）
 
 ```java
-	private List<String> searchCategoryList(Map searchMap) {
-		List<String> list = new ArrayList<>();
-		
-		Query query = new SimpleQuery("*:*");
-		
-		// 根据关键字查询
-		Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));	// where ...
-		query.addCriteria(criteria);
-		
-		// 设置分组选项
-		GroupOptions groupOptions = new GroupOptions().addGroupByField("item_category");	// group by ....（可以有多个分组域）
-		query.setGroupOptions(groupOptions);
-		
-		// 获取分组页
-		GroupPage<TbItem> queryForGroupPage = solrTemplate.queryForGroupPage(query, TbItem.class);
-		// 获取分组结果对象
-		GroupResult<TbItem> groupResult = queryForGroupPage.getGroupResult("item_category");
-		// 获取分组入口页
-		Page<GroupEntry<TbItem>> groupEntries = groupResult.getGroupEntries();
-		// 遍历获取每个对象的值
-		for(GroupEntry<TbItem> entry : groupEntries) {
-			list.add(entry.getGroupValue());
-		}
-		return list;
-	}
+private List<String> searchCategoryList(Map searchMap) {
+    List<String> list = new ArrayList<>();
+
+    Query query = new SimpleQuery("*:*");
+
+    // 根据关键字查询
+    Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));	// where ...
+    query.addCriteria(criteria);
+
+    // 设置分组选项
+    GroupOptions groupOptions = new GroupOptions().addGroupByField("item_category");	// group by ....（可以有多个分组域）
+    query.setGroupOptions(groupOptions);
+
+    // 获取分组页
+    GroupPage<TbItem> queryForGroupPage = solrTemplate.queryForGroupPage(query, TbItem.class);
+    // 获取分组结果对象
+    GroupResult<TbItem> groupResult = queryForGroupPage.getGroupResult("item_category");
+    // 获取分组入口页
+    Page<GroupEntry<TbItem>> groupEntries = groupResult.getGroupEntries();
+    // 遍历获取每个对象的值
+    for(GroupEntry<TbItem> entry : groupEntries) {
+        list.add(entry.getGroupValue());
+    }
+    return list;
+}
 ```
 
 
@@ -975,32 +975,32 @@ app.filter('trustHtml', ['$sce', function($sce){
 ​	面包屑其实就是显示搜索对象。可将搜索对象定义为`$scope.searchMap={'keywords':'','category':'','brand':'',spec:{}};`。然后实现添加查询条件和取消查询条件。
 
 ```java
-	// 搜索
-	$scope.search = function() {
-		searchService.search($scope.searchMap).success(function(response) {
-			$scope.resultMap = response;	// 搜索返回的结果
-		});
-	}
-	
-	// 添加查询搜索项
-	$scope.addSearchItem=function(key,value){
-		if (key == 'brand' || key == 'category') {	// 如果点击品牌和分类
-			$scope.searchMap[key] = value;
-		}else{
-			$scope.searchMap.spec[key]=value;
-		}
-		$scope.search();
-	}
-	
-	// 取消查询条件
-	$scope.removeSearchItem=function(key){
-		if (key == 'brand' || key == 'category') {	// 如果点击品牌和分类
-			$scope.searchMap[key] = "";
-		}else{
-			delete $scope.searchMap.spec[key];
-		}
-		$scope.search();
-	}
+// 搜索
+$scope.search = function() {
+    searchService.search($scope.searchMap).success(function(response) {
+        $scope.resultMap = response;	// 搜索返回的结果
+    });
+}
+
+// 添加查询搜索项
+$scope.addSearchItem=function(key,value){
+    if (key == 'brand' || key == 'category') {	// 如果点击品牌和分类
+        $scope.searchMap[key] = value;
+    }else{
+        $scope.searchMap.spec[key]=value;
+    }
+    $scope.search();
+}
+
+// 取消查询条件
+$scope.removeSearchItem=function(key){
+    if (key == 'brand' || key == 'category') {	// 如果点击品牌和分类
+        $scope.searchMap[key] = "";
+    }else{
+        delete $scope.searchMap.spec[key];
+    }
+    $scope.search();
+}
 ```
 
 
@@ -1018,34 +1018,34 @@ app.filter('trustHtml', ['$sce', function($sce){
 通过当前页数、总页数然后构建分页标签。
 
 ```javascript
-	// 构建分页标签
-	buildPageLable=function(){
-		$scope.pageLable=[];
-		var firstPage = 1;		// 开始页码
-		var lastPage = $scope.resultMap.totalPages;	 // 截止页码
-		$scope.firstDot = true;
-		$scope.lastDot = true;
-		
-		if (lastPage > 5){
-			if ($scope.searchMap.pageNo<=3){	// 当前页码小于3，显示前五页
-				lastPage = 5;
-				$scope.firstDot = false;
-			}else if ($scope.searchMap.pageNo>=lastPage-2) {	// 当前页码大于总页数-2，则显示后5页
-				firstPage = lastPage - 4;
-				$scope.lastDot = false;
-			}else {
-				firstPage = $scope.searchMap.pageNo - 2;
-				lastPage = $scope.searchMap.pageNo + 2;
-			}
-		}else{
-			$scope.firstDot = false;
-			$scope.lastDot = false;
-		}
-		
-		for (var i = firstPage; i <= lastPage; i++) {
-			$scope.pageLable.push(i);
-		}
-	}
+// 构建分页标签
+buildPageLable=function(){
+    $scope.pageLable=[];
+    var firstPage = 1;		// 开始页码
+    var lastPage = $scope.resultMap.totalPages;	 // 截止页码
+    $scope.firstDot = true;
+    $scope.lastDot = true;
+
+    if (lastPage > 5){
+        if ($scope.searchMap.pageNo<=3){	// 当前页码小于3，显示前五页
+            lastPage = 5;
+            $scope.firstDot = false;
+        }else if ($scope.searchMap.pageNo>=lastPage-2) {	// 当前页码大于总页数-2，则显示后5页
+            firstPage = lastPage - 4;
+            $scope.lastDot = false;
+        }else {
+            firstPage = $scope.searchMap.pageNo - 2;
+            lastPage = $scope.searchMap.pageNo + 2;
+        }
+    }else{
+        $scope.firstDot = false;
+        $scope.lastDot = false;
+    }
+
+    for (var i = firstPage; i <= lastPage; i++) {
+        $scope.pageLable.push(i);
+    }
+}
 ```
 
 
@@ -1063,18 +1063,18 @@ app.filter('trustHtml', ['$sce', function($sce){
 ​	根据综合、价格升降序、新品的来实现排序。前端传递两个参数，分别为待排序的字段名称和排序方式（升序or降序）。
 
 ```java
-		// 1.7 排序
-		String sortValue = (String) searchMap.get("sort");	// 升序 or 降序
-		String sortFiled = (String) searchMap.get("sortFiled");	 // 升序字段
-		if (!"".equals(sortValue) && !"".equals(sortFiled)) {
-			if (sortValue.equals("ASC")) {	// 升序
-				Sort sort = new Sort(Sort.Direction.ASC, "item_"+sortFiled);
-				query.addSort(sort);
-			}else if(sortValue.equals("DESC")) {
-				Sort sort = new Sort(Sort.Direction.DESC, "item_"+sortFiled);
-				query.addSort(sort);
-			}
-		}
+// 1.7 排序
+String sortValue = (String) searchMap.get("sort");	// 升序 or 降序
+String sortFiled = (String) searchMap.get("sortFiled");	 // 升序字段
+if (!"".equals(sortValue) && !"".equals(sortFiled)) {
+    if (sortValue.equals("ASC")) {	// 升序
+        Sort sort = new Sort(Sort.Direction.ASC, "item_"+sortFiled);
+        query.addSort(sort);
+    }else if(sortValue.equals("DESC")) {
+        Sort sort = new Sort(Sort.Direction.DESC, "item_"+sortFiled);
+        query.addSort(sort);
+    }
+}
 ```
 
 ​	销量和评价的排序(待完成)：
