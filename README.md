@@ -1,6 +1,6 @@
 ## 品优购项目学习
 
-​	  一个综合性的 B2B2C 的电商网站系统。网站采用商家入驻的模式，商家入驻平台提交申请，有平台进行资质审核，审核通过后，商家拥有独立的管理后台录入商品信息。商品经过平台审核后即可发布。 
+一个综合性的 B2B2C 的电商网站系统。网站采用商家入驻的模式，商家入驻平台提交申请，有平台进行资质审核，审核通过后，商家拥有独立的管理后台录入商品信息。商品经过平台审核后即可发布。 
 
 [Github地址](https://github.com/Mindyu/pinyougou)
 
@@ -26,7 +26,7 @@
 
 原理图
 ![Dubbox原理图][2]
-节点角色说明：
+	节点角色说明：
 
  - Provider: 暴露服务的服务提供方。 
  - Consumer: 调用远程服务的服务消费方。 
@@ -38,22 +38,23 @@
 ### 品牌管理模块
 **功能实现**
 
- 1. 运用AngularJS前端框架的常用指令
- 2. 完成品牌管理的列表功能
-![品牌管理][3]
+  1. 运用AngularJS前端框架的常用指令
+  2. 完成品牌管理的列表功能
+    ![品牌管理][3]
+  3. 完成品牌管理的分页列表功能
+  4. 完成品牌管理的增加功能
+  5. 完成品牌管理的修改功能
+    ![品牌新增与修改][4]
+  6. 完成品牌管理的删除功能
+  7. 完成品牌管理的条件查询功能
 
- 3. 完成品牌管理的分页列表功能
- 4. 完成品牌管理的增加功能
- 5. 完成品牌管理的修改功能
-![品牌新增与修改][4]
 
- 6. 完成品牌管理的删除功能
- 7. 完成品牌管理的条件查询功能
 
 **前端框架 AngularJS**
 *四大特征*
 
- 1. MVC 模式
+  1. MVC 模式
+
 - Model: 数据,其实就是angular变量($scope.XX);
 - View: 数据的呈现,Html+Directive(指令);
 - Controller: 操作数据,就是function,数据的增删改查;
@@ -66,6 +67,8 @@
 - 高内聚低耦合法则
   1)官方提供的模块   ng、ngRoute、ngAnimate
   2)用户自定义的模块     angular.module('模块名',[ ])
+
+
 
 *常见指令*
 
@@ -87,7 +90,7 @@
 
 - $http 内置服务，用于访问后端数据。
 
-- $location 服务，用于获取链接地址中的参数值。` $location.search()['id']`id对应的值。(注：地址中 ? 前需要添加 # )
+- $location 服务，用于获取链接地址中的参数值。`$location.search()['id']`id对应的值。(注：地址中 ? 前需要添加 # )
 
   eg:  http://localhost:9102/admin/goods_edit.html#?id=149187842867969
 
@@ -96,6 +99,8 @@
 - app.filter 过滤器，通过 | 来调用过滤器
 
 - $sce 服务 严格控制上下文访问，为防止 跨站XSS。该服务可以实现安全控制，比如允许html标签的插入转换。
+
+
 
 *复选框的使用*
 
@@ -152,14 +157,11 @@
 
    ```html
    <input  select2  select2-model="entity.brandIds"  config="brandList"  multiple placeholder=" 选择品牌（可多选）" class="form-control" type="text"/> 
-   
    ```
 
    multiple 表示可多选
-   Config 用于配置数据来源
-   select2-model 用于指定用户选择后提交的变量
-
-![select2多选下拉列表](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%A4%9A%E9%80%89%E4%B8%8B%E6%8B%89%E6%A1%86.png)
+   	Config 用于配置数据来源
+   	select2-model 用于指定用户选择后提交的变量![select2多选下拉列表](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%A4%9A%E9%80%89%E4%B8%8B%E6%8B%89%E6%A1%86.png)
 
 *模板列表显示*
 
@@ -177,6 +179,7 @@ $scope.jsonToString = function(jsonString,key){
 	return value;
 }
 ```
+
 
 ![类型模板管理](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%95%86%E5%93%81%E7%B1%BB%E5%9E%8B%E6%A8%A1%E6%9D%BF%E7%AE%A1%E7%90%86.png)
 
@@ -337,6 +340,8 @@ spring-security 配置
 
 *注：浏览器控制台提示 [DOM] Input elements should have autocomplete attributes (suggested: "current-password") 为浏览器表单默认的记忆功能，可以在 input 标签中添加 autocomplete="off|on" 即可。*
 
+
+
 ### 商品分类管理
 
 *多级分类列表*
@@ -484,9 +489,7 @@ spring-security 配置
 
 *商品录入【SKU商品信息】* 
 
-对于同一个产品分为多种不同的规格组合。根据选择的规格录入商品的 SKU 信息，当用户选择相应的规格，下面的 SKU 列表就会自动生成。
-
-![规格管理](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%95%86%E5%93%81%E8%A7%84%E6%A0%BC%E7%BB%84%E5%90%88.png)
+对于同一个产品分为多种不同的规格组合。根据选择的规格录入商品的 SKU 信息，当用户选择相应的规格，下面的 SKU 列表就会自动生成。![规格管理](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%95%86%E5%93%81%E8%A7%84%E6%A0%BC%E7%BB%84%E5%90%88.png)
 
 实现思路：
 （1）我们先定义一个初始的不带规格名称的集合，只有一条记录。
@@ -531,9 +534,7 @@ spring-security 配置
 
 
 
-*商家后台列表显示*
-
-![商家商品管理](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%95%86%E5%AE%B6%E5%95%86%E5%93%81%E7%AE%A1%E7%90%86.png)
+*商家后台列表显示*![商家商品管理](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%95%86%E5%AE%B6%E5%95%86%E5%93%81%E7%AE%A1%E7%90%86.png)
 
 状态显示：
 
@@ -565,9 +566,7 @@ spring-security 配置
 
 *存在的问题*
 
-​	pinyougou-shop-web 模块中分页插件提示 ClassNotFoundException。但是页面可以访问。
-
-![](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/error_page.png)
+​	pinyougou-shop-web 模块中分页插件提示 ClassNotFoundException。但是页面可以访问。![](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/error_page.png)
 
 ```xml
 			<dependency>
@@ -577,9 +576,7 @@ spring-security 配置
 			</dependency>	
 ```
 
-​	如上配置之后，又出现下图错误，导致商品列表无法显示。（但是 manager-web 模块中也没有引入pagehelper,但是没有出现问题）
-
-![](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/error_RowBounds.png)
+​	如上配置之后，又出现下图错误，导致商品列表无法显示。（但是 manager-web 模块中也没有引入pagehelper,但是没有出现问题）![](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/error_RowBounds.png)
 
 
 
@@ -683,9 +680,8 @@ Hash 类型
 </env-entry>
 ```
 
-8. 启动 Tomcat 。访问 http://localhost:8080/solr 即可
+8. 启动 Tomcat 。访问 http://localhost:8080/solr 即可![solr](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/solr%E6%8E%A7%E5%88%B6%E5%8F%B0.png)
 
-   ![solr](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/solr%E6%8E%A7%E5%88%B6%E5%8F%B0.png)
 
 
 
@@ -732,9 +728,7 @@ Hash 类型
 
 出现的错误
 
-1. 前端可以从后台获取数据（ itemsearch/search.do正常获取数据 ），但是控制台显示" TypeError: Cannot read property 'success' of undefined "错误。
-
-![success_of_undefined](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/success_undefined.png)
+1. 前端可以从后台获取数据（ itemsearch/search.do正常获取数据 ），但是控制台显示" TypeError: Cannot read property 'success' of undefined "错误。![success_of_undefined](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/success_undefined.png)
 
 原因是因为：
 
@@ -1120,546 +1114,7 @@ app.filter('trustHtml', ['$sce', function($sce){
 
 
 
-### 网页静态化技术
-
-​	网页静态化技术和缓存技术的共同点都是为了**减轻数据库的访问压力**，但是具体的应用场景不同，缓存比较适合小规模的数据，而网页静态化比较适合大规模且相对变化不太频繁的数据。另外网页静态化还有利于 SEO（搜索引擎优化）。静态界面通过 Nginx 服务器部署可以达到5万的并发，而Tomcat只有几百。
-
-*Freemarker* 模板引擎，基于模板来生成文本输出。与web容器无关。
-
-模板文件的元素
-
-- 文本，直接输出的部分
-- 注释，<#-- 该内容不会输出 -->
-- 插值，${...} 将使用数据模型中的部分来替代输出
-- FTL 指令，实现逻辑
-
-生成文件
-
-```java
-	public static void main(String[] args) throws IOException, TemplateException {
-		
-		// 1. 创建一个配置对象
-		Configuration configuration = new Configuration(Configuration.getVersion());
-		// 2. 设置模板所在的目录
-		configuration.setDirectoryForTemplateLoading(new File("E:\\eclipse-workspace\\freemarkerDemo\\src\\main\\resources\\"));
-		// 3. 设置默认字符编码
-		configuration.setDefaultEncoding("utf-8");
-		// 4. 加载模板，创建一个模板对象
-		Template template = configuration.getTemplate("test.ftl");
-		// 5. 模板的数据集模型
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("name", "Mindyu");
-		map.put("message", "this is a freemarker demo!");
-		// 6. 模板输出流对象
-		Writer out = new FileWriter("d:\\src\\test.html");
-		// 7. 输出文件
-		template.process(map, out);
-		// 8. 关闭输出流对象
-		out.close();
-		
-	}
-```
-
-
-
-FTL 指令
-
-- assgin 用于在页面上定义一个变量：<#assign info={"mobile":"aa",'address':'11'} >
-
-- include 用于模板文件的嵌套：<#include "head.ftl">
-
-- if 指令 条件判断语句
-
-- list 指令 对集合的遍历 (goods_index 获得索引)
-
-  ```javascript
-  <#list goodsList as goods>
-  	${goods_index+1} 商品名称： ${goods.name} 价格：${goods.price}<br>
-  </#list>
-  ```
-
-内建函数 （语法格式：变量+?+函数名称）
-
-- ${goodsList?size} 获取集合的大小
-- <#assign object=text?eval> 转换 JSON 字符串为对象
-- ${today?date} 当前日期 （dataModel.put("today", new Date());）
-- ${today?time} 当前时间
-- ${today?datetime} 当前日期+时间
-- ${today?string("yyyy年MM月")} 日期格式化
-- ${number} 数字会以每三位一个分隔符显示 123,456,789
-- ${number?c} 将数字转换为字符串
-- 空值处理运算符
-  - variable?? 判断变量是否存在，存在则返回true
-  - ${aaa!'-'} 缺失变脸默认值,若aaa为空值则使用默认值‘-’
-- 运算符
-  - 算数运算符 +、-、*、/
-  - 逻辑运算符 && || ! 
-  - 比较运算符 = 、==、!=、>(gt)、<(lt)、>=(gte)、<=(lte)
-
-
-
-*商品详情页的数据显示*
-
-​	创建 pinyougou-page-interface 工程，创建 com.pinyougou.page.service 包,包下创建接口 ItemPageService。然后再创建服务层，来实现接口方法。pom 文件中添加 freemarker 依赖。Spring 配置文件中添加 freemarker 的bean.
-
-```xml
-<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-	<property name="templateLoaderPath" value="/WEB-INF/ftl/" />
-	<property name="defaultEncoding" value="UTF-8" />
-</bean>
-```
-
-服务层生成静态页面的方法：
-
-```java
-	@Override
-	public boolean genItemHtml(Long goodsId) {
-
-		try {
-			Configuration configuration = freeMarkerConfig.getConfiguration();
-			Template template = configuration.getTemplate("item.ftl");
-			
-			// 创建数据模型
-			Map<Object, Object> dataModel = new HashMap<>();
-			// 1.商品主表信息
-			TbGoods goods = goodsMapper.selectByPrimaryKey(goodsId);
-			dataModel.put("goods", goods);
-			// 2.商品详细信息
-			TbGoodsDesc goodsDesc = goodsDescMapper.selectByPrimaryKey(goodsId);
-			dataModel.put("goodsDesc", goodsDesc);
-			// 3.读取商品分类
-			String itemCat1 = itemCatMapper.selectByPrimaryKey(goods.getCategory1Id()).getName();
-			String itemCat2 = itemCatMapper.selectByPrimaryKey(goods.getCategory2Id()).getName();
-			String itemCat3 = itemCatMapper.selectByPrimaryKey(goods.getCategory3Id()).getName();
-			dataModel.put("itemCat1", itemCat1);
-			dataModel.put("itemCat2", itemCat2);
-			dataModel.put("itemCat3", itemCat3);
-			// 4.读取SKU列表信息
-			TbItemExample example = new TbItemExample();
-			Criteria criteria = example.createCriteria();
-			criteria.andGoodsIdEqualTo(goodsId);	// 设置SPU信息
-			criteria.andStatusEqualTo("1");			// 存在状态
-			example.setOrderByClause("is_default desc");	// 按是否默认降序排序,目的是为了方便前端可以直接取出默认选项
-			List<TbItem> itemList = itemMapper.selectByExample(example);
-			dataModel.put("itemList", itemList);
-			
-			Writer out = new FileWriter("D:\\src\\item\\"+goodsId+".html");
-			template.process(dataModel, out);
-			out.close();
-			return true;
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (TemplateException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-```
-
-在运营商管理后台引入依赖，因为需要在运营商审核之后生成静态页面。
-
-
-
-freemarker 图片列表的生成（扩展属性、规格列表类似）
-
-​	通过 assign指令，将字符串转换为对象格式`<#assign imageList=goodsDesc.itemImages?eval />`，然后在图片显示区遍历图片对象。
-
-```html
-<!--默认第一个预览-->
-<div id="preview" class="spec-preview">
-	<#if (imageList?size>0)>
-		<span class="jqzoom"><img jqimg="${imageList[0].url}" src="${imageList[0].url}" width="400px" height="400px"/></span>
-	</#if>
-</div>
-<!--下方的缩略图-->
-<div class="spec-scroll">
-	<a class="prev">&lt;</a>
-	<!--左右按钮-->
-	<div class="items">
-		<ul>
-			<#list imageList as item>
-				<li><img src="${item.url}" bimg="${item.url}" onmousemove="preview(this)" /></li>
-			</#list>
-		</ul>
-	</div>
-	<a class="next">&gt;</a>
-</div>
-```
-
-
-
-*商品详情页-前端逻辑*
-
-​	静态页面的动态效果，就需要 angularjs 来实现。比如商品购买数量的点击事件对应到angularjs的变量中、规格的选择。都已变量的形式与页面进行绑定。
-
-​	不同规格的标题、价格等信息都不相同（SKU信息），为了实现静态页面的效果可以在将SKU信息生成到静态页面。以变量的形式保存在前端。然后用户点击不同规格时，去匹配对应的SKU列表中的某一条数据。
-
-```javascript
- //控制层 
-app.controller('itemController' ,function($scope){	
-	 
-	 $scope.specificationItems={};	// 存储用户选择的规格
-	 
-	 // 数量加减
-	 $scope.addNum=function(x){
-		 $scope.num+=x;
-		 if ($scope.num<1) $scope.num=1;
-	 }
-	 
-	 // 选择规格
-	 $scope.selectSpecification=function(key,value){
-		 $scope.specificationItems[key]=value;
-		 searchSku();	// 查询sku
-	 }
-	 
-	 // 判断规格是否被选中
-	 $scope.isSelected=function(key,value){
-		 if($scope.specificationItems[key]==value){
-			 return true;
-		 }return false;
-	 }
-	 
-	 $scope.sku={};
-	 // 加载默认的sku信息
-	 $scope.loadSku=function(){
-		 $scope.sku=skuList[0];
-		 $scope.specificationItems=JSON.parse(JSON.stringify($scope.sku.spec)); // 深克隆
-	 }
-	 
-	 // 判断两个对象是否匹配
-	 isEqual=function(map1,map2){
-		 
-		 for(var k in map1){
-			 if(map1[k]!=map2[k]){
-				 return false;
-			 }
-		 }
-		 for(var k in map2){
-			 if(map2[k]!=map1[k]){
-				 return false;
-			 }
-		 }
-		 return true;
-	 }
-	 
-	 // 根据规格查询sku信息
-	 searchSku=function(){
-		 
-		 for(var i=0;i<skuList.length;i++){
-			 if( isEqual($scope.specificationItems, skuList[i].spec) ){
-				 $scope.sku=skuList[i];
-				 return;
-			 }
-		 }
-		 $scope.sku={id:0,title:'--------',price:0};
-	 }
-	 // 添加到购物车
-	 $scope.addToCart=function(){
-		 alert('sku_id:'+ $scope.sku.id);
-	 }
-	 
-});	
-```
-
-
-
-*系统模块的对接*
-
-​	运营商管理后台在审核之后进行静态页面的生成。创建 page-web 工程，用于存储生成页面。实现前端 angular 动态逻辑和静态模板的实现。
-
-​	修改搜索系统模块中的search.html。点击搜索页面的图片跳转到静态页面。
-
-
-
-### 消息中间件解决方案 JMS
-
-*消息中间件*
-
-​	消息中间件利用**高效可靠的消息传递机制进行平台无关的数据交流**，并基于数据通信来进行分布式系统的集成。通过提供消息传递和消息排队模型，它可以在分布式环境下扩展进程间的通信。对于消息中间件，常见的角色大致也就有 Producer（生产者）、Consumer（消费者）。
-
-*常见产品*
-
-- ActiveMQ  Apache 出品，最流行的，能力强劲的开源消息总线。
-- RabbitMQ AMQP 协议的领导实现，支持多种场景。
-- ZeroMQ 史上最快的消息队列系统
-- Kafka 高吞吐，在一台普通的服务器上就可以达到 10W/s的吞吐速率；完全的分布式系统。适合处理海量数据。
-
-*JMS（Java 消息服务）*
-
-​	 Java 平台上有关面向消息中间件的技术规范，它便于消息系统中的 Java 应用程序进行消息交换，并且通过提供标准的产生、发送、接收消息的接口简化企业应用的开发。**是一系列接口规范**。
-
-​	消息是 JMS 中的一种类型对象，由两部分组成：**报头和消息主体**。报头由路由信息以及有关该消息的元数据组成。消息主体则携带着应用程序的数据或有效负载。消息正文格式：
-
-- · TextMessage--一个字符串对象
-- · MapMessage--一套名称-值对
-- · ObjectMessage--一个序列化的 Java 对象
-- · BytesMessage--一个字节的数据流
-- · StreamMessage -- Java 原始值的数据流
-
-*JMS 消息传递类型*
-
-- 点对点模式：一个生产者一个消费者，存在多个消费者时，只有一个消费者可以获取消息。（未消费的消息会存储在队列中直到被消费）
-- 发布订阅模式：一个生产者产生消息并进行发送后，可以由多个消费者进
-  行接收。（如果消息发送时没有消费者，那么这个消息无效，不会再被消费）
-
-*安装*
-
-​	下载、解压、赋权、启动服务（./activemq start）。ActiveMQ 管理页面端口8161。（用户：admin 密码：admin）
-
-![activemq管理界面](https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/activemq.png)
-
-
-
-*点对点模式案例*
-
-​	引入依赖
-
-```xml
-	<dependency>
-		<groupId>org.apache.activemq</groupId>
-		<artifactId>activemq-client</artifactId>
-		<version>5.13.4</version>
-	</dependency>
-```
-
-​	消息生产者:
-
-```java
-	public static void main(String[] args) throws JMSException {
-		// 1. 创建连接工厂
-		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://192.168.25.130:61616");
-		// 2. 创建连接对象
-		Connection connection = connectionFactory.createConnection();
-		// 3. 启动连接
-		connection.start();
-		// 4. 获取session（会话对象） 参数1：是否启动事务  参数2：消息确认方式
-		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		// 5. 创建队列对象
-		Queue queue = session.createQueue("test-queue");
-		// 6. 创建消息生产者对象
-		MessageProducer producer = session.createProducer(queue);
-		// 7. 创建消息对象（TextMessage）
-		TextMessage message = session.createTextMessage("这是一条text消息");
-		// 8. 发送消息 
-		producer.send(message);
-		// 9. 关闭资源
-		producer.close();
-		session.close();
-		connection.close();
-	}
-```
-
-注：创建session的第二个参数为消息确认模式：AUTO_ACKNOWLEDGE = 1 自动确认、CLIENT_ACKNOWLEDGE = 2 客户端手动确认、DUPS_OK_ACKNOWLEDGE = 3 自动批量确认、SESSION_TRANSACTED = 0 事务提交并确认。
-
-​	消息消费者：
-
-```java
-	public static void main(String[] args) throws JMSException, IOException {
-		// 1. 创建连接工厂
-		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://192.168.25.130:61616");
-		// 2. 创建连接对象
-		Connection connection = connectionFactory.createConnection();
-		// 3. 启动连接
-		connection.start();
-		// 4. 获取session（会话对象） 参数1：是否启动事务 参数2：消息确认方式
-		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		// 5. 创建队列对象
-		Queue queue = session.createQueue("test-queue");
-		// 6. 创建消息的消费者对象
-		MessageConsumer consumer = session.createConsumer(queue);
-		// 7. 设置监听
-		consumer.setMessageListener(new MessageListener() {
-			@Override
-			public void onMessage(Message message) {
-				TextMessage textMessage = (TextMessage) message;
-				try {
-					System.out.println(""+ textMessage.getText());
-				} catch (JMSException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		// 8. 等待键盘输入
-		System.in.read();
-		// 9. 关闭资源
-		consumer.close();
-		session.close();
-		connection.close();
-	}
-```
-
-*发布订阅模式*
-
-​	只需要修改上述第五步中，创建对应的主题对象即可`Topic topic = session.createTopic("test-topic");`
-
-
-
-*JMS 应用*
-
-​	运营商后台管理模块中，商品审核之后需要导入 solr 索引库和生成静态页面。对于这种同步调用的情况存在**耦合度高、后期不易维护、同步执行、导致审核过程缓慢、用户体验性不好**等多种问题。我们可以采用消息中间件来进行解耦，实现运营商后端与搜索服务的零耦合。运营商执行审核后，向activeMQ 发送消息（SKU列表），搜索服务从activeMQ接收到消息执行导入操作。
-
-​	然后搜索模块采用 solr 系统实现，那么我们可以采用点对点的方式实现消息服务，而静态页面生成服务，由于静态页面存储于多个服务器，并且各个服务器数据相同，需要实现服务器之间同步更新的效果，所以需要采用发布订阅的方式实现。
-
-导入搜索系统的消息生产者实现：
-
-1. 解除耦合（移除itemService服务依赖）
-2. 引入activeMQ客户端依赖、spring-jms依赖。
-3. 创建jms生产者配置文件
-
-```xml
-	<!-- 真正可以产生Connection的ConnectionFactory，由对应的 JMS服务厂商提供-->  
-	<bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">  
-	    <property name="brokerURL" value="tcp://192.168.25.130:61616"/>  
-	</bean>
-	   
-    <!-- Spring用于管理真正的ConnectionFactory的ConnectionFactory -->  
-	<bean id="connectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">  
-	<!-- 目标ConnectionFactory对应真实的可以产生JMS Connection的ConnectionFactory -->  
-	    <property name="targetConnectionFactory" ref="targetConnectionFactory"/>  
-	</bean>  
-		   
-    <!-- Spring提供的JMS工具类，它可以进行消息发送、接收等 -->  
-	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">  
-	    <!-- 这个connectionFactory对应的是我们定义的Spring提供的那个ConnectionFactory对象 -->  
-	    <property name="connectionFactory" ref="connectionFactory"/>  
-	</bean>      
-    <!--这个是队列目的地，点对点的  文本信息-->  
-	<bean id="queueSolrDestination" class="org.apache.activemq.command.ActiveMQQueue">  
-	    <constructor-arg value="pinyougou_queue_solr"/>  
-	</bean>    
-	<!--这个是队列目的地，点对点的  文本信息，删除操作-->  
-	<bean id="queueSolrDeleteDestination" class="org.apache.activemq.command.ActiveMQQueue">  
-	    <constructor-arg value="pinyougou_queue_solr_delete"/>  
-	</bean>  
-	
-	<!--这个是订阅模式  生成页面-->  
-	<bean id="topicPageDestination" class="org.apache.activemq.command.ActiveMQTopic">  
-	    <constructor-arg value="pinyougou_topic_page"/>  
-	</bean> 
-	<!--这个是订阅模式  删除页面-->  
-	<bean id="topicPageDeleteDestination" class="org.apache.activemq.command.ActiveMQTopic">  
-	    <constructor-arg value="pinyougou_topic_page_delete"/>  
-	</bean> 
-```
-
-4. web.xml文件中引入该配置文件(contextConfigLocation)
-5. 代码实现，注入所用的对象服务(jmsTemplate、queueSolrDestination、queueSolrDeleteDestination)
-
-```
-/********导入到索引库**********/
-// 得到需要的SKU列表
-List<TbItem> itemList = goodsService.findItemListByGoodsIdAndStatus(ids, status);
-// 导入到solr 
-// itemSearchService.importItemList(itemList);
-final String jsonString = JSON.toJSONString(itemList);	// 转换为json字符串
-
-jmsTemplate.send(queueSolrDestination, new MessageCreator() {
-	@Override
-	public Message createMessage(Session session) throws JMSException {
-		return session.createTextMessage(jsonString);
-	}
-});
-
-/********生成静态页面**********/
-/*for (final Long id : ids) {
-	itemPageService.genItemHtml(id);
-}*/
-jmsTemplate.send(topicPageDestination, new MessageCreator() {
-	@Override
-	public Message createMessage(Session session) throws JMSException {
-		return session.createObjectMessage(ids);
-	}
-});
-
-```
-
-
-
-消息消费者（搜索服务）
-
- 	1.  添加 activeMQ 依赖
- 	2. 添加spring配置文件  applicationContext-jms-consumer.xml
-
-```xml
-	<!-- 真正可以产生Connection的ConnectionFactory，由对应的 JMS服务厂商提供-->  
-	<bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">  
-	    <property name="brokerURL" value="tcp://192.168.25.130:61616"/>  
-	</bean>
-	   
-    <!-- Spring用于管理真正的ConnectionFactory的ConnectionFactory -->  
-	<bean id="connectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">  
-	<!-- 目标ConnectionFactory对应真实的可以产生JMS Connection的ConnectionFactory -->  
-	    <property name="targetConnectionFactory" ref="targetConnectionFactory"/>  
-	</bean>  
-	
-    <!--这个是队列目的地，导入到索引库-->  
-	<bean id="queueSolrDestination" class="org.apache.activemq.command.ActiveMQQueue">  
-	    <constructor-arg value="pinyougou_queue_solr"/>  
-	</bean>    
-	
-	<!-- 消息监听容器 -->
-	<bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
-		<property name="connectionFactory" ref="connectionFactory" />
-		<property name="destination" ref="queueSolrDestination" />
-		<property name="messageListener" ref="itemSearchListener" />
-	</bean>
-	
-	<!--这个是队列目的地，删除索引库-->  
-	<bean id="queueSolrDeleteDestination" class="org.apache.activemq.command.ActiveMQQueue">  
-	    <constructor-arg value="pinyougou_queue_solr_delete"/>  
-	</bean>    
-	
-	<!-- 消息监听容器 -->
-	<bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
-		<property name="connectionFactory" ref="connectionFactory" />
-		<property name="destination" ref="queueSolrDeleteDestination" />
-		<property name="messageListener" ref="itemDeleteListener" />
-	</bean>
-```
-
-消息监听类：
-
-```java
-@Component
-public class ItemSearchListener implements MessageListener {
-
-	@Autowired
-	private ItemSearchService itemSearchService;
-	
-	@Override
-	public void onMessage(Message message) {
-		TextMessage textMessage = (javax.jms.TextMessage) message;
-		try {
-			String text = textMessage.getText();
-			System.out.println("监听到消息："+text);
-			
-			List<TbItem> itemlist = JSON.parseArray(text,TbItem.class);
-			itemSearchService.importItemList(itemlist);
-			System.out.println("导入到solr索引库");
-		} catch (JMSException e) {
-			e.printStackTrace();
-		}
-	}
-
-}
-```
-
-商品删除（移除solr索引库记录）类似。以及王爷静态化，主要是消息模式为发布订阅模式。运营商执行商品审核后，向 activeMQ 发送消息（商品 ID集合），网页生成服务从 activeMQ 接收到消息后执行网页生成操作。
-
-
-
-*存在的问题*
-
-​		 Exception sending context initialized event to listener instance of class org.springframework.web.context.ContextLoaderListener
-
-org.springframework.beans.factory.BeanDefinitionStoreException: Invalid bean definition with name 'dataSource' defined in URL [jar:file:/D:/Program%20Files/Maven/repository/com/pinyougou/pinyougou-dao/0.0.1-SNAPSHOT/pinyougou-dao-0.0.1-SNAPSHOT.jar!/spring/applicationContext-dao.xml]: Could not resolve placeholder 'jdbc.url' in string value "${jdbc.url}"; nested exception is java.lang.IllegalArgumentException: Could not resolve placeholder 'jdbc.url' in string value "${jdbc.url}"
-
-​	提示找不到配置文件中的jdbc.url配置。是因为在page-service中，在生成静态页面时会用到一个页面生成路径的配置信息。然后在spring中的配置文件中设置`<context:property-placeholder location="classpath:config/page.properties" />` 。但是该服务依赖dao模块，这个模块中的数据库连接池的配置信息存放在 properties/db.properties 中，然后在 dao 模块中配置了 `<context:property-placeholder location="classpath*:properties/*.properties" />` 。此时 page-service 模块中的配置会覆盖该配置，就导致了无法访问 properties/db.properties 中数据库连接池的配置信息。解决方法就是使 `<context:property-placeholder location="classpath*:*/*.properties" />` 包含 dao 模块中的加载配置即可。
-
-
-
-
-
+[品优购学习笔记（下）](docs/品优购项目笔记（下）.md)
 
 
 
@@ -1667,3 +1122,4 @@ org.springframework.beans.factory.BeanDefinitionStoreException: Invalid bean def
 [2]: https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/Dubbox%E5%8E%9F%E7%90%86.jpg
 [3]: https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%93%81%E7%89%8C%E7%AE%A1%E7%90%86.png
 [4]: https://hexoblog-1253306922.cos.ap-guangzhou.myqcloud.com/photo2018/%E5%93%81%E4%BC%98%E8%B4%AD/%E5%93%81%E7%89%8C%E4%BF%AE%E6%94%B9%E4%B8%8E%E6%96%B0%E5%A2%9E.png
+
