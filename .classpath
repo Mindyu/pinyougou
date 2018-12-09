@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="pinyougou-common/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-content-interface/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-content-service/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-dao/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-manager-web/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-page-interface/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-page-service/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-pojo/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-portal-web/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-search-interface/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-search-service/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-search-web/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-sellergoods-interface/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-sellergoods-service/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-shop-web/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-solr-util/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-user-interface/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-user-service/src/main/java"/>
+	<classpathentry kind="src" path="pinyougou-user-web/src/main/java"/>
+	<classpathentry kind="src" path="src/generatorSqlmapCustom/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
