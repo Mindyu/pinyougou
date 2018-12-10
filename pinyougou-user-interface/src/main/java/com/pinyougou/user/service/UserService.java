@@ -52,7 +52,7 @@ public interface UserService {
 
 	/**
 	 * 分页
-	 * @param pageNum 当前页 码
+	 * @param pageNum 当前页码
 	 * @param pageSize 每页记录数
 	 * @return
 	 */

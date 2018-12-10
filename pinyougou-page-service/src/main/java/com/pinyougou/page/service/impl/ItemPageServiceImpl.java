@@ -13,15 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
 
-import com.pinyougou.mapper.TbGoodsDescMapper;
-import com.pinyougou.mapper.TbGoodsMapper;
-import com.pinyougou.mapper.TbItemCatMapper;
-import com.pinyougou.mapper.TbItemMapper;
+import com.pinyougou.mapper.*;
 import com.pinyougou.page.service.ItemPageService;
-import com.pinyougou.pojo.TbGoods;
-import com.pinyougou.pojo.TbGoodsDesc;
-import com.pinyougou.pojo.TbItem;
-import com.pinyougou.pojo.TbItemExample;
+import com.pinyougou.pojo.*;
 import com.pinyougou.pojo.TbItemExample.Criteria;
 
 import freemarker.template.Configuration;

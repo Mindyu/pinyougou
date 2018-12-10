@@ -121,6 +121,7 @@ public class UserController {
 	 */
 	@RequestMapping("/createSmsCode")
 	public Result createSmsCode(String phone) {
+		System.out.println("请求 createSmsCode.do ");
 		if (PhoneFormatCheckUtils.isPhoneLegal(phone)) {
 			userService.createSmsCode(phone);
 			return new Result(true, "验证码发送成功");

@@ -11,7 +11,7 @@
 	<!-- 注册登陆 -->
 	<http pattern="/register.html" security="none"></http>
 	<http pattern="/user/add.do" security="none"></http>
-	<http pattern="/user/sendCode.do" security="none"></http>
+	<http pattern="/user/createSmsCode.do" security="none"></http>
 	
 	<!--   entry-point-ref  入口点引用 -->
 	<http use-expressions="false" entry-point-ref="casProcessingFilterEntryPoint">  

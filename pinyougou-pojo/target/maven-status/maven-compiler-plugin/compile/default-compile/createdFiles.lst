@@ -61,6 +61,7 @@ com\pinyougou\pojo\TbContentExample$Criterion.class
 com\pinyougou\pojo\TbGoodsDescExample$GeneratedCriteria.class
 com\pinyougou\pojo\TbCities.class
 com\pinyougou\pojo\TbSellerExample$GeneratedCriteria.class
+com\pinyougou\pojogroup\Cart.class
 com\pinyougou\pojo\TbSpecificationOptionExample.class
 com\pinyougou\pojo\TbGoodsExample$Criterion.class
 com\pinyougou\pojo\TbSpecificationOptionExample$GeneratedCriteria.class
