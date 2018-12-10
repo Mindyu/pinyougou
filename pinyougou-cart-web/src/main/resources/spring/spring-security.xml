@@ -10,10 +10,11 @@
 	<http pattern="/plugins/**" security="none"></http>
 	<!-- 购物车 -->
 	<http pattern="/cart.html" security="none"></http>
-	<http pattern="/cart/*.do" security="none"></http>
+	<!-- <http pattern="/cart/*.do" security="none"></http> -->	<!-- 这种方式会导致不会经过登录认证操作，无法获取登录用户名 -->
 	
 	<!--   entry-point-ref  入口点引用 -->
 	<http use-expressions="false" entry-point-ref="casProcessingFilterEntryPoint">  
+		<intercept-url pattern="/cart/*.do" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <intercept-url pattern="/**" access="ROLE_USER"/>   
         <csrf disabled="true"/>  
         <!-- custom-filter为过滤器， position 表示将过滤器放在指定的位置上，before表示放在指定位置之前  ，after表示放在指定的位置之后  -->           
