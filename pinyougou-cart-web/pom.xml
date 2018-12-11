@@ -111,7 +111,12 @@
 			<artifactId>pinyougou-cart-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>com.pinyougou</groupId>
+			<artifactId>pinyougou-user-interface</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+  </dependencies>
 
 	<build>
 		<plugins>

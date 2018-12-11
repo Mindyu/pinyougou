@@ -25,4 +25,8 @@ app.service('cartService',function($http){
 		}
 		return total;
 	}
+	
+	this.findAddress=function(){
+		return $http.get("address/findAddressByLoginUser.do");
+	}
 });

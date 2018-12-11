@@ -20,5 +20,36 @@ app.controller('cartController', function($scope, cartService) {
 		});
 	}
 	
+	// 查询用户的收货地址信息
+	$scope.findAddress=function(){
+		cartService.findAddress().success(
+				function(response){
+					$scope.addressList = response;
+					// 查找默认地址
+					for(var i=0;i<$scope.addressList.length;i++){
+						if($scope.addressList[i].isDefault=='1'){
+							$scope.address=$scope.addressList[i];break;
+						}
+					}
+				}
+		);
+	}
+	
+	// 选择地址
+	$scope.selectAddress=function(address){
+		$scope.address = address;
+	}
+	
+	// 改地址是否被选
+	$scope.isSelectedAddress=function(address){
+		return ($scope.address == address);
+	}
+	
+	$scope.order={paymentType:'1'};
+	
+	// 选择支付方式
+	$scope.selectPayType=function(type){
+		$scope.order.paymentType = type;
+	}
 	
 });

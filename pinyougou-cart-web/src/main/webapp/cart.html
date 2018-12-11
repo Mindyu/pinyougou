@@ -84,12 +84,12 @@
 								</li>
 								<li class="yui3-u-11-24">
 									<div class="good-item">
-										<div class="item-img"><img src="img/goods.png" /></div>
+										<div class="item-img"><img src="{{item.picPath}}" /></div>
 										<div class="item-msg">{{item.title}}</div>
 									</div>
 								</li>
 								
-								<li class="yui3-u-1-8"><span class="price">{{item.price}}</span></li>
+								<li class="yui3-u-1-8"><span class="price">￥{{item.price}}</span></li>
 								<li class="yui3-u-1-8">
 									<a href="javascript:void(0)" class="increment mins" ng-click="addGoodsToCartList( item.itemId, -1)">-</a>
 									<input autocomplete="off" type="text" value="1" minnum="1" class="itxt" ng-model="item.num"/>
