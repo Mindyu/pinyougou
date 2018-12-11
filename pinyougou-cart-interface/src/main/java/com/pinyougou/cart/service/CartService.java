@@ -29,4 +29,11 @@ public interface CartService {
 	 */
 	public void addCartListToRedis(String username, List<Cart> cartList);
 
+	/**
+	 * 合并本地和redis购物车数据
+	 * @param cartList1
+	 * @param cartList2
+	 * @return
+	 */
+	public List<Cart> mergeCartList(List<Cart> cartList1, List<Cart> cartList2);
 }
