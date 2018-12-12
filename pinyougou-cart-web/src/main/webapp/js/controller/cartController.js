@@ -52,4 +52,26 @@ app.controller('cartController', function($scope, cartService) {
 		$scope.order.paymentType = type;
 	}
 	
+	// 提交订单
+	$scope.submitOrder=function(){
+		$scope.order.receiverAreaName = $scope.address.address;
+		$scope.order.receiverMobile = $scope.address.mobile;
+		$scope.order.receiver = $scope.address.contact;
+		
+		cartService.submitOrder($scope.order).success(
+				function(response){
+					if (response.success) {
+						// 微信支付 就跳转到支付页面
+						if ($scope.order.paymentType == '1' ) {
+							location.href="pay.html";
+						}else {	// 货到付款，跳转到提示页面
+							location.href="paysuccess.html";
+						}
+					}else {
+						alert(response.message);
+					}
+				}
+		);
+	}
+	
 });

@@ -26,7 +26,13 @@ app.service('cartService',function($http){
 		return total;
 	}
 	
+	// 查询登录用户的收获地址信息
 	this.findAddress=function(){
 		return $http.get("address/findAddressByLoginUser.do");
+	}
+	
+	// 提交订单
+	this.submitOrder=function(order){
+		return $http.post("order/add.do",order);
 	}
 });
