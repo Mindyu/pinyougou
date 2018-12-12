@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -26,6 +27,7 @@ import util.IdWorker;
  *
  */
 @Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
 
 	@Autowired
@@ -92,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
 				orderItemMapper.insert(orderItem);
 			}
 			tbOrder.setPayment(new BigDecimal(money));
-			orderMapper.insert(tbOrder);	
+			orderMapper.insert(tbOrder);
 		}
 		
 		// 3.清除redis中购物车中的数据
@@ -185,7 +187,6 @@ public class OrderServiceImpl implements OrderService {
 			if(order.getSellerId()!=null && order.getSellerId().length()>0){
 				criteria.andSellerIdLike("%"+order.getSellerId()+"%");
 			}
-	
 		}
 		
 		Page<TbOrder> page= (Page<TbOrder>)orderMapper.selectByExample(example);		

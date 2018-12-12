@@ -19,7 +19,7 @@ import entity.PageResult;
  * @author Administrator
  *
  */
-@Service
+@Service(timeout=6000)
 public class AddressServiceImpl implements AddressService {
 
 	@Autowired

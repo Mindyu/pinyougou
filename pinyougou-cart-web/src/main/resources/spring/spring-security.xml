@@ -10,6 +10,7 @@
 	<http pattern="/plugins/**" security="none"></http>
 	<!-- 购物车 -->
 	<http pattern="/cart.html" security="none"></http>
+	<http pattern="/pay/*.do" security="none"></http>
 	<!-- <http pattern="/cart/*.do" security="none"></http> -->	<!-- 这种方式会导致不会经过登录认证操作，无法获取登录用户名 -->
 	
 	<!--   entry-point-ref  入口点引用 -->
