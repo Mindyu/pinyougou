@@ -1,6 +1,7 @@
 E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbFreightTemplateMapper.java
 E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbOrderItemMapper.java
 E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbItemMapper.java
+E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbSeckillOrderMapper.java
 E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbSpecificationMapper.java
 E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbTypeTemplateMapper.java
 E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbOrderMapper.java
@@ -13,6 +14,7 @@ E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\
 E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbBrandMapper.java
 E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbItemCatMapper.java
 E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbGoodsDescMapper.java
+E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbSeckillGoodsMapper.java
 E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbSellerMapper.java
 E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbProvincesMapper.java
 E:\eclipse-workspace\pinyougou-parent\pinyougou-dao\src\main\java\com\pinyougou\mapper\TbSpecificationOptionMapper.java

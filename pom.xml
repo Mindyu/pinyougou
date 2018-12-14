@@ -314,5 +314,8 @@
 		<module>pinyougou-order-service</module>
 		<module>pinyougou-pay-interface</module>
 		<module>pinyougou-pay-service</module>
+		<module>pinyougou-seckill-interface</module>
+		<module>pinyougou-seckill-service</module>
+		<module>pinyougou-seckill-web</module>
 	</modules>
 </project>

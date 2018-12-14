@@ -1,14 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.pinyougou</groupId>
-    <artifactId>pinyougou-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>pinyougou-cart-web</artifactId>
-  <packaging>war</packaging>
-  
-  <dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.pinyougou</groupId>
+		<artifactId>pinyougou-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>pinyougou-cart-web</artifactId>
+	<packaging>war</packaging>
+
+	<dependencies>
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -126,7 +128,7 @@
 			<artifactId>pinyougou-pay-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-  </dependencies>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -143,5 +145,5 @@
 			</plugin>
 		</plugins>
 	</build>
-  
+
 </project>
