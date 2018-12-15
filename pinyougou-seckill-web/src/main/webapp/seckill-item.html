@@ -178,7 +178,7 @@ $(function(){
 					<div class="zoom">
 						<!--默认第一个预览-->
 						<div id="preview" class="spec-preview">
-							<span class="jqzoom"><img jqimg="img/_/b1.png" src="img/_/s1.png" /></span>
+							<span class="jqzoom"><img jqimg="{{entity.smallPic}}" src="{{entity.smallPic}}" width="400px" height="400px"/></span>
 						</div>						
 					</div>
 					
@@ -235,8 +235,6 @@ $(function(){
 						</div>
 					</div>
 					<div class="clearfix choose">
-						
-
 						<div class="summary-wrap">
 							<div class="fl title">
 								
@@ -244,7 +242,7 @@ $(function(){
 							<div class="fl">
 								<ul class="btn-choose unstyled">
 									<li>
-										<a href="cart.html" target="_blank" class="sui-btn  btn-danger addshopcar">立即抢购</a>
+										<a class="sui-btn  btn-danger addshopcar" target="_blank" ng-click="submitOrder()">立即抢购</a>
 									</li>
 								</ul>
 							</div>

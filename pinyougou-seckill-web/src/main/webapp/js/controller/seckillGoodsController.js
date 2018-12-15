@@ -38,4 +38,18 @@ app.controller('seckillGoodsController', function($scope, $location, $interval, 
 		var day = totalSecond;
 		return day==0? hour+":"+min+":"+sec : day+"天 "+hour+":"+min+":"+sec;
 	}
+	
+	$scope.submitOrder=function(){
+		seckillGoodsService.submitOrder($scope.entity.id).success(
+				function(response){
+					if (response.success) {
+						alert("抢购成功，请在五分钟内付款");
+						location.href="pay.html";
+					}else{
+						alert(response.message);
+					}
+				}
+		);
+	}
+	
 });

@@ -53,10 +53,16 @@ public interface SeckillOrderService {
 
 	/**
 	 * 分页
-	 * @param pageNum 当前页 码
+	 * @param pageNum 当前页码
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
 	public PageResult findPage(TbSeckillOrder seckillOrder, int pageNum,int pageSize);
 	
+	/**
+	 * 提交订单
+	 * @param seckillId	秒杀的商品ID
+	 * @param userId	用户ID
+	 */
+	public void submitOrder(Long seckillId,String userId);
 }
