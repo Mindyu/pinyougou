@@ -8,18 +8,7 @@
         http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!-- 访问 dubbo 的端口号， 多个服务存在时不能重复，默认 20880 -->
-    <dubbo:protocol name="dubbo" port="20889"></dubbo:protocol> 
-    
-	<dubbo:application name="pinyougou-seckill-service"/>  
-    <!-- <dubbo:registry address="zookeeper://192.168.25.130:2181"/>	 -->	
-    <dubbo:annotation package="com.pinyougou.seckill.service.impl" />  
- 	
- 	<bean id="idWorker" class="util.IdWorker">
-	    <!-- 进程 ID -->
-		<constructor-arg index="0" value="1"></constructor-arg>
-		<!-- 数据中心 ID -->
-		<constructor-arg index="1" value="0"></constructor-arg>
-	</bean>
- 	
+	<context:property-placeholder location="classpath*:properties/*.properties" />
+    <dubbo:registry protocol="zookeeper" address="${address}"/>
+
 </beans>

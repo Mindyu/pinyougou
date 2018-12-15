@@ -12,7 +12,7 @@
     <dubbo:protocol name="dubbo" port="20888"></dubbo:protocol> 
     
 	<dubbo:application name="pinyougou-order-service"/>  
-    <dubbo:registry address="zookeeper://192.168.25.130:2181"/>	
+    <!-- <dubbo:registry address="zookeeper://192.168.25.130:2181"/>	 -->
     <dubbo:annotation package="com.pinyougou.order.service.impl" />  
     
     <bean id="idWorker" class="util.IdWorker">

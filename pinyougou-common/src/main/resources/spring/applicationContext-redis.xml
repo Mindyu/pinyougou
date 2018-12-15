@@ -13,7 +13,6 @@
             http://www.springframework.org/schema/cache  
             http://www.springframework.org/schema/cache/spring-cache.xsd">  
    
-  <context:property-placeholder location="classpath*:properties/*.properties" />
    <!-- redis 相关配置 --> 
    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">  
      <property name="maxIdle" value="${redis.maxIdle}" />   

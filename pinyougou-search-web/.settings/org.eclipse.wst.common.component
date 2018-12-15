@@ -10,6 +10,9 @@
         <dependent-module archiveName="pinyougou-pojo-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pinyougou-pojo/pinyougou-pojo">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="pinyougou-common-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pinyougou-common/pinyougou-common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="pinyougou-search-web"/>
         <property name="java-output-path" value="/pinyougou-search-web/target/classes"/>
     </wb-module>
