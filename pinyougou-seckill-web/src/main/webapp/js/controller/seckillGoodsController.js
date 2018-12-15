@@ -15,9 +15,9 @@ app.controller('seckillGoodsController', function($scope, $location, $interval, 
 			function(response){
 				$scope.entity = response;
 				totalSecond = Math.floor((new Date($scope.entity.endTime).getTime() - (new Date().getTime()))/1000);
-				time = $interval(function(){
+				time = $interval(function(){	
 					if (totalSecond>0) {
-						$scope.timeString = convertSecondToTime(totalSecond);
+						$scope.timeString = convertSecondToTime(totalSecond);	
 						--totalSecond;
 					}else{
 						alert("秒杀已结束");

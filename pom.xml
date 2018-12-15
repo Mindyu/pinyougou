@@ -317,5 +317,6 @@
 		<module>pinyougou-seckill-interface</module>
 		<module>pinyougou-seckill-service</module>
 		<module>pinyougou-seckill-web</module>
+		<module>pinyougou-task-service</module>
 	</modules>
 </project>
