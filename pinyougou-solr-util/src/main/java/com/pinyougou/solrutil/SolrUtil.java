@@ -34,7 +34,7 @@ public class SolrUtil {
 		System.out.println("------商品列表-----");
 		for (TbItem item : list) {
 			System.out.println(item.getId()+" "+item.getTitle()+" "+item.getBrand());
-			Map map = JSON.parseObject(item.getSpec(),Map.class);	// 将数据库中的spec字符串转换为map对象
+			Map map = JSON.parseObject(item.getSpec(), Map.class);	// 将数据库中的spec字符串转换为map对象
 			item.setSpecMap(map);
 		}
 		
